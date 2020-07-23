@@ -3,7 +3,7 @@ Let's help Elad help us shop for cheap!!
 
 ## Tech
 - [React](https://reactjs.org/) ([Create-React-App](https://create-react-app.dev/)) - JavaScript UI framework by Facebook
-- [Firebase](https://firebase.google.com/) - Database as a service (DaaS) by Google
+- [Firebase](https://firebase.google.com/) -Backend as a service (BaaS) by Google
 
 ### Project type options
 - Web App (only React and Firebase are needed)
