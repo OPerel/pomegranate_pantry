@@ -1,0 +1,7 @@
+{
+  "name": "Rimon's Pantry",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
