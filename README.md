@@ -20,11 +20,14 @@ Let's help Elad help us shop for cheap!!
   open: boolean,
   openToUsers: boolean,
   createdAt: Date,
+  closingTime: Date,
   orderProducts: string[], // array of OrderProducts` ids
   userOrders: string[], // array of UserOrders` ids
   totalPrice: number, // total price of UsersOrders 
   payed: boolean
 }
+
+userOrdres.every(order => order.payed) => payed = true
 ```
 
 ### OrderProduct
@@ -60,7 +63,8 @@ Let's help Elad help us shop for cheap!!
   userRef: string, // User's id
   orderRef: string, // Order's id
   products: string[], // array of Products` ids
-  totalPrice: number // total price of products
+  totalPrice: number, // total price of products
+  payed: boolean
 }
 ```
 
