@@ -28,11 +28,13 @@ Let's help Elad help us shop for cheap!!
 }
 
 userOrdres.every(order => order.payed) => payed = true
+totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
 ```
 
 ### OrderProduct
 ```ts
 {
+  id: string,
   product: string, // ref to Product
   order: string, // ref to Order
   totalQty: number,
@@ -42,8 +44,8 @@ userOrdres.every(order => order.payed) => payed = true
   priceWarn: boolean
 }
 
-(fixedTotalPrice > FinalTotalPrice) => priceWarn = true
-(Product.minQty > totalQty) => missing = (Product.minQty - totalQty)
+(fixedTotalPrice < FinalTotalPrice) => priceWarn = true
+((totalQty % Product.minQty) !== 0) => missing = (Product.minQty - totalQty)
 ```
 
 ### User
@@ -52,7 +54,7 @@ userOrdres.every(order => order.payed) => payed = true
   id: string,
   name: string,
   role: 'user' | 'rimon', // user is either a shopper or the one we now call Elad
-  location: string
+  location: 'TA' | 'PH'
 }
 ```
 
@@ -66,6 +68,8 @@ userOrdres.every(order => order.payed) => payed = true
   totalPrice: number, // total price of products
   payed: boolean
 }
+
+totalPrice = products.reduce((acc, product) => acc += product.price, 0)
 ```
 
 ### Product
