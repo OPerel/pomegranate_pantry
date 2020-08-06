@@ -18,10 +18,29 @@ Let's help Elad help us shop for cheap!!
 {
   id: string,
   open: boolean,
-  products: string[], // array of Products` ids
+  openToUsers: boolean,
+  createdAt: Date,
+  orderProducts: string[], // array of OrderProducts` ids
   userOrders: string[], // array of UserOrders` ids
-  totalPrice: number // total price of UsersOrders 
+  totalPrice: number, // total price of UsersOrders 
+  payed: boolean
 }
+```
+
+### OrderProduct
+```ts
+{
+  product: string, // ref to Product
+  order: string, // ref to Order
+  totalQty: number,
+  missing: number | null,
+  fixedTotalPrice: number,
+  FinalTotalPrice: number,
+  priceWarn: boolean
+}
+
+(fixedTotalPrice > FinalTotalPrice) => priceWarn = true
+(Product.minQty > totalQty) => missing = (Product.minQty - totalQty)
 ```
 
 ### User
@@ -29,7 +48,8 @@ Let's help Elad help us shop for cheap!!
 {
   id: string,
   name: string,
-  role: string<'user' | 'rimon'> // user is either a shopper or the one we now call Elad
+  role: 'user' | 'rimon', // user is either a shopper or the one we now call Elad
+  location: string
 }
 ```
 
@@ -50,6 +70,7 @@ Let's help Elad help us shop for cheap!!
   id: string,
   name: string,
   price: number,
-  quantityUnit: string
+  minQty: number,
+  qtyUnit: string
 }
 ```
