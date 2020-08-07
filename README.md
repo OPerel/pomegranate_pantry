@@ -27,8 +27,8 @@ Let's help Elad help us shop for cheap!!
   payed: boolean
 }
 
-userOrdres.every(order => order.payed) => payed = true
-totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
+Order.payed = userOrdres.every(order => order.payed)
+Order.totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
 ```
 
 ### OrderProduct
@@ -44,8 +44,10 @@ totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
   priceWarn: boolean
 }
 
-(fixedTotalPrice < FinalTotalPrice) => priceWarn = true
-((totalQty % Product.minQty) !== 0) => missing = (Product.minQty - totalQty)
+priceWarn = fixedTotalPrice < FinalTotalPrice
+missing = (totalQty % Product.minQty) !== 0
+  ? ((Math.floor(totalQty / Product.minQty) + 1) * Product.minQty) - totalQty
+  : null
 ```
 
 ### User
@@ -79,6 +81,31 @@ totalPrice = products.reduce((acc, product) => acc += product.price, 0)
   name: string,
   price: number,
   minQty: number,
-  qtyUnit: string
+  qtyUnit: 'unit' | 'Kg'
 }
 ```
+
+## Views
+### 1 Rimon Views
+Rimon's main view is divided to Orders and Products using tabs.
+#### 1.1 Orders View
+A list of old orders, and the active one if it exists.
+![orders view](./mockups/orders_view.jpg)
+Clicking on an order's row leads to its [Order](#order_view)
+
+#### 1.2 Products View
+This is only needed for creating a fixed price for every product, and then compare it to the final price Elad types in manually.  
+Maybe we omit the fixed prices and the users won't know the price until after the purchase (the way it is now...?). 
+
+#### 1.3 Order View <a id="order_view"></a>
+Every order view is divided to a list of the order's users, and a list of the order's products.
+
+##### 1.3.1 Order Users View
+![order view - users](./mockups/order_view_users.jpg)
+
+##### 1.3.2 Order Products View
+![order view - products](./mockups/order_view_products.jpg)
+
+TODO: for every product with `Product.qytUnit === 'Kg'`, `OrderProduct.totalQty` has to satisfy the minimum quantity requirement for each location independently (or maybe just for PH?).
+
+### 2 Users Views
