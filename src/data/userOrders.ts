@@ -1,16 +1,21 @@
 export interface UserOrder {
   _id: string;
-  products: string[]; // array of Products`
+  products: UserOrderProducts[]; // array of Products`
   userRef: string // a ref to the user
   orderRef: string // a ref to the order
   totalPrice: number; // total price of UsersOrders
   payed: boolean;
 }
 
+export interface UserOrderProducts {
+  product: string, // ref to Product
+  qty: number
+}
+
 const userOrders: UserOrder[] = [
   {
     _id: '1',
-    products: [],
+    products: [{ product: 'qwerty1', qty: 2 }, { product: 'qwerty2', qty: 3 }],
     userRef: 'a',
     orderRef: '1',
     totalPrice: 0,
@@ -34,7 +39,14 @@ const userOrders: UserOrder[] = [
   }
 ];
 
-
+/**
+ * get UserOrder[] by Order id
+ * @param orderRef ref to Order
+ */
 export const getOrderUsers = (orderRef: string) => userOrders.filter(orders => orders.orderRef === orderRef);
 
+/**
+ * get UserOrder by user
+ * @param _id User id
+ */
 export const getUserOrder = (_id: string) => userOrders.filter(m => m._id === _id)[0];

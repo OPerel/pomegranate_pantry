@@ -6,6 +6,7 @@ import {
   IonContent,
   IonHeader,
   IonList,
+  IonItem,
   IonPage,
   IonToolbar,
   useIonViewWillEnter
@@ -15,24 +16,30 @@ import UserOrderListItem from '../../presentational/UserOrderListItem/UserOrderL
 import { RouteComponentProps } from 'react-router';
 import './ViewOrder.css';
 
-import { UserOrder, getOrderUsers } from '../../../data/userOrders';
 import { Order, getOrder } from '../../../data/orders'; 
+import { UserOrder, getOrderUsers } from '../../../data/userOrders';
+import { OrderProduct, getOrderProducts } from '../../../data/orderProduct';
 
 interface ViewOrderProps extends RouteComponentProps<{ id: string; }> { }
 
 const ViewOrder: React.FC<ViewOrderProps> = ({ match }) => {
 
   const [order, setOrder] = useState<Order>();
-  const [orderUsers, setOrderUsers ] = useState<UserOrder[]>();
+  const [orderUsers, setOrderUsers] = useState<UserOrder[]>();
+  const [orderProducts, setOrderProduct] = useState<OrderProduct[]>();
 
   const [tab, setTab] = useState<string>('users');
 
   useIonViewWillEnter(() => {
-    const order = getOrder(match.params.id);
+    const { id: orderId } = match.params;
+    const order = getOrder(orderId);
     setOrder(order);
 
-    const orderUsers = getOrderUsers(match.params.id);
+    const orderUsers = getOrderUsers(orderId);
     setOrderUsers(orderUsers);
+
+    const orderProducts = getOrderProducts(orderId);
+    setOrderProduct(orderProducts);
   });
 
   return (
@@ -48,7 +55,7 @@ const ViewOrder: React.FC<ViewOrderProps> = ({ match }) => {
       <IonContent>
         <div style={{ textAlign: 'center', paddingTop: '20px', backgroundColor: 'lightgray' }}>
           {order?.createdAt.toDateString()} &nbsp; | &nbsp; {order?.openToUsers ? 'Open' : 'Close'} &nbsp; | &nbsp; {order?.closingTime.toDateString()}
-          <nav style={{ display: 'flex' }}>
+          <nav style={{ display: 'flex', borderBottom: '1px solid' }}>
             <IonButton onClick={() => setTab('users')} disabled={tab === 'users'} expand="full">משתמשים</IonButton>
             <IonButton onClick={() => setTab('products')} disabled={tab === 'products'} expand="full">מוצרים</IonButton>
           </nav>
@@ -59,7 +66,7 @@ const ViewOrder: React.FC<ViewOrderProps> = ({ match }) => {
             {tab === 'users' ? (
               <OrderUsersList orderUsers={orderUsers as UserOrder[]} />
             ) : (
-              <h2>Order {order?._id} Products</h2>
+              <OrderProductsList orderProducts={orderProducts as OrderProduct[]} />
             )}
           </div>
         </div>
@@ -75,5 +82,12 @@ const OrderUsersList = ({ orderUsers }: { orderUsers: UserOrder[] }) => (
   <IonList>
     <h2>רשימת משתמשים</h2>
     {orderUsers ? orderUsers.map(o => <UserOrderListItem key={o._id} userOrder={o} />) : <div>Order not found</div>}
+  </IonList>
+);
+
+const OrderProductsList = ({ orderProducts }: { orderProducts: OrderProduct[] }) => (
+  <IonList>
+    <h2>רשימת מוצרים</h2>
+    {orderProducts ? orderProducts.map(o => <IonItem key={o.product}>{o.product}</IonItem>) : <div>Order not found</div>}
   </IonList>
 )

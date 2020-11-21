@@ -6,8 +6,8 @@ import {
   IonHeader,
   IonList,
   IonPage,
-  IonRefresher,
-  IonRefresherContent,
+  // IonRefresher,
+  // IonRefresherContent,
   IonTitle,
   IonToolbar,
   useIonViewWillEnter,
@@ -25,11 +25,11 @@ const Home: React.FC = () => {
     setOrders(msgs);
   });
 
-  const refresh = (e: CustomEvent) => {
-    setTimeout(() => {
-      e.detail.complete();
-    }, 3000);
-  };
+  // const refresh = (e: CustomEvent) => {
+  //   setTimeout(() => {
+  //     e.detail.complete();
+  //   }, 3000);
+  // };
 
   return (
     <IonPage id="home-page">

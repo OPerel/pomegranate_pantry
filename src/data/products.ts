@@ -53,4 +53,4 @@ const products: Product[] = [
 
 export const getProducts = () => products;
 
-export const getProduct = (_id: string) => products.find(m => m._id === _id);
+export const getProductsById = (_id: string) => products.find(p => p._id === _id);
