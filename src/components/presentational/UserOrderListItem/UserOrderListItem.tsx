@@ -9,8 +9,8 @@ import {
   IonListHeader,
   IonLabel,
   IonIcon
-  } from '@ionic/react';
-  import { arrowDownCircleOutline, arrowUpCircleOutline } from 'ionicons/icons'
+} from '@ionic/react';
+import { arrowDownCircleOutline, arrowUpCircleOutline } from 'ionicons/icons';
 
 import { UserOrder } from '../../../data/userOrders';
 import { getUser } from '../../../data/users';

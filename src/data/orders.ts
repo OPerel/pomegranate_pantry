@@ -20,7 +20,7 @@ const orders: Order[] = [
     openToUsers: true,
     createdAt: new Date(234234234),
     closingTime: new Date(234234345),
-    orderProducts: [''],
+    orderProducts: ['123', '456'],
     userOrders: ['1', '2', '3'],
     totalPrice: 0,
     payed: false

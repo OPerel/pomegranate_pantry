@@ -6,14 +6,17 @@ import {
   IonContent,
   IonHeader,
   IonList,
-  IonItem,
+  IonListHeader,
+  IonLabel,
   IonPage,
   IonToolbar,
   useIonViewWillEnter
 } from '@ionic/react';
 
-import UserOrderListItem from '../../presentational/UserOrderListItem/UserOrderListItem';
 import { RouteComponentProps } from 'react-router';
+
+import ProductOrderListItem from '../../presentational/ProductOrderListItem';
+import UserOrderListItem from '../../presentational/UserOrderListItem/UserOrderListItem';
 import './ViewOrder.css';
 
 import { Order, getOrder } from '../../../data/orders'; 
@@ -81,6 +84,13 @@ export default ViewOrder;
 const OrderUsersList = ({ orderUsers }: { orderUsers: UserOrder[] }) => (
   <IonList>
     <h2>רשימת משתמשים</h2>
+    <IonListHeader>
+      <IonLabel>שם</IonLabel>
+      <IonLabel>מקום</IonLabel>
+      <IonLabel>סה"כ</IonLabel>
+      <IonLabel>שולם</IonLabel>
+      <IonLabel></IonLabel>
+    </IonListHeader>
     {orderUsers ? orderUsers.map(o => <UserOrderListItem key={o._id} userOrder={o} />) : <div>Order not found</div>}
   </IonList>
 );
@@ -88,6 +98,14 @@ const OrderUsersList = ({ orderUsers }: { orderUsers: UserOrder[] }) => (
 const OrderProductsList = ({ orderProducts }: { orderProducts: OrderProduct[] }) => (
   <IonList>
     <h2>רשימת מוצרים</h2>
-    {orderProducts ? orderProducts.map(o => <IonItem key={o.product}>{o.product}</IonItem>) : <div>Order not found</div>}
+    <IonListHeader>
+      <IonLabel>מוצר</IonLabel>
+      <IonLabel>כמות</IonLabel>
+      <IonLabel>חסר</IonLabel>
+      <IonLabel>סה"כ</IonLabel>
+      <IonLabel>מחיר סופי</IonLabel>
+      <IonLabel></IonLabel>
+    </IonListHeader>
+    {orderProducts ? orderProducts.map(o => <ProductOrderListItem key={o.product} orderProduct={o} />) : <div>Order not found</div>}
   </IonList>
 )

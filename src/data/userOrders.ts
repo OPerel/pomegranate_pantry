@@ -18,7 +18,7 @@ const userOrders: UserOrder[] = [
     products: [{ product: 'qwerty1', qty: 2 }, { product: 'qwerty2', qty: 3 }],
     userRef: 'a',
     orderRef: '1',
-    totalPrice: 0,
+    totalPrice: 56,
     payed: false
   },
   {

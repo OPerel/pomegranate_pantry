@@ -13,6 +13,8 @@ export interface OrderProduct {
 // missing = (totalQty % Product.minQty) !== 0
 //   ? ((Math.floor(totalQty / Product.minQty) + 1) * Product.minQty) - totalQty
 //   : null
+// totalQty = UserOrder.products.reduce((acc, {p, qty}) => acc += aty, 0) of all UserOrders in the current Order
+// fixedTotalPrice = totalQty * Product.price
 
 export const orderProducts: OrderProduct[] = [
   {
@@ -20,7 +22,7 @@ export const orderProducts: OrderProduct[] = [
     product: 'qwerty1',
     order: '1',
     totalQty: 2,
-    missing: 6,
+    missing: 10,
     fixedTotalPrice: 28,
     finalTotalPrice: null,
     priceWarn: false
@@ -30,8 +32,8 @@ export const orderProducts: OrderProduct[] = [
     product: 'qwerty2',
     order: '1',
     totalQty: 3,
-    missing: 4,
-    fixedTotalPrice: 13,
+    missing: 9,
+    fixedTotalPrice: 18,
     finalTotalPrice: null,
     priceWarn: false
   }
