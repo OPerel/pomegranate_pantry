@@ -5,18 +5,15 @@ import {
   IonButton,
   IonContent,
   IonHeader,
-  IonList,
-  IonListHeader,
-  IonLabel,
   IonPage,
   IonToolbar,
-  useIonViewWillEnter
+  useIonViewWillEnter,
 } from '@ionic/react';
 
 import { RouteComponentProps } from 'react-router';
 
-import ProductOrderListItem from '../../presentational/ProductOrderListItem';
-import UserOrderListItem from '../../presentational/UserOrderListItem/UserOrderListItem';
+import OrderProductsList from '../../presentational/OrderProductsList';
+import OrderUsersList from '../../presentational/OrderUsersList';
 import './ViewOrder.css';
 
 import { Order, getOrder } from '../../../data/orders'; 
@@ -46,7 +43,7 @@ const ViewOrder: React.FC<ViewOrderProps> = ({ match }) => {
   });
 
   return (
-    <IonPage id="view-message-page">
+    <IonPage>
       <IonHeader translucent>
         <IonToolbar>
           <IonButtons>
@@ -65,15 +62,12 @@ const ViewOrder: React.FC<ViewOrderProps> = ({ match }) => {
         </div>
 
         <div>
-          <div>
-            {tab === 'users' ? (
-              <OrderUsersList orderUsers={orderUsers as UserOrder[]} />
-            ) : (
-              <OrderProductsList orderProducts={orderProducts as OrderProduct[]} />
-            )}
-          </div>
+          {tab === 'users' && orderUsers ? (
+            <OrderUsersList orderUsers={orderUsers} />
+          ) : (
+            orderProducts && <OrderProductsList orderProducts={orderProducts} />
+          )}
         </div>
-          
       </IonContent>
     </IonPage>
   );
@@ -81,31 +75,5 @@ const ViewOrder: React.FC<ViewOrderProps> = ({ match }) => {
 
 export default ViewOrder;
 
-const OrderUsersList = ({ orderUsers }: { orderUsers: UserOrder[] }) => (
-  <IonList>
-    <h2>רשימת משתמשים</h2>
-    <IonListHeader>
-      <IonLabel>שם</IonLabel>
-      <IonLabel>מקום</IonLabel>
-      <IonLabel>סה"כ</IonLabel>
-      <IonLabel>שולם</IonLabel>
-      <IonLabel></IonLabel>
-    </IonListHeader>
-    {orderUsers ? orderUsers.map(o => <UserOrderListItem key={o._id} userOrder={o} />) : <div>Order not found</div>}
-  </IonList>
-);
 
-const OrderProductsList = ({ orderProducts }: { orderProducts: OrderProduct[] }) => (
-  <IonList>
-    <h2>רשימת מוצרים</h2>
-    <IonListHeader>
-      <IonLabel>מוצר</IonLabel>
-      <IonLabel>כמות</IonLabel>
-      <IonLabel>חסר</IonLabel>
-      <IonLabel>סה"כ</IonLabel>
-      <IonLabel>מחיר סופי</IonLabel>
-      <IonLabel></IonLabel>
-    </IonListHeader>
-    {orderProducts ? orderProducts.map(o => <ProductOrderListItem key={o.product} orderProduct={o} />) : <div>Order not found</div>}
-  </IonList>
-)
+
