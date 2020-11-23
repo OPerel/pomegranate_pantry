@@ -1,5 +1,5 @@
 import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   IonContent,
   IonHeader,
@@ -14,17 +14,11 @@ import {
 } from '@ionic/react';
 import './Orders.css';
 
-import { getOrders } from '../../../data/orders';
-import { Order } from '../../../types/interfaces';
+import { useAdminStateContext } from '../../context/AdminContextProvider'
 
 const Home: React.FC = () => {
 
-  const [orders, setOrders] = useState<Order[]>([]);
-
-  React.useEffect(() => {
-    const orders = getOrders();
-    setOrders(orders);
-  }, []);
+  const { state : { orders } } = useAdminStateContext();
 
   // const refresh = (e: CustomEvent) => {
   //   setTimeout(() => {

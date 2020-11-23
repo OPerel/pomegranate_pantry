@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   IonBackButton,
   IonButtons,
@@ -9,37 +9,19 @@ import {
   IonToolbar,
 } from '@ionic/react';
 
-import { RouteComponentProps } from 'react-router';
-
 import OrderProductsList from '../../presentational/OrderProductsList';
 import OrderUsersList from '../../presentational/OrderUsersList';
 import './ViewOrder.css';
 
-import { Order, getOrder } from '../../../data/orders'; 
-import { UserOrder, getOrderUsers } from '../../../data/userOrders';
-import { OrderProduct, getOrderProducts } from '../../../data/orderProduct';
+import { useAdminStateContext } from '../../context/AdminContextProvider';
 
-interface ViewOrderProps extends RouteComponentProps<{ id: string; }> { }
-
-const ViewOrder: React.FC<ViewOrderProps> = ({ match }) => {
-
-  const [order, setOrder] = useState<Order>();
-  const [orderUsers, setOrderUsers] = useState<UserOrder[]>();
-  const [orderProducts, setOrderProduct] = useState<OrderProduct[]>();
+const ViewOrder: React.FC = () => {
 
   const [tab, setTab] = useState<string>('users');
 
-  useEffect(() => {
-    const { id: orderId } = match.params;
-    const order = getOrder(orderId);
-    setOrder(order);
-
-    const orderUsers = getOrderUsers(orderId);
-    setOrderUsers(orderUsers);
-
-    const orderProducts = getOrderProducts(orderId);
-    setOrderProduct(orderProducts);
-  }, [match.params]);
+  const { state } = useAdminStateContext();
+  console.log('provided state: ', state)
+  const { order, orderUsers, orderProducts } = state;
 
   return (
     <IonPage>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import AdminStateProvider from './components/context/AdminContextProvider';
 import Orders from './components/containers/Orders/Orders';
 import ViewOrder from './components/containers/ViewOrder/ViewOrder';
 
@@ -28,8 +29,12 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route path="/home" component={Orders} exact={true} />
-        <Route path="/order/:id" component={ViewOrder} exact={true} />
+        <Route exact path="/home" render={(props) => {
+          return <AdminStateProvider {...props}><Orders /></AdminStateProvider>
+        }}/>
+        <Route exact path="/order/:id" render={(props) => {
+          return <AdminStateProvider {...props}><ViewOrder /></AdminStateProvider>
+        }}/>
         <Route exact path="/" render={() => <Redirect to="/home" />} />
       </IonRouterOutlet>
     </IonReactRouter>
