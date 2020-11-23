@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   IonBackButton,
   IonButtons,
@@ -7,7 +7,6 @@ import {
   IonHeader,
   IonPage,
   IonToolbar,
-  useIonViewWillEnter,
 } from '@ionic/react';
 
 import { RouteComponentProps } from 'react-router';
@@ -30,7 +29,7 @@ const ViewOrder: React.FC<ViewOrderProps> = ({ match }) => {
 
   const [tab, setTab] = useState<string>('users');
 
-  useIonViewWillEnter(() => {
+  useEffect(() => {
     const { id: orderId } = match.params;
     const order = getOrder(orderId);
     setOrder(order);
@@ -40,7 +39,7 @@ const ViewOrder: React.FC<ViewOrderProps> = ({ match }) => {
 
     const orderProducts = getOrderProducts(orderId);
     setOrderProduct(orderProducts);
-  });
+  }, [match.params]);
 
   return (
     <IonPage>

@@ -1,6 +1,5 @@
 import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
 import React, { useState } from 'react';
-import { Order, getOrders } from '../../../data/orders';
 import {
   IonContent,
   IonHeader,
@@ -10,20 +9,21 @@ import {
   // IonRefresherContent,
   IonTitle,
   IonToolbar,
-  useIonViewWillEnter,
   IonListHeader,
   IonLabel
 } from '@ionic/react';
 import './Orders.css';
 
+import { Order, getOrders } from '../../../data/orders';
+
 const Home: React.FC = () => {
 
   const [orders, setOrders] = useState<Order[]>([]);
 
-  useIonViewWillEnter(() => {
-    const msgs = getOrders();
-    setOrders(msgs);
-  });
+  React.useEffect(() => {
+    const orders = getOrders();
+    setOrders(orders);
+  }, []);
 
   // const refresh = (e: CustomEvent) => {
   //   setTimeout(() => {
