@@ -1,10 +1,4 @@
-export interface Product {
-  _id: string,
-  name: string,
-  price: number,
-  minQty: number,
-  qtyUnit: 'unit' | 'Kg'
-}
+import { Product } from '../types/interfaces';
 
 const products: Product[] = [
   {

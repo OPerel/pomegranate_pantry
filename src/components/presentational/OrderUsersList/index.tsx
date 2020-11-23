@@ -10,7 +10,7 @@ import {
 } from '@ionic/react';
 
 import { getUser } from '../../../data/users';
-import { UserOrder } from '../../../data/userOrders';
+import { UserOrder } from '../../../types/interfaces';
 
 import UserOrderListItem from '../UserOrderListItem/UserOrderListItem';
 import './OrderUsersList.css';

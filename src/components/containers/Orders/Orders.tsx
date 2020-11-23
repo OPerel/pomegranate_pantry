@@ -14,7 +14,8 @@ import {
 } from '@ionic/react';
 import './Orders.css';
 
-import { Order, getOrders } from '../../../data/orders';
+import { getOrders } from '../../../data/orders';
+import { Order } from '../../../types/interfaces';
 
 const Home: React.FC = () => {
 

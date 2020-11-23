@@ -6,7 +6,7 @@ import {
   IonListHeader
 } from '@ionic/react';
 
-import { OrderProduct } from '../../../data/orderProduct';
+import { OrderProduct } from '../../../types/interfaces';
 
 import ProductOrderListItem from '../ProductOrderListItem';
 

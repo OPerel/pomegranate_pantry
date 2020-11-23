@@ -1,17 +1,4 @@
-export interface Order {
-  _id: string,
-  open: boolean,
-  openToUsers: boolean,
-  createdAt: Date,
-  closingTime: Date,
-  orderProducts: string[], // array of OrderProducts` ids
-  userOrders: string[], // array of UserOrders` ids
-  totalPrice: number, // total price of UsersOrders 
-  payed: boolean
-}
-
-// Order.payed = userOrdres.every(order => order.payed)
-// Order.totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
+import { Order } from '../types/interfaces';
 
 const orders: Order[] = [
   {

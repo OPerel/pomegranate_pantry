@@ -12,7 +12,8 @@ import {
   } from '@ionic/react';
   import { arrowDownCircleOutline, arrowUpCircleOutline } from 'ionicons/icons'
 
-import { OrderProduct } from '../../../data/orderProduct';
+import { OrderProduct } from '../../../types/interfaces';
+
 import { getProductsById } from '../../../data/products';
 import { getOrderUsers } from '../../../data/userOrders';
 import { getUser } from '../../../data/users';

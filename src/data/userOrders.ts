@@ -1,16 +1,4 @@
-export interface UserOrder {
-  _id: string;
-  products: UserOrderProducts[]; // array of Products`
-  userRef: string // a ref to the user
-  orderRef: string // a ref to the order
-  totalPrice: number; // total price of UsersOrders
-  payed: boolean;
-}
-
-export interface UserOrderProducts {
-  product: string, // ref to Product
-  qty: number
-}
+import { UserOrder } from '../types/interfaces';
 
 const userOrders: UserOrder[] = [
   {

@@ -7,7 +7,7 @@ import {
   IonRow,
   } from '@ionic/react';
 
-import { Order } from '../../../data/orders';
+import { Order } from '../../../types/interfaces';
 import './OrderListItem.css';
 
 interface OrderListItemProps {
