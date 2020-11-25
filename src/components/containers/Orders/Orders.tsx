@@ -18,12 +18,12 @@ import { addOutline } from 'ionicons/icons';
 import './Orders.css';
 
 import { useAdminStateContext, addNewOrder, ActionTypes } from '../../context/AdminContextProvider';
-import { Order } from '../../../types/interfaces';
+// import { Order } from '../../../types/interfaces';
 
 const Home: React.FC = () => {
 
   const { state, dispatch } = useAdminStateContext();
-  console.log('Order state: ', state)
+  // console.log('Order state: ', state)
 
   // const refresh = (e: CustomEvent) => {
   //   setTimeout(() => {
@@ -33,7 +33,7 @@ const Home: React.FC = () => {
 
   const addOrder = (): void => {
     const today = new Date();
-    const monthFromToday = today.setDate(today.getDate() + 30);
+    const monthFromToday = new Date().setDate(today.getDate() + 30);
     const newOrder = {
       _id: '2',
       open: true, 
@@ -76,7 +76,7 @@ const Home: React.FC = () => {
           {state.orders.map(p => <OrderListItem key={p._id} order={p} />)}
         </IonList>
         <IonLabel>
-          <IonButton onClick={addOrder}>
+          <IonButton onClick={addOrder} data-testid="add-order-button">
             <IonIcon icon={addOutline} />
           </IonButton>
           הזמנה חדשה
