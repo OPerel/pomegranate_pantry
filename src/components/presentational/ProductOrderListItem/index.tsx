@@ -39,7 +39,7 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
 
   return (
     <>
-      <IonItem button onClick={() => setItemOpen(!itemOpen)}>
+      <IonItem button onClick={() => setItemOpen(!itemOpen)} data-testid="product-order-list-item">
         <IonGrid>
           <IonRow>
             <IonCol><h3>{getProductsById(orderProduct.product)?.name}</h3></IonCol>

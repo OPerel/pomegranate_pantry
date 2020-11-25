@@ -19,7 +19,7 @@ import { useAdminStateContext } from '../../context/AdminContextProvider'
 const Home: React.FC = () => {
 
   const { state } = useAdminStateContext();
-  console.log('Order state: ', state)
+  // console.log('Order state: ', state)
 
   // const refresh = (e: CustomEvent) => {
   //   setTimeout(() => {
