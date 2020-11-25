@@ -11,9 +11,9 @@ const userOrders: UserOrder[] = [
   },
   {
     _id: '2',
-    products: [],
+    products: [{ product: 'qwerty3', qty: 2 }, { product: 'qwerty4', qty: 1 }],
     userRef: 'b',
-    orderRef: '1',
+    orderRef: '2',
     totalPrice: 0,
     payed: true
   },

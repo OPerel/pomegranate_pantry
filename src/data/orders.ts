@@ -7,8 +7,6 @@ const orders: Order[] = [
     openToUsers: true,
     createdAt: new Date(234234234),
     closingTime: new Date(234234345),
-    orderProducts: ['123', '456'],
-    userOrders: ['1', '2', '3'],
     totalPrice: 0,
     payed: false
   }
@@ -18,6 +16,14 @@ const orders: Order[] = [
 export const getOrders = () => orders;
 
 export const getOrder = (_id: string) => orders.find(m => m._id === _id);
+
+export const addOrder = async (orderDetails: Order): Promise<Order> => {
+  const orderWithId = { ...orderDetails, _id: (orders.length + 1).toString() }
+  console.log('orders before push :', orders)
+  orders.push(orderWithId);
+  console.log('orders after push :', orders)
+  return orderWithId
+}
 
 
 

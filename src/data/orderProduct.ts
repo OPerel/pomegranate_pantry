@@ -20,6 +20,26 @@ export const orderProducts: OrderProduct[] = [
     fixedTotalPrice: 18,
     finalTotalPrice: null,
     priceWarn: false
+  },
+  {
+    _id: '789',
+    product: 'qwerty3',
+    order: '2',
+    totalQty: 2,
+    missing: 3,
+    fixedTotalPrice: 100,
+    finalTotalPrice: null,
+    priceWarn: false
+  },
+  {
+    _id: '012',
+    product: 'qwerty4',
+    order: '2',
+    totalQty: 1,
+    missing: 4,
+    fixedTotalPrice: 38,
+    finalTotalPrice: null,
+    priceWarn: false
   }
 ]
 

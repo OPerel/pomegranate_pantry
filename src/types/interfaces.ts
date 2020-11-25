@@ -4,8 +4,6 @@ export interface Order {
   openToUsers: boolean,
   createdAt: Date,
   closingTime: Date,
-  orderProducts: string[], // array of OrderProducts` ids
-  userOrders: string[], // array of UserOrders` ids
   totalPrice: number, // total price of UsersOrders 
   payed: boolean
 }

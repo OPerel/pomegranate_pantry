@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { Order, UserOrder, OrderProduct } from '../../types/interfaces';
 
-import { getOrders, getOrder } from '../../data/orders'; 
+import { getOrders, getOrder, addOrder } from '../../data/orders'; 
 import { getOrderUsers } from '../../data/userOrders';
 import { getOrderProducts } from '../../data/orderProduct';
 
@@ -21,15 +21,20 @@ export enum ActionTypes {
   SET_ORDERS = 'SET_ORDERS',
   SET_ORDER = 'SET_ORDER',
   SET_USER_ORDERS = 'SET_USER_ORDERS',
-  SET_ORDER_PRODUCTS = 'SET_ORDER_PRODUCTS'
+  SET_ORDER_PRODUCTS = 'SET_ORDER_PRODUCTS',
+
+  ADD_ORDER = '@@/admin/order/ADD_ORDER', 
 }
+
+
 
 type AdminAction =
 | { type: ActionTypes.FETCH, payload: { loading: boolean } }
 | { type: ActionTypes.SET_ORDERS, payload: Order[] }
 | { type: ActionTypes.SET_ORDER, payload: Order }
 | { type: ActionTypes.SET_USER_ORDERS, payload: UserOrder[] }
-| { type: ActionTypes.SET_ORDER_PRODUCTS, payload: OrderProduct[] };
+| { type: ActionTypes.SET_ORDER_PRODUCTS, payload: OrderProduct[] }
+| { type: ActionTypes.ADD_ORDER, payload: Order };;
 
 interface ProviderValue {
   state: AdminState,
@@ -57,9 +62,25 @@ const reducer = (state: AdminState, action: AdminAction): AdminState => {
       return { ...state, orderUsers: [ ...action.payload ] };
     case ActionTypes.SET_ORDER_PRODUCTS:
       return { ...state, orderProducts: [ ...action.payload ] };
+    case ActionTypes.ADD_ORDER:
+      return { ...state, orders: [ ...state.orders, action.payload ] }
     default:
       return state;
   }
+}
+
+export const addNewOrder = async (order: Order): Promise<string> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const res = await addOrder(order);
+      console.log('order added id: ', res);
+      
+      resolve(res._id);
+    } catch (err) {
+      console.log('Error adding order: ', err);
+      reject(err);
+    }
+  })
 }
   
 // react context

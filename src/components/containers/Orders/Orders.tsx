@@ -10,22 +10,42 @@ import {
   IonTitle,
   IonToolbar,
   IonListHeader,
-  IonLabel
+  IonLabel,
+  IonButton,
+  IonIcon,
 } from '@ionic/react';
+import { addOutline } from 'ionicons/icons';
 import './Orders.css';
 
-import { useAdminStateContext } from '../../context/AdminContextProvider'
+import { useAdminStateContext, addNewOrder, ActionTypes } from '../../context/AdminContextProvider';
+import { Order } from '../../../types/interfaces';
 
 const Home: React.FC = () => {
 
-  const { state } = useAdminStateContext();
-  // console.log('Order state: ', state)
+  const { state, dispatch } = useAdminStateContext();
+  console.log('Order state: ', state)
 
   // const refresh = (e: CustomEvent) => {
   //   setTimeout(() => {
   //     e.detail.complete();
   //   }, 3000);
   // };
+
+  const addOrder = (): void => {
+    const today = new Date();
+    const monthFromToday = today.setDate(today.getDate() + 30);
+    const newOrder = {
+      _id: '2',
+      open: true, 
+      openToUsers: true,
+      createdAt: today,
+      closingTime: new Date(monthFromToday),
+      totalPrice: 0,
+      payed: false
+    }
+    addNewOrder(newOrder);
+    dispatch({ type: ActionTypes.ADD_ORDER, payload: newOrder })
+  } 
 
   return (
     <IonPage id="home-page">
@@ -55,6 +75,12 @@ const Home: React.FC = () => {
           </IonListHeader>
           {state.orders.map(p => <OrderListItem key={p._id} order={p} />)}
         </IonList>
+        <IonLabel>
+          <IonButton onClick={addOrder}>
+            <IonIcon icon={addOutline} />
+          </IonButton>
+          הזמנה חדשה
+        </IonLabel>
       </IonContent>
     </IonPage>
   );
