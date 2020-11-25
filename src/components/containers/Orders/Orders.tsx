@@ -18,7 +18,8 @@ import { useAdminStateContext } from '../../context/AdminContextProvider'
 
 const Home: React.FC = () => {
 
-  const { state : { orders } } = useAdminStateContext();
+  const { state } = useAdminStateContext();
+  console.log('Order state: ', state)
 
   // const refresh = (e: CustomEvent) => {
   //   setTimeout(() => {
@@ -52,7 +53,7 @@ const Home: React.FC = () => {
             <IonLabel>סה"כ</IonLabel>
             <IonLabel>שולם</IonLabel>
           </IonListHeader>
-          {orders.map(p => <OrderListItem key={p._id} order={p} />)}
+          {state.orders.map(p => <OrderListItem key={p._id} order={p} />)}
         </IonList>
       </IonContent>
     </IonPage>

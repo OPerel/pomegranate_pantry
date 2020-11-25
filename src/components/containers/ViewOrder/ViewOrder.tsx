@@ -20,7 +20,7 @@ const ViewOrder: React.FC = () => {
   const [tab, setTab] = useState<string>('users');
 
   const { state } = useAdminStateContext();
-  console.log('provided state: ', state)
+  // console.log('provided state: ', state)
   const { order, orderUsers, orderProducts } = state;
 
   return (
@@ -43,10 +43,10 @@ const ViewOrder: React.FC = () => {
         </div>
 
         <div>
-          {tab === 'users' && orderUsers ? (
+          {tab === 'users' ? (
             <OrderUsersList orderUsers={orderUsers} />
           ) : (
-            orderProducts && <OrderProductsList orderProducts={orderProducts} />
+            <OrderProductsList orderProducts={orderProducts} />
           )}
         </div>
       </IonContent>

@@ -29,7 +29,7 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
 
   return (
     <>
-      <IonItem button onClick={() => setItemOpen(!itemOpen)}>
+      <IonItem button onClick={() => setItemOpen(!itemOpen)} data-testid="order-user-list-item">
         <IonGrid>
           <IonRow>
             <IonCol><h3>{getUser(userOrder.userRef).name}</h3></IonCol>

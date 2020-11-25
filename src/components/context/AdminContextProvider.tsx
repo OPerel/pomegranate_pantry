@@ -78,14 +78,17 @@ export default ({ match, children }: StateContextProps) => {
     const orders = getOrders();
     dispatch({ type: ActionTypes.SET_ORDERS, payload: orders as Order[] })
 
-    const order = getOrder(orderId);
-    dispatch({ type: ActionTypes.SET_ORDER, payload: order as Order });
+    if (orderId) {
+      const order = getOrder(orderId);
+      dispatch({ type: ActionTypes.SET_ORDER, payload: order as Order });
 
-    const orderUsers = getOrderUsers(orderId);
-    dispatch({ type: ActionTypes.SET_USER_ORDERS, payload: orderUsers as UserOrder[] });
+      const orderUsers = getOrderUsers(orderId);
+      dispatch({ type: ActionTypes.SET_USER_ORDERS, payload: orderUsers as UserOrder[] });
 
-    const orderProducts = getOrderProducts(orderId);
-    dispatch({ type: ActionTypes.SET_ORDER_PRODUCTS, payload: orderProducts as OrderProduct[] });
+      const orderProducts = getOrderProducts(orderId);
+      dispatch({ type: ActionTypes.SET_ORDER_PRODUCTS, payload: orderProducts as OrderProduct[] });
+    }
+    
   }, [match.params]);
 
   return state.loading ? (

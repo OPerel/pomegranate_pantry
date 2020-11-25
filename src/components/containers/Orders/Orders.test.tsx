@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { render } from '@testing-library/react';
+import { render } from '../../../tests/testUtils';
 import '@testing-library/jest-dom/extend-expect';
 
 import Orders from './Orders';
