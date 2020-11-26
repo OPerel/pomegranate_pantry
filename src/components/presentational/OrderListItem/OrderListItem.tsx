@@ -15,7 +15,6 @@ interface OrderListItemProps {
 }
 
 const OrderListItem: React.FC<OrderListItemProps> = ({ order }) => {
-  console.log('orderListItem order: ', order)
   return (
     <IonItem routerLink={`/order/${order._id}`} detail={true} data-testid="order-list-item">
       <IonGrid>

@@ -1,4 +1,3 @@
-import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
 import React from 'react';
 import {
   IonContent,
@@ -13,11 +12,13 @@ import {
   IonLabel,
   IonButton,
   IonIcon,
+  IonSpinner
 } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
 import './Orders.css';
 
 import { useAdminStateContext, addNewOrder, ActionTypes } from '../../context/AdminContextProvider';
+import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
 // import { Order } from '../../../types/interfaces';
 
 const Home: React.FC = () => {
@@ -35,7 +36,7 @@ const Home: React.FC = () => {
     const today = new Date();
     const monthFromToday = new Date().setDate(today.getDate() + 30);
     const newOrder = {
-      _id: '2',
+      _id: '',
       open: true, 
       openToUsers: true,
       createdAt: today,
@@ -45,7 +46,7 @@ const Home: React.FC = () => {
     }
     addNewOrder(newOrder);
     dispatch({ type: ActionTypes.ADD_ORDER, payload: newOrder })
-  } 
+  }
 
   return (
     <IonPage id="home-page">
@@ -73,13 +74,12 @@ const Home: React.FC = () => {
             <IonLabel>סה"כ</IonLabel>
             <IonLabel>שולם</IonLabel>
           </IonListHeader>
-          {state.orders.map(p => <OrderListItem key={p._id} order={p} />)}
+          {!state.loading ? state.orders.map(p => <OrderListItem key={p._id} order={p} />) : <IonSpinner color="primary" style={{ display: 'block', margin: '50px auto' }}/>}
         </IonList>
         <IonLabel>
           <IonButton onClick={addOrder} data-testid="add-order-button">
-            <IonIcon icon={addOutline} />
+            <IonIcon slot="start" icon={addOutline} />הזמנה חדשה
           </IonButton>
-          הזמנה חדשה
         </IonLabel>
       </IonContent>
     </IonPage>
