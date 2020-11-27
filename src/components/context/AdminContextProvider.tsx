@@ -117,7 +117,7 @@ const AdminStateProvider: React.FC<StateContextProps> = ({ match, children }) =>
     
   }, [match.params, state.loading]);
   
-  console.log('state: ', state)
+  // console.log('state: ', state)
   return (
     <AdminStateContext.Provider value={{ state, dispatch }}>
       {children}
