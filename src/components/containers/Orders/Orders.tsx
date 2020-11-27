@@ -23,7 +23,7 @@ import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
 
 const Home: React.FC = () => {
 
-  const { state, dispatch } = useAdminStateContext();
+  const { state: { orders, loading }, dispatch } = useAdminStateContext();
   // console.log('Order state: ', state)
 
   // const refresh = (e: CustomEvent) => {
@@ -74,7 +74,11 @@ const Home: React.FC = () => {
             <IonLabel>סה"כ</IonLabel>
             <IonLabel>שולם</IonLabel>
           </IonListHeader>
-          {!state.loading ? state.orders.map(p => <OrderListItem key={p._id} order={p} />) : <IonSpinner color="primary" style={{ display: 'block', margin: '50px auto' }}/>}
+          {!loading ? (
+            orders ? (
+              orders.map(p => <OrderListItem key={p._id} order={p} />) 
+            ) : <h3>לא נמצאו הזמנות</h3>
+          ) : <IonSpinner color="primary" style={{ display: 'block', margin: '50px auto' }}/>}
         </IonList>
         <IonLabel>
           <IonButton onClick={addOrder} data-testid="add-order-button">

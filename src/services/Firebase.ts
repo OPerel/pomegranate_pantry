@@ -17,7 +17,9 @@ class FirebaseService {
   private db: firebase.database.Database;
 
   constructor() {
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
 
     this.db = firebase.database();
   }

@@ -95,7 +95,6 @@ const AdminStateProvider: React.FC<StateContextProps> = ({ match, children }) =>
   useEffect(() => {
     const { id: orderId } = match.params;
     
-    console.log('useEffect set loading to true: ', state.loading)
     dispatch({ type: ActionTypes.FETCH })
     try {
       Fire.ordersCollectionListener((orders) => {
