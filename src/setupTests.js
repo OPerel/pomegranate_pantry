@@ -16,6 +16,7 @@ jest.mock('./services/Firebase', () => {
   // const snapshot = { val: () => data };
   return {
     ordersCollectionListener: (cb) => {cb(ordersData)},
+    productsCollectionListener: (cb) => {cb([])},
     addNewOrder: () => {
       // const orderWithId = { ...orderDetails, _id: (ordersData.length + 1).toString() }
       // console.log('orders before push :', ordersData)

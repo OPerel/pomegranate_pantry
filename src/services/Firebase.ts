@@ -2,7 +2,7 @@
 import app from 'firebase/app';
 import "firebase/database";
 
-import { Order, UserOrder, OrderProduct } from '../types/interfaces';
+import { Order, UserOrder, OrderProduct, Product } from '../types/interfaces';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -25,8 +25,10 @@ class FirebaseService {
     this.db = app.database();
   }
 
+  // utils and refs
   private getColRef = (col: string) => this.db.ref(col);
 
+  // listeners
   public ordersCollectionListener = async (
     cb: (snap: Order[]) => void
   ) => {
@@ -44,6 +46,22 @@ class FirebaseService {
     });
   }
 
+  public productsCollectionListener = async (
+    cb: (snap: Product[]) => void
+  ) => {
+    this.getColRef('/products').on('value', (snapshot) => {
+      // parse snapshot
+      const val = snapshot.val();
+      const products = Object.keys(val).map(key => ({
+        ...val[key],
+        _id: key
+      }))
+      console.log('products: ', products)
+      cb(products);
+    });
+  }
+
+  // write
   public addNewOrder = async (closingTime: Date) => {
     const newOrder = {
       open: true, 
@@ -59,6 +77,15 @@ class FirebaseService {
       return (await res.get()).val();
     } catch (err) {
       console.log('Error adding new order: ', err)
+    }
+  }
+
+  public addNewProduct = async (product: Product) => {
+    try {
+      const res = await this.getColRef('/products').push(product);
+      return (await res.get()).val();
+    } catch (err) {
+      console.log('Error adding new product: ', err)
     }
   }
 }

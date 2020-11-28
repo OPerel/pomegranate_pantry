@@ -3,7 +3,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import AdminStateProvider from './components/context/AdminContextProvider';
-import Orders from './components/containers/Orders/Orders';
+import Admin from './components/containers/Admin';
 import ViewOrder from './components/containers/ViewOrder/ViewOrder';
 
 /* Core CSS required for Ionic components to work properly */
@@ -30,7 +30,7 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonRouterOutlet>
         <Route exact path="/home" render={(props) => {
-          return <AdminStateProvider {...props}><Orders /></AdminStateProvider>
+          return <AdminStateProvider {...props}><Admin /></AdminStateProvider>
         }}/>
         <Route exact path="/order/:id" render={(props) => {
           return <AdminStateProvider {...props}><ViewOrder /></AdminStateProvider>

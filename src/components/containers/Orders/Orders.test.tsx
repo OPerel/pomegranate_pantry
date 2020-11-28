@@ -4,10 +4,7 @@ import React from 'react';
 import { render, fireEvent } from '../../../tests/testUtils';
 import '@testing-library/jest-dom/extend-expect';
 
-import Orders from './Orders';
-import { getOrders } from '../../../data/orders'
-
-const ordersLength = getOrders().length;
+import Orders from '.';
 
 describe('Order list view', () => {
   test('should render orders list header', async () => {
@@ -17,7 +14,7 @@ describe('Order list view', () => {
   
   test('should display orders list', async () => {
     const { findAllByTestId } = render(<Orders />);
-    expect(await findAllByTestId('order-list-item')).toHaveLength(ordersLength);
+    expect(await findAllByTestId('order-list-item')).toHaveLength(1);
   });
   
   // test('should click add order button and display new order', async () => {
