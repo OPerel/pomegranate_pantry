@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { Order, UserOrder, OrderProduct } from '../../types/interfaces';
 
-import { getOrder, addOrder } from '../../data/orders'; 
+import { getOrder } from '../../data/orders'; 
 import { getOrderUsers } from '../../data/userOrders';
 import { getOrderProducts } from '../../data/orderProduct';
 
@@ -69,11 +69,12 @@ const reducer = (state: AdminState, action: AdminAction): AdminState => {
   }
 }
 
-export const addNewOrder = async (order: Order): Promise<string> => {
+export const addNewOrder = async (order: Date): Promise<string> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await addOrder(order);
-      console.log('order added id: ', res);
+      // const res = await addOrder(order);
+      const res = await Fire.addNewOrder(order);
+      console.log('order added res: ', res);
       
       resolve(res._id);
     } catch (err) {

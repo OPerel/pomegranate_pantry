@@ -1,4 +1,5 @@
-import firebase from 'firebase/app';
+// import firebase from 'firebase';
+import app from 'firebase/app';
 import "firebase/database";
 
 import { Order, UserOrder, OrderProduct } from '../types/interfaces';
@@ -14,14 +15,14 @@ const firebaseConfig = {
 };
 
 class FirebaseService {
-  private db: firebase.database.Database;
+  private db: app.database.Database;
 
   constructor() {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
+    if (!app.apps.length) {
+      app.initializeApp(firebaseConfig);
     }
 
-    this.db = firebase.database();
+    this.db = app.database();
   }
 
   private getColRef = (col: string) => this.db.ref(col);
@@ -31,20 +32,35 @@ class FirebaseService {
   ) => {
     this.getColRef('/orders').on('value', (snapshot) => {
       // parse snapshot
-      const vals = snapshot.val();
-      let orders: Order[] = [];
-      vals.forEach((val: any) => {
-        const { createdAt, closingTime } = val;
-        orders.push({
-          ...val,
-          createdAt: new Date(createdAt),
-          closingTime: new Date(closingTime)
-        })
-      });
+      const val = snapshot.val();
+      const orders = Object.keys(val).map(key => ({
+        ...val[key],
+        _id: key,
+        createdAt: new Date(val[key].createdAt),
+        closingTime: new Date(val[key].closingTime)
+      }))
       console.log('orders: ', orders)
       cb(orders);
     });
-  } 
+  }
+
+  public addNewOrder = async (closingTime: Date) => {
+    const newOrder = {
+      open: true, 
+      openToUsers: true,
+      createdAt: app.database.ServerValue.TIMESTAMP,
+      closingTime: closingTime.getTime(),
+      totalPrice: 0,
+      payed: false
+    }
+
+    try {
+      const res = await this.getColRef('/orders').push(newOrder);
+      return (await res.get()).val();
+    } catch (err) {
+      console.log('Error adding new order: ', err)
+    }
+  }
 }
 
 const Fire = new FirebaseService();

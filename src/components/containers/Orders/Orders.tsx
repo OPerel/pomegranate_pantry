@@ -12,19 +12,24 @@ import {
   IonLabel,
   IonButton,
   IonIcon,
-  IonSpinner
+  IonSpinner,
+  IonModal,
+  IonDatetime
 } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
 import './Orders.css';
 
-import { useAdminStateContext, addNewOrder, ActionTypes } from '../../context/AdminContextProvider';
+import { useAdminStateContext, addNewOrder } from '../../context/AdminContextProvider';
 import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
 // import { Order } from '../../../types/interfaces';
 
 const Home: React.FC = () => {
 
-  const { state: { orders, loading }, dispatch } = useAdminStateContext();
+  const { state: { orders, loading } } = useAdminStateContext();
   // console.log('Order state: ', state)
+
+  const [showDateModal, setShowDateModal] = React.useState<boolean>(false);
+  const [dateValue, setDateValue] = React.useState<string | null | undefined>(null);
 
   // const refresh = (e: CustomEvent) => {
   //   setTimeout(() => {
@@ -33,19 +38,9 @@ const Home: React.FC = () => {
   // };
 
   const addOrder = (): void => {
-    const today = new Date();
-    const monthFromToday = new Date().setDate(today.getDate() + 30);
-    const newOrder = {
-      _id: '',
-      open: true, 
-      openToUsers: true,
-      createdAt: today,
-      closingTime: new Date(monthFromToday),
-      totalPrice: 0,
-      payed: false
+    if (dateValue) {
+      addNewOrder(new Date(dateValue));
     }
-    addNewOrder(newOrder);
-    dispatch({ type: ActionTypes.ADD_ORDER, payload: newOrder })
   }
 
   return (
@@ -75,16 +70,31 @@ const Home: React.FC = () => {
             <IonLabel>שולם</IonLabel>
           </IonListHeader>
           {!loading ? (
-            orders ? (
+            orders.length > 0 ? (
               orders.map(p => <OrderListItem key={p._id} order={p} />) 
-            ) : <h3>לא נמצאו הזמנות</h3>
+            ) : <h3 style={{ margin: '50px 0', textAlign: 'center' }}>לא נמצאו הזמנות</h3>
           ) : <IonSpinner color="primary" style={{ display: 'block', margin: '50px auto' }}/>}
         </IonList>
         <IonLabel>
-          <IonButton onClick={addOrder} data-testid="add-order-button">
+          <IonButton onClick={() => setShowDateModal(true)} data-testid="add-order-button">
             <IonIcon slot="start" icon={addOutline} />הזמנה חדשה
           </IonButton>
         </IonLabel>
+
+        <IonModal isOpen={showDateModal} backdropDismiss={false} data-testid="date-modal">
+          <h3>בחר תאריך סיום</h3>
+          <IonLabel>
+            בחר תאריך
+            <IonDatetime
+              displayFormat="DD MM YYYY"
+              placeholder="Select Date"
+              value={dateValue}
+              onIonChange={e => setDateValue(e.detail.value)}
+            ></IonDatetime>
+          </IonLabel>
+          <IonButton onClick={addOrder}>הוסף הזמנה</IonButton>
+          <IonButton onClick={() => setShowDateModal(false)}>ביטול</IonButton>
+        </IonModal>
       </IonContent>
     </IonPage>
   );

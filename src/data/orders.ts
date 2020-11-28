@@ -5,8 +5,8 @@ const orders: Order[] = [
     _id: '1',
     open: true, 
     openToUsers: true,
-    createdAt: new Date(234234234),
-    closingTime: new Date(234234345),
+    createdAt: new Date(1606513716688),
+    closingTime: new Date(1601241806937),
     totalPrice: 0,
     payed: false
   }

@@ -20,8 +20,8 @@ const ViewOrder: React.FC = () => {
   const [tab, setTab] = useState<string>('users');
 
   const { state } = useAdminStateContext();
-  // console.log('provided state: ', state)
   const { order, orderUsers, orderProducts } = state;
+  // console.log('provided order: ', order)
 
   return (
     <IonPage>
