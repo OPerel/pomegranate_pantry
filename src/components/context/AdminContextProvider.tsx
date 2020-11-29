@@ -24,10 +24,10 @@ export enum ActionTypes {
   SET_ORDERS = 'SET_ORDERS',
   SET_PRODUCTS = 'SET_PRODUCTS',
   SET_ORDER = 'SET_ORDER',
-  SET_USER_ORDERS = 'SET_USER_ORDERS',
+  SET_ORDER_USERS = 'SET_ORDER_USERS',
   SET_ORDER_PRODUCTS = 'SET_ORDER_PRODUCTS',
 
-  ADD_ORDER = '@@/admin/order/ADD_ORDER', 
+  // ADD_ORDER = '@@/admin/order/ADD_ORDER',
 }
 
 type AdminAction =
@@ -35,9 +35,8 @@ type AdminAction =
 | { type: ActionTypes.SET_ORDERS, payload: Order[] }
 | { type: ActionTypes.SET_PRODUCTS, payload: Product[] }
 | { type: ActionTypes.SET_ORDER, payload: Order }
-| { type: ActionTypes.SET_USER_ORDERS, payload: UserOrder[] }
+| { type: ActionTypes.SET_ORDER_USERS, payload: UserOrder[] }
 | { type: ActionTypes.SET_ORDER_PRODUCTS, payload: OrderProduct[] }
-| { type: ActionTypes.ADD_ORDER, payload: Order };;
 
 interface ProviderValue {
   state: AdminState,
@@ -64,12 +63,10 @@ const reducer = (state: AdminState, action: AdminAction): AdminState => {
       return { ...state, loading: false, products: [ ...action.payload ] };
     case ActionTypes.SET_ORDER:
       return { ...state, loading: false, order: { ...action.payload } };
-    case ActionTypes.SET_USER_ORDERS:
+    case ActionTypes.SET_ORDER_USERS:
       return { ...state, loading: false, orderUsers: [ ...action.payload ] };
     case ActionTypes.SET_ORDER_PRODUCTS:
       return { ...state, orderProducts: [ ...action.payload ] };
-    case ActionTypes.ADD_ORDER:
-      return { ...state, orders: [ ...state.orders, action.payload ] }
     default:
       return state;
   }
@@ -93,7 +90,7 @@ export const addNewOrder = async (order: Date): Promise<string> => {
 const AdminStateContext = createContext<ProviderValue>({ state: initialState, dispatch: () => {} });
 export const useAdminStateContext = () => useContext(AdminStateContext);
 
-interface StateContextProps extends RouteComponentProps<{ id: string; }> { children: React.ReactNode; }
+interface StateContextProps extends RouteComponentProps<{ id: string; }> { children: React.ReactNode; };
 
 const AdminStateProvider: React.FC<StateContextProps> = ({ match, children }) => {
 
@@ -119,7 +116,7 @@ const AdminStateProvider: React.FC<StateContextProps> = ({ match, children }) =>
       dispatch({ type: ActionTypes.SET_ORDER, payload: order as Order });
       
       const orderUsers = getOrderUsers(orderId);
-      dispatch({ type: ActionTypes.SET_USER_ORDERS, payload: orderUsers as UserOrder[] });
+      dispatch({ type: ActionTypes.SET_ORDER_USERS, payload: orderUsers as UserOrder[] });
       
       const orderProducts = getOrderProducts(orderId);
       dispatch({ type: ActionTypes.SET_ORDER_PRODUCTS, payload: orderProducts as OrderProduct[] });

@@ -23,6 +23,7 @@ import { addOutline } from 'ionicons/icons';
 // import './Orders.css';
 
 import { useAdminStateContext  } from '../../context/AdminContextProvider';
+import ProductListItem from '../../presentational/ProductsListItem';
 
 import Fire from '../../../services/Firebase';
 // import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
@@ -108,7 +109,7 @@ const Products: React.FC = () => {
         </IonListHeader>
         {!loading ? (
           products.length > 0 ? (
-            products.map(p => <div key={p._id}>{p.name}</div>) 
+            products.map(p => <ProductListItem key={p._id} product={p} />) 
           ) : <h3 style={{ margin: '50px 0', textAlign: 'center' }}>לא נמצאו מוצרים</h3>
         ) : <IonSpinner color="primary" style={{ display: 'block', margin: '50px auto' }}/>}
       </IonList>
