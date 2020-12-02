@@ -3,7 +3,7 @@ import {
   IonContent,
   IonHeader,
   IonList,
-  IonPage,
+  IonButtons,
   // IonRefresher,
   // IonRefresherContent,
   IonTitle,
@@ -44,7 +44,7 @@ const Orders: React.FC = () => {
   }
 
   return (
-    <IonContent fullscreen>
+    <IonContent fullscreen data-testid="admin-orders-list">
       {/* <IonRefresher slot="fixed" onIonRefresh={refresh}>
         <IonRefresherContent></IonRefresherContent>
       </IonRefresher> */}
@@ -86,8 +86,10 @@ const Orders: React.FC = () => {
             onIonChange={e => setDateValue(e.detail.value)}
           ></IonDatetime>
         </IonLabel>
-        <IonButton onClick={addOrder}>הוסף הזמנה</IonButton>
-        <IonButton onClick={() => setShowDateModal(false)}>ביטול</IonButton>
+        <IonButtons>
+          <IonButton onClick={addOrder}>הוסף הזמנה</IonButton>
+          <IonButton onClick={() => setShowDateModal(false)}>ביטול</IonButton>
+        </IonButtons>
       </IonModal>
     </IonContent>
   );

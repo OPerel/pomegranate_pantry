@@ -87,7 +87,7 @@ const Products: React.FC = () => {
   }
 
   return (
-    <IonContent fullscreen>
+    <IonContent fullscreen data-testid="admin-products-list">
       {/* <IonRefresher slot="fixed" onIonRefresh={refresh}>
         <IonRefresherContent></IonRefresherContent>
       </IonRefresher> */}

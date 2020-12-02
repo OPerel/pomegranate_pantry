@@ -26,8 +26,8 @@ const Admin: React.FC = () => {
 
       <IonToolbar color="dark">
         <IonButtons>
-          <IonButton onClick={() => setTab('orders')} disabled={tab === 'orders'}>הזמנות</IonButton>
-          <IonButton onClick={() => setTab('products')} disabled={tab === 'products'}>מוצרים</IonButton>
+          <IonButton onClick={() => setTab('orders')} disabled={tab === 'orders'} data-testid="admin-orders-button">הזמנות</IonButton>
+          <IonButton onClick={() => setTab('products')} disabled={tab === 'products'} data-testid="admin-products-button">מוצרים</IonButton>
         </IonButtons>
       </IonToolbar>
       

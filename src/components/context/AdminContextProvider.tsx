@@ -122,9 +122,9 @@ const AdminStateProvider: React.FC<StateContextProps> = ({ match, children }) =>
       dispatch({ type: ActionTypes.SET_ORDER_PRODUCTS, payload: orderProducts as OrderProduct[] });
     }
     
-  }, [match.params, state.loading]);
+  }, [match.params]);
   
-  // console.log('state: ', state)
+  // console.log('state provider: ', state)
   return (
     <AdminStateContext.Provider value={{ state, dispatch }}>
       {children}

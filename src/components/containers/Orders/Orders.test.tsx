@@ -17,12 +17,12 @@ describe('Order list view', () => {
     expect(await findAllByTestId('order-list-item')).toHaveLength(1);
   });
   
-  // test('should click add order button and display new order', async () => {
-  //   const { findByText, findByTestId, findAllByTestId } = render(<Orders />);
-  //   fireEvent.click(await findByTestId('add-order-button'));
-  //   await findByText('בחר תאריך סיום');
-  //   await findByTestId('date-modal')
-  //   // await findByText(new Date().toDateString());
-  //   // expect(await findAllByTestId('order-list-item')).toHaveLength(ordersLength + 1);
-  // });
+  test('should click add order button and display new order', async () => {
+    const { findByText, findByTestId } = render(<Orders />);
+    fireEvent.click(await findByTestId('add-order-button'));
+    await findByText('בחר תאריך סיום');
+    await findByTestId('date-modal')
+    // await findByText(new Date().toDateString());
+    // expect(await findAllByTestId('order-list-item')).toHaveLength(ordersLength + 1);
+  });
 })
