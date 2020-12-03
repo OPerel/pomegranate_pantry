@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
-  IonBackButton,
   IonButtons,
   IonButton,
   IonContent,
   IonHeader,
   IonPage,
   IonToolbar,
+  IonIcon
 } from '@ionic/react';
+
+import { chevronForwardOutline } from 'ionicons/icons';
 
 import OrderProductsList from '../../presentational/OrderProductsList';
 import OrderUsersList from '../../presentational/OrderUsersList';
@@ -21,6 +24,8 @@ const ViewOrder: React.FC = () => {
 
   const { state } = useAdminStateContext();
   const { order, orderUsers, orderProducts } = state;
+
+  const history = useHistory();
   // console.log('provided order: ', order)
 
   return (
@@ -28,7 +33,10 @@ const ViewOrder: React.FC = () => {
       <IonHeader translucent>
         <IonToolbar>
           <IonButtons>
-            <IonBackButton text="הזמנות" defaultHref="/home"></IonBackButton>
+            <IonButton onClick={() => history.goBack()}>
+              <IonIcon icon={chevronForwardOutline} slot="start"></IonIcon>
+              הזמנות
+            </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>

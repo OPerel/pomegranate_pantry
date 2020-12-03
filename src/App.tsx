@@ -1,10 +1,12 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import AdminStateProvider from './components/context/AdminContextProvider';
-import Admin from './components/containers/Admin';
-import ViewOrder from './components/containers/ViewOrder/ViewOrder';
+// import AdminStateProvider from './components/context/AdminContextProvider';
+// import Admin from './components/containers/Admin';
+// import ViewOrder from './components/containers/ViewOrder/ViewOrder';
+
+import { routes } from './routes';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -25,17 +27,27 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+export function RouteWithSubRoutes(route: any) {
+  return (
+    <Route
+      path={route.path}
+      render={props => (
+        // pass the sub-routes down to keep nesting
+        <route.component {...props} routes={route.routes} />
+      )}
+    />
+  );
+}
+
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/home" render={(props) => {
-          return <AdminStateProvider {...props}><Admin /></AdminStateProvider>
-        }}/>
-        <Route exact path="/order/:id" render={(props) => {
-          return <AdminStateProvider {...props}><ViewOrder /></AdminStateProvider>
-        }}/>
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
+        <Switch>
+          {routes.map((route, i) => (
+            <RouteWithSubRoutes key={i} {...route} />
+          ))}
+        </Switch>
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
