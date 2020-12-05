@@ -48,7 +48,7 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
             <IonLabel>כמות</IonLabel>
             <IonLabel>סה"כ</IonLabel>
           </IonListHeader>
-          {userOrder.products.map(({ product, qty }) => (
+          {userOrder.products?.map(({ product, qty }) => (
             <IonItem key={product}>
               <IonGrid>
                 <IonRow onClick={() => setItemOpen(!itemOpen)}>

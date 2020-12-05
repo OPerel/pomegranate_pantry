@@ -30,24 +30,28 @@ class FirebaseService {
 
   // listeners
   public ordersCollectionListener = async (
-    cb: (snap: Order[]) => void
+    cb: (orders: Order[]) => void
   ) => {
     this.getColRef('/orders').on('value', (snapshot) => {
       // parse snapshot
       const val = snapshot.val();
-      const orders = Object.keys(val).map(key => ({
-        ...val[key],
-        _id: key,
-        createdAt: new Date(val[key].createdAt),
-        closingTime: new Date(val[key].closingTime)
-      }))
-      console.log('orders: ', orders)
-      cb(orders);
+      if (val) {
+        const orders = Object.keys(val).map(key => ({
+          ...val[key],
+          _id: key,
+          createdAt: new Date(val[key].createdAt),
+          closingTime: new Date(val[key].closingTime)
+        }))
+        // console.log('orders: ', orders)
+        cb(orders);
+      } else {
+        cb([])
+      }
     });
   }
 
   public productsCollectionListener = async (
-    cb: (snap: Product[]) => void
+    cb: (products: Product[]) => void
   ) => {
     this.getColRef('/products').on('value', (snapshot) => {
       // parse snapshot
@@ -56,9 +60,46 @@ class FirebaseService {
         ...val[key],
         _id: key
       }))
-      console.log('products: ', products)
+      // console.log('products: ', products)
       cb(products);
     });
+  }
+
+  public orderListener = async (
+    id: string,
+    cb: (order: Order) => void
+  ) => {
+    this.getColRef('orders').child(id).on('value', snapshot => {
+      const data = snapshot.val();
+      const { closingTime, createdAt } = data;
+      const order = {
+        ...data,
+        _id: id,
+        closingTime: new Date(closingTime),
+        createdAt: new Date(createdAt)
+      }
+      cb(order);
+    })
+  }
+
+  public orderUsersCollectionListener = async (
+    id: string,
+    cb: (userOrders: UserOrder[]) => void
+  ) => {
+    this.getColRef('/userOrders')
+      .orderByChild('orderRef')
+      .equalTo(id)
+      .on('value', snapshot => {
+        // parse snapshot
+        const val = snapshot.val();
+        if (val) {
+          const userOrders = Object.keys(val).map(key => ({
+            ...val[key],
+            _id: key
+          }))
+          cb(userOrders);
+        }
+      })
   }
 
   // write

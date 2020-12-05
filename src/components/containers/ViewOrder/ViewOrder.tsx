@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useHistory, RouteComponentProps } from 'react-router-dom';
 import {
   IonButtons,
   IonButton,
@@ -16,17 +16,27 @@ import OrderProductsList from '../../presentational/OrderProductsList';
 import OrderUsersList from '../../presentational/OrderUsersList';
 import './ViewOrder.css';
 
-import { useAdminStateContext } from '../../context/AdminContextProvider';
+import { useAdminStateContext, ActionTypes } from '../../context/AdminContextProvider';
+import Fire from '../../../services/Firebase';
 
-const ViewOrder: React.FC = () => {
+const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
+
+  const { id: orderId } = match.params;
 
   const [tab, setTab] = useState<string>('users');
 
-  const { state } = useAdminStateContext();
-  const { order, orderUsers, orderProducts } = state;
+  const { state, dispatch } = useAdminStateContext();
+  const { order, orderProducts } = state;
 
   const history = useHistory();
-  // console.log('provided order: ', order)
+
+  useEffect(() => {
+    dispatch({ type: ActionTypes.FETCH })
+    Fire.orderListener(orderId, order => {
+      dispatch({ type: ActionTypes.SET_ORDER, payload: order })
+    })
+  }, [orderId, dispatch])
+  // console.log('viewOrder state: ', state)
 
   return (
     <IonPage>
@@ -52,7 +62,7 @@ const ViewOrder: React.FC = () => {
 
         <div>
           {tab === 'users' ? (
-            <OrderUsersList orderUsers={orderUsers} />
+            <OrderUsersList />
           ) : (
             <OrderProductsList orderProducts={orderProducts} />
           )}

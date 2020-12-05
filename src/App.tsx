@@ -2,9 +2,6 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-// import AdminStateProvider from './components/context/AdminContextProvider';
-// import Admin from './components/containers/Admin';
-// import ViewOrder from './components/containers/ViewOrder/ViewOrder';
 
 import { routes } from './routes';
 

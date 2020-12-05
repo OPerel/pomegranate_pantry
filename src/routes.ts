@@ -3,15 +3,17 @@ import ViewOrder from './components/containers/ViewOrder/ViewOrder';
 import User from './components/containers/User';
 import Login from './components/containers/Login/Login';
 
+import AdminStateProvider from './components/context/AdminContextProvider';
+
 export const routes = [
   {
     path: '/admin',
-    component: Admin,
+    component: AdminStateProvider(Admin),
     routes: [
       {
         path: '/admin/order/:id',
-        component: ViewOrder,
-        // exact: true
+        component: AdminStateProvider(ViewOrder),
+        exact: true
       }
     ]
   },

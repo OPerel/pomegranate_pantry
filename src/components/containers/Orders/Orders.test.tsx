@@ -4,7 +4,7 @@ import React from 'react';
 import { render, fireEvent } from '../../../tests/testUtils';
 import '@testing-library/jest-dom/extend-expect';
 
-import Orders from '.';
+import Orders from './Order';
 
 describe('Order list view', () => {
   test('should render orders list header', async () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import { Switch, RouteComponentProps } from 'react-router-dom';
 
 import { RouteWithSubRoutes } from '../../../App';
 
@@ -13,11 +13,10 @@ import {
   IonToolbar,
 } from '@ionic/react';
 
-import Orders from '../Orders';
+import Orders from '../Orders/Order';
 import Products from '../Products';
 
-const Admin: React.FC<{routes: any[]}> = ({ routes }) => {
-  console.log('Admin routes: ', routes)
+const Admin: React.FC<{routes: RouteComponentProps<{ id: string }>[]}> = ({ routes }) => {
   const [tab, setTab] = React.useState<string>('orders');
   return (
     <>
