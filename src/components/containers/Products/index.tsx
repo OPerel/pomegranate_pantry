@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   IonContent,
-  // IonHeader,
+  IonHeader,
   IonList,
   // IonPage,
   // IonRefresher,
   // IonRefresherContent,
   IonTitle,
-  // IonToolbar,
+  IonToolbar,
   IonListHeader,
   IonLabel,
   IonButton,
@@ -22,12 +22,10 @@ import {
 import { addOutline } from 'ionicons/icons';
 // import './Orders.css';
 
-import { useAdminStateContext  } from '../../context/AdminContextProvider';
+import { useAdminStateContext, ActionTypes  } from '../../context/AdminContextProvider';
 import ProductListItem from '../../presentational/ProductsListItem';
 
 import Fire from '../../../services/Firebase';
-// import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
-// import { Order } from '../../../types/interfaces';
 
 interface ProductFormState {
   name: string,
@@ -67,7 +65,7 @@ const reducer = (state: ProductFormState, action: ProductFormAction): ProductFor
 
 const Products: React.FC = () => {
 
-  const { state: { products, loading } } = useAdminStateContext();
+  const { state: { products, loading }, dispatch: contextDispatch } = useAdminStateContext();
 
   const [showProductForm, setShowProductForm] = React.useState<boolean>(false);
   const [{ name, price, minQty, qtyUnit }, dispatch] = React.useReducer(reducer, initialState);
@@ -86,20 +84,27 @@ const Products: React.FC = () => {
     }
   }
 
+  useEffect(() => {
+    contextDispatch({ type: ActionTypes.FETCH })
+    Fire.productsCollectionListener(products => {
+      contextDispatch({ type: ActionTypes.SET_PRODUCTS, payload: products })
+    })
+  }, [contextDispatch])
+
   return (
     <IonContent fullscreen data-testid="admin-products-list">
       {/* <IonRefresher slot="fixed" onIonRefresh={refresh}>
         <IonRefresherContent></IonRefresherContent>
       </IonRefresher> */}
 
-      {/* <IonHeader collapse="condense">
-        <IonToolbar>
-          <IonTitle size="large">
-            הזמנות
+      <IonHeader>
+        <IonToolbar color="light">
+          <IonTitle color="primary" size="large">
+            מוצרים
           </IonTitle>
         </IonToolbar>
-      </IonHeader> */}
-      <IonTitle color="primary" style={{ padding: '3% 3% 0 0', borderBottom: '1px solid' }}>מוצרים</IonTitle>
+      </IonHeader>
+      {/* <IonTitle  style={{ padding: '3% 3% 0 0', borderBottom: '1px solid' }}>מוצרים</IonTitle> */}
       <IonList>
         <IonListHeader>
           <IonLabel>שם</IonLabel>

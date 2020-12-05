@@ -1,13 +1,13 @@
 import React from 'react';
 import {
   IonContent,
-  // IonHeader,
+  IonHeader,
   IonList,
   IonButtons,
   // IonRefresher,
   // IonRefresherContent,
   IonTitle,
-  // IonToolbar,
+  IonToolbar,
   IonListHeader,
   IonLabel,
   IonButton,
@@ -62,14 +62,14 @@ const Orders: React.FC = () => {
         <IonRefresherContent></IonRefresherContent>
       </IonRefresher> */}
 
-      {/* <IonHeader collapse="condense">
-        <IonToolbar>
-          <IonTitle size="large">
+      <IonHeader>
+        <IonToolbar color="light">
+          <IonTitle color="primary" size="large">
             הזמנות
           </IonTitle>
         </IonToolbar>
-      </IonHeader> */}
-      <IonTitle color="primary" style={{ padding: '3% 3% 0 0', borderBottom: '1px solid' }}>הזמנות</IonTitle>
+      </IonHeader>
+      {/* <IonTitle color="primary" style={{ padding: '3% 3% 0 0', borderBottom: '1px solid' }}>הזמנות</IonTitle> */}
       <IonList>
         <IonListHeader>
           <IonLabel>תאריך</IonLabel>

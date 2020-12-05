@@ -13,7 +13,7 @@ const userOrders: UserOrder[] = [
     _id: '2',
     products: [{ product: 'qwerty3', qty: 2 }, { product: 'qwerty4', qty: 1 }],
     userRef: 'b',
-    orderRef: '2',
+    orderRef: '-MNArMQr-Jxt0gE8-Szk',
     totalPrice: 0,
     payed: true
   },

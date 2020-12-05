@@ -27,6 +27,12 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
   const [itemOpen, setItemOpen] = useState<boolean>(false);
   // const [userProducts, setUserProducts] = useState<Product[]>([]);
 
+  /**
+ * for each row I need:
+ * 1. the User object for the row itself
+ * 2. all the UserOrder's Products for the row's details dropdown
+ */
+
   return (
     <>
       <IonItem button onClick={() => setItemOpen(!itemOpen)} data-testid="order-user-list-item">
