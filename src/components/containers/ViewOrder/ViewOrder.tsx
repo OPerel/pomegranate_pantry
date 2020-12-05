@@ -7,6 +7,7 @@ import {
   IonHeader,
   IonPage,
   IonToolbar,
+  IonTitle,
   IonIcon
 } from '@ionic/react';
 
@@ -27,6 +28,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
 
   const { state, dispatch } = useAdminStateContext();
   const { order } = state;
+  // const { createdAt } = order;
 
   const history = useHistory();
 
@@ -52,13 +54,22 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
       </IonHeader>
 
       <IonContent>
-        <div style={{ textAlign: 'center', paddingTop: '20px', backgroundColor: 'lightgray' }}>
-          {order?.createdAt.toDateString()} &nbsp; | &nbsp; {order?.openToUsers ? 'Open' : 'Close'} &nbsp; | &nbsp; {order?.closingTime.toDateString()}
-          <nav style={{ display: 'flex', borderBottom: '1px solid' }}>
-            <IonButton onClick={() => setTab('users')} disabled={tab === 'users'} expand="full">משתמשים</IonButton>
-            <IonButton onClick={() => setTab('products')} disabled={tab === 'products'} expand="full">מוצרים</IonButton>
+        <IonToolbar className="order-header">
+
+          <nav slot="start">
+            <IonButton onClick={() => setTab('users')} disabled={tab === 'users'}>משתמשים</IonButton>
+            <IonButton onClick={() => setTab('products')} disabled={tab === 'products'}>מוצרים</IonButton>
           </nav>
-        </div>
+
+          <IonTitle size="small">
+            {`הזמנה ${order?.createdAt.getDate()}/${order?.createdAt.getMonth()}/${order?.createdAt.getFullYear()}`} &nbsp; | &nbsp;
+            {order?.openToUsers ? 'הזמנה פעילה' : 'הזמנה סגורה'} &nbsp; | &nbsp;
+            {`נסגר ב - ${order?.closingTime.getDate()}/${order?.closingTime.getMonth()}/${order?.closingTime.getFullYear()}`}
+          </IonTitle>
+
+          <IonButton color="danger" slot="primary">סגור הזמנה</IonButton>
+        
+        </IonToolbar>
 
         <div>
           {tab === 'users' ? (
