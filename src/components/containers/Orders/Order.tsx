@@ -64,12 +64,18 @@ const Orders: React.FC = () => {
 
       <IonHeader>
         <IonToolbar color="light">
-          <IonTitle color="primary" size="large">
+          <IonTitle color="primary" size="large" slot="start">
             הזמנות
           </IonTitle>
+
+          <IonLabel slot="end">
+            <IonButton onClick={() => setShowDateModal(true)} data-testid="add-order-button">
+              <IonIcon slot="start" icon={addOutline} />הזמנה חדשה
+            </IonButton>
+          </IonLabel>
         </IonToolbar>
       </IonHeader>
-      {/* <IonTitle color="primary" style={{ padding: '3% 3% 0 0', borderBottom: '1px solid' }}>הזמנות</IonTitle> */}
+
       <IonList>
         <IonListHeader>
           <IonLabel>תאריך</IonLabel>
@@ -82,12 +88,6 @@ const Orders: React.FC = () => {
           ) : <h3 style={{ margin: '50px 0', textAlign: 'center' }}>לא נמצאו הזמנות</h3>
         ) : <IonSpinner color="primary" style={{ display: 'block', margin: '50px auto' }}/>}
       </IonList>
-
-      <IonLabel>
-        <IonButton onClick={() => setShowDateModal(true)} data-testid="add-order-button">
-          <IonIcon slot="start" icon={addOutline} />הזמנה חדשה
-        </IonButton>
-      </IonLabel>
 
       <IonModal isOpen={showDateModal} backdropDismiss={false} data-testid="date-modal">
         <h3>בחר תאריך סיום</h3>

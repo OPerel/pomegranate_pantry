@@ -1,4 +1,5 @@
 ion-toolbar {
   --color: var(--ion-color-primary-contrast);
   --background: var(--ion-color-primary-tint);
+  --padding-end: 1%;
 }

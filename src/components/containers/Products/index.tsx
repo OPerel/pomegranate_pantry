@@ -99,12 +99,18 @@ const Products: React.FC = () => {
 
       <IonHeader>
         <IonToolbar color="light">
-          <IonTitle color="primary" size="large">
+          <IonTitle color="primary" size="large" slot="start">
             מוצרים
           </IonTitle>
+
+          <IonLabel slot="end">
+            <IonButton onClick={() => setShowProductForm(true)} data-testid="add-product-button">
+              <IonIcon slot="start" icon={addOutline} />הוסף מוצר
+            </IonButton>
+          </IonLabel>
         </IonToolbar>
       </IonHeader>
-      {/* <IonTitle  style={{ padding: '3% 3% 0 0', borderBottom: '1px solid' }}>מוצרים</IonTitle> */}
+
       <IonList>
         <IonListHeader>
           <IonLabel>שם</IonLabel>
@@ -118,11 +124,6 @@ const Products: React.FC = () => {
           ) : <h3 style={{ margin: '50px 0', textAlign: 'center' }}>לא נמצאו מוצרים</h3>
         ) : <IonSpinner color="primary" style={{ display: 'block', margin: '50px auto' }}/>}
       </IonList>
-      <IonLabel>
-        <IonButton onClick={() => setShowProductForm(true)} data-testid="add-product-button">
-          <IonIcon slot="start" icon={addOutline} />הוסף מוצר
-        </IonButton>
-      </IonLabel>
       
       <IonModal isOpen={showProductForm} backdropDismiss={false}>product details
         <form>
