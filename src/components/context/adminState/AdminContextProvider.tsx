@@ -1,9 +1,6 @@
 import React, { useReducer, createContext, useContext } from 'react';
 
-import { Order, UserOrder, OrderProduct, Product } from '../../types/interfaces';
-
-
-import Fire from '../../services/Firebase';
+import { Order, UserOrder, OrderProduct, Product } from '../../../types/interfaces';
 
 // Types
 interface AdminState {
@@ -65,7 +62,6 @@ const reducer = (state: AdminState, action: AdminAction): AdminState => {
       return state;
   }
 }
-
   
 // react context
 const AdminStateContext = createContext<ProviderValue>({ state: initialState, dispatch: () => {} });

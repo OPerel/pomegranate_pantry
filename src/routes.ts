@@ -3,7 +3,7 @@ import ViewOrder from './components/containers/ViewOrder/ViewOrder';
 import User from './components/containers/User';
 import Login from './components/containers/Login/Login';
 
-import AdminStateProvider from './components/context/AdminContextProvider';
+import AdminStateProvider from './components/context/adminState/AdminContextProvider';
 
 export const routes = [
   {

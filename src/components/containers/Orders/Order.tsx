@@ -19,7 +19,7 @@ import {
 import { addOutline } from 'ionicons/icons';
 import './Orders.css';
 
-import { useAdminStateContext, ActionTypes } from '../../context/AdminContextProvider';
+import { useAdminStateContext, ActionTypes } from '../../context/adminState/AdminContextProvider';
 import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
 // import { Order } from '../../../types/interfaces';
 import Fire from '../../../services/Firebase';

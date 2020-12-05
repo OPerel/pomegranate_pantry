@@ -17,7 +17,7 @@ import OrderProductsList from '../../presentational/OrderProductsList/OrderProdu
 import OrderUsersList from '../../presentational/OrderUsersList';
 import './ViewOrder.css';
 
-import { useAdminStateContext, ActionTypes } from '../../context/AdminContextProvider';
+import { useAdminStateContext, ActionTypes } from '../../context/adminState/AdminContextProvider';
 import Fire from '../../../services/Firebase';
 
 const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {

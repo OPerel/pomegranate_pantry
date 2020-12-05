@@ -12,7 +12,7 @@ import {
 
 import { getUser } from '../../../data/users';
 
-import { useAdminStateContext, ActionTypes } from '../../context/AdminContextProvider';
+import { useAdminStateContext, ActionTypes } from '../../context/adminState/AdminContextProvider';
 import Fire from '../../../services/Firebase';
 
 import UserOrderListItem from '../UserOrderListItem/UserOrderListItem';

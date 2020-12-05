@@ -11,7 +11,7 @@ import { OrderProduct } from '../../../types/interfaces';
 
 import ProductOrderListItem from '../ProductOrderListItem';
 import Fire from '../../../services/Firebase';
-import { useAdminStateContext, ActionTypes } from '../../context/AdminContextProvider';
+import { useAdminStateContext, ActionTypes } from '../../context/adminState/AdminContextProvider';
 
 // interface OrderProductsListPropsTypes {
 //   orderProducts: OrderProduct[]

@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminStateProvider from '../../context/AdminContextProvider';
+import AdminStateProvider from '../../context/adminState/AdminContextProvider';
 
 import { render, fireEvent } from '../../../tests/testUtils';
 import '@testing-library/jest-dom/extend-expect';
