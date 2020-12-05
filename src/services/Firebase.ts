@@ -102,6 +102,26 @@ class FirebaseService {
       })
   }
 
+  public orderProductsCollectionListener = async (
+    id: string,
+    cb: (orderProducts: OrderProduct[]) => void
+  ) => {
+    this.getColRef('/orderProducts')
+      .orderByChild('order')
+      .equalTo(id)
+      .on('value', snapshot => {
+        // parse snapshot
+        const val = snapshot.val();
+        if (val) {
+          const orderProducts = Object.keys(val).map(key => ({
+            ...val[key],
+            _id: key
+          }))
+          cb(orderProducts);
+        }
+      })
+  }
+
   // write
   public addNewOrder = async (closingTime: Date) => {
     const newOrder = {

@@ -60,7 +60,7 @@ const reducer = (state: AdminState, action: AdminAction): AdminState => {
     case ActionTypes.SET_ORDER_USERS:
       return { ...state, loading: false, orderUsers: [ ...action.payload ] };
     case ActionTypes.SET_ORDER_PRODUCTS:
-      return { ...state, orderProducts: [ ...action.payload ] };
+      return { ...state, loading: false, orderProducts: [ ...action.payload ] };
     default:
       return state;
   }

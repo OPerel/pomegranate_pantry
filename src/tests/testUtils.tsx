@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { Router, Route } from 'react-router-dom';
 import { createMemoryHistory, History, MemoryHistory } from 'history';
-import AdminStateProvider from '../components/context/AdminContextProvider';
+
 
 type CustomRenderPropsTypes = {
   route?: string,
@@ -12,33 +12,22 @@ type CustomRenderPropsTypes = {
 const customRender = (
   ui: React.ReactElement,
   {
-    route = '/home',
+    route = '/',
     history = createMemoryHistory({ initialEntries: [route] }),
     ...options
   }: CustomRenderPropsTypes = {} as CustomRenderPropsTypes
 ) => {
 
   const RenderWithRouter: React.FC = ({ children }) => (
-    <Router history={history}>{children}</Router>
+    <Router history={history}>
+      <Route path={route}>
+        {children}
+      </Route>
+    </Router>
   )
   
-  const RenderWithAdminState: React.FC = ({ children }) => (
-    <Route path={route === '/home' ? route : '/order/:id'} render={(props) => (
-      <AdminStateProvider {...props}>
-        {children}
-      </AdminStateProvider>
-    )}/>
-  )
-  
-  const AllTheProviders: React.FC = ({ children }) => (
-    <RenderWithRouter>
-      <RenderWithAdminState>
-        {children}
-      </RenderWithAdminState>
-    </RenderWithRouter>
-  )
 
-  return { ...render(ui, { wrapper: AllTheProviders, ...options }), history }
+  return { ...render(<RenderWithRouter>{ui}</RenderWithRouter>, { ...options }), history }
 }
 
 // re-export everything

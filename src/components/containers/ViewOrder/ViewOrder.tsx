@@ -12,7 +12,7 @@ import {
 
 import { chevronForwardOutline } from 'ionicons/icons';
 
-import OrderProductsList from '../../presentational/OrderProductsList';
+import OrderProductsList from '../../presentational/OrderProductsList/OrderProductsList';
 import OrderUsersList from '../../presentational/OrderUsersList';
 import './ViewOrder.css';
 
@@ -26,7 +26,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
   const [tab, setTab] = useState<string>('users');
 
   const { state, dispatch } = useAdminStateContext();
-  const { order, orderProducts } = state;
+  const { order } = state;
 
   const history = useHistory();
 
@@ -64,7 +64,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
           {tab === 'users' ? (
             <OrderUsersList />
           ) : (
-            <OrderProductsList orderProducts={orderProducts} />
+            <OrderProductsList />
           )}
         </div>
       </IonContent>
