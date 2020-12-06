@@ -88,7 +88,9 @@ const Products: React.FC = () => {
     contextDispatch({ type: AdminStateActionTypes.FETCH })
     Fire.productsCollectionListener(products => {
       contextDispatch({ type: AdminStateActionTypes.SET_PRODUCTS, payload: products })
-    })
+    });
+
+    return () => Fire.productsCollectionOff();
   }, [contextDispatch])
 
   return (

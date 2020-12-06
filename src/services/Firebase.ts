@@ -30,7 +30,7 @@ class FirebaseService {
 
   // utils and refs
   private getColRef = (col: string) => this.db.ref(col);
-  private getUser = (id: string) => this.db.ref(`users/${id}`);
+  private getUser = (id: string) => this.db.ref(`/users/${id}`);
 
   /**
    * Listeners  
@@ -81,6 +81,10 @@ class FirebaseService {
     });
   }
 
+  public ordersCollectionOff = () => {
+    this.getColRef('/orders').off('value');
+  }
+
   public productsCollectionListener = async (
     cb: (products: Product[]) => void
   ) => {
@@ -94,6 +98,10 @@ class FirebaseService {
       // console.log('products: ', products)
       cb(products);
     });
+  }
+
+  public productsCollectionOff = () => {
+    this.getColRef('/products').off('value');
   }
 
   public orderListener = async (
@@ -111,6 +119,10 @@ class FirebaseService {
       }
       cb(order);
     })
+  }
+
+  public orderOff = (id: string) => {
+    this.getColRef('orders').child(id).off('value');
   }
 
   public orderUsersCollectionListener = async (
@@ -133,6 +145,10 @@ class FirebaseService {
       })
   }
 
+  public orderUsersOff = (id: string) => {
+    this.getColRef('/userOrders').orderByChild('orderRef').equalTo(id).off('value');
+  }
+
   public orderProductsCollectionListener = async (
     id: string,
     cb: (orderProducts: OrderProduct[]) => void
@@ -151,6 +167,14 @@ class FirebaseService {
           cb(orderProducts);
         }
       })
+  }
+
+  public orderProductsOff = (id: string) => {
+    try {
+      this.getColRef('/orderProducts').orderByChild('order').equalTo(id).off('value');
+    } catch (err) {
+      console.log('Error unsubscribing: ', err)
+    }
   }
 
   // write

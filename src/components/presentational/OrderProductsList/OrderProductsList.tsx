@@ -21,11 +21,12 @@ const OrderProductsList: React.FC = () => {
   const { state: { loading, order, orderProducts }, dispatch } = useAdminStateContext();
 
   useEffect(() => {
-    dispatch({ type: AdminStateActionTypes.FETCH })
     if (order) {
+      dispatch({ type: AdminStateActionTypes.FETCH })
       Fire.orderProductsCollectionListener(order._id, orderProducts => {
         dispatch({ type: AdminStateActionTypes.SET_ORDER_PRODUCTS, payload: orderProducts });
-      })
+      });
+      return () => Fire.orderProductsOff(order._id);
     }
   }, [order, dispatch]);
 

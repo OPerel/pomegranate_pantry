@@ -33,11 +33,15 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
   const history = useHistory();
 
   useEffect(() => {
-    dispatch({ type: AdminStateActionTypes.FETCH })
-    Fire.orderListener(orderId, order => {
-      dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: order })
-    })
-  }, [orderId, dispatch])
+    if (order) {
+      dispatch({ type: AdminStateActionTypes.FETCH })
+      Fire.orderListener(orderId, order => {
+        dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: order })
+      });
+    
+      return () => Fire.orderOff(order._id)
+    };
+  }, [order, orderId, dispatch])
   // console.log('viewOrder state: ', state)
 
   return (

@@ -55,9 +55,11 @@ const AuthStateProvider = <P extends {}>(Component: React.ComponentType<P>): Rea
 
     useEffect(() => {
       dispatch({ type: AuthStateActionTypes.FETCH });
-      Fire.authStateListener(user => {
+      const unsubscribe = Fire.authStateListener(user => {
         dispatch({ type: AuthStateActionTypes.SET_USER, payload: user })
-      }) 
+      });
+
+      return unsubscribe;
     }, []);
 
     const [state, dispatch] = useReducer(reducer, initialState);

@@ -25,11 +25,12 @@ const OrderUsersList: React.FC = () => {
   const filteredUserOrders = userFilter ? orderUsers.filter(o => getUser(o.userRef).location === userFilter) : orderUsers;
 
   useEffect(() => {
-    dispatch({ type: AdminStateActionTypes.FETCH })
     if (order) {
+      dispatch({ type: AdminStateActionTypes.FETCH })
       Fire.orderUsersCollectionListener(order._id, orderUsers => {
         dispatch({ type: AdminStateActionTypes.SET_ORDER_USERS, payload: orderUsers })
-      })
+      });
+      return () => Fire.orderUsersOff(order._id);
     }
   }, [dispatch, order])
 

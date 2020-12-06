@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   IonContent,
   IonHeader,
@@ -49,11 +49,13 @@ const Orders: React.FC = () => {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch({ type: AdminStateActionTypes.FETCH })
     Fire.ordersCollectionListener(orders => {
       dispatch({ type: AdminStateActionTypes.SET_ORDERS, payload: orders });
-    })
+    });
+
+    return () => Fire.ordersCollectionOff();
   }, [dispatch])
 
   return (
