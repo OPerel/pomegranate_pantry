@@ -1,8 +1,9 @@
 // import firebase from 'firebase';
 import app from 'firebase/app';
 import "firebase/database";
+import 'firebase/auth';
 
-import { Order, UserOrder, OrderProduct, Product } from '../types/interfaces';
+import { User, Order, UserOrder, OrderProduct, Product } from '../types/interfaces';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -16,6 +17,7 @@ const firebaseConfig = {
 
 class FirebaseService {
   private db: app.database.Database;
+  private auth: app.auth.Auth;
 
   constructor() {
     if (!app.apps.length) {
@@ -23,12 +25,41 @@ class FirebaseService {
     }
 
     this.db = app.database();
+    this.auth = app.auth();
   }
 
   // utils and refs
   private getColRef = (col: string) => this.db.ref(col);
+  private getUser = (id: string) => this.db.ref(`users/${id}`);
 
-  // listeners
+  /**
+   * Listeners  
+   */ 
+
+  // Auth and user
+  public authStateListener = (cb: (user: User | null) => void) => {
+    this.auth.onAuthStateChanged(user => {
+      if (user) {
+        this.getUser(user.uid)
+        .once('value')
+        .then(snapshot => {
+          const dbUser = snapshot.val();
+
+          // merge auth and db user
+          const mergedUser: User = {
+            _id: user?.uid,
+            ...dbUser,
+          };
+
+          cb(mergedUser);
+        });
+      } else {
+        cb(null);
+      }
+    })
+  }
+
+  // Admin datd
   public ordersCollectionListener = async (
     cb: (orders: Order[]) => void
   ) => {

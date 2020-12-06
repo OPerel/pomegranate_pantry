@@ -1,5 +1,7 @@
-import React, { useReducer, createContext, useContext } from 'react';
+import React, { useReducer, createContext, useContext, useEffect } from 'react';
 import { User } from '../../../types/interfaces';
+
+import Fire from '../../../services/Firebase';
 
 // types
 interface AuthState {
@@ -16,7 +18,7 @@ export enum AuthStateActionTypes {
 
 type AuthAction = 
   | { type: AuthStateActionTypes.FETCH }
-  | { type: AuthStateActionTypes.SET_USER, payload: User }
+  | { type: AuthStateActionTypes.SET_USER, payload: User | null }
   | { type: AuthStateActionTypes.SET_ERROR, payload: string };
 
 interface ProviderValue {
@@ -50,6 +52,14 @@ export const useAuthStateContext = () => useContext(AuthStateContext);
 
 const AuthStateProvider = <P extends {}>(Component: React.ComponentType<P>): React.FC<P> => {
   const WithAuth: React.ComponentType<P> = (props) => {
+
+    useEffect(() => {
+      dispatch({ type: AuthStateActionTypes.FETCH });
+      Fire.authStateListener(user => {
+        dispatch({ type: AuthStateActionTypes.SET_USER, payload: user })
+      }) 
+    }, []);
+
     const [state, dispatch] = useReducer(reducer, initialState);
     return (
       <AuthStateContext.Provider value={{ state, dispatch }}>
