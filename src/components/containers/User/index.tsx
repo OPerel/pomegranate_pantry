@@ -1,7 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+ 
+import { ROLES, ROUTES } from '../../../constants';
 
 import {
-  IonButton
+  IonButton, IonButtons
 } from '@ionic/react';
 
 import  { useAuthStateContext } from '../../context/authState/AuthContextProvider';
@@ -17,10 +20,12 @@ const UserPage: React.FC = () => {
   return (
     <div>
       <h2>Uesr {user?.name}</h2>
-      <pre>
+      <pre dir="ltr">
         {JSON.stringify(user, null, 2)}
       </pre>
       <IonButton onClick={() => Fire.doSignOut()}>יציאה</IonButton>
+      &nbsp;
+      {user?.role === ROLES.ADMIN && <Link to={ROUTES.ADMIN}>אדמין</Link>}
     </div>
   )
 }

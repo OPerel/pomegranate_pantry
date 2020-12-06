@@ -3,7 +3,11 @@ import { useHistory } from 'react-router-dom';
 
 import { useAuthStateContext } from '../../context/authState/AuthContextProvider';
 import { User } from '../../../types/interfaces';
-import { ROUTES, ROLES } from '../../../constants'; 
+import { ROUTES, ROLES } from '../../../constants';
+
+import { IonLoading } from '@ionic/react';
+
+import './AuthGuard.css';
 
 const AuthGuard = (condition: (user: User) => boolean) => {
   return <P extends object>(Component: React.ComponentType<P>): React.FC<P> => {
@@ -32,9 +36,13 @@ const AuthGuard = (condition: (user: User) => boolean) => {
 
       }, [history, user, loading]);
 
-      return !loading ? <Component { ...props } /> : null;
-    }
+      if (loading) {
+        return <IonLoading cssClass='auth-loader' isOpen={loading} message={'טוען משתמש...'} />;
+      }
 
+      return <Component { ...props } />;
+
+    }
     return Guard;
   }
 }

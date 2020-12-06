@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, RouteComponentProps } from 'react-router-dom';
+import { Switch, RouteComponentProps, Link } from 'react-router-dom';
 
 import { RouteWithSubRoutes } from '../../../App';
 
@@ -16,18 +16,21 @@ import {
 import Orders from '../Orders/Order';
 import Products from '../Products';
 import AuthGuard from '../Auth/AuthGuard';
+import { useAuthStateContext } from '../../context/authState/AuthContextProvider';
 import Fire from '../../../services/Firebase';
 import { User } from '../../../types/interfaces';
-import { ROLES } from '../../../constants';
+import { ROLES, ROUTES } from '../../../constants';
 
 const Admin: React.FC<{routes: RouteComponentProps<{ id: string }>[]}> = ({ routes }) => {
   const [tab, setTab] = React.useState<string>('orders');
+  const { state: { user } } = useAuthStateContext();
   return (
     <>
       <IonPage>
         <IonHeader>
           <IonToolbar>
             <IonTitle slot="start">אדמין</IonTitle>
+            <Link to={`${ROUTES.USER}/${user?._id}`} style={{ color: 'white', marginLeft: '2%' }} slot="end">משתמש</Link>
             <IonButton slot="end" color="secondary" onClick={() => Fire.doSignOut()}>יציאה</IonButton>
           </IonToolbar>
         </IonHeader>

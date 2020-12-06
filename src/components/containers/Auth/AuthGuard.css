@@ -1,0 +1,7 @@
+.auth-loader {
+  --width: 30vw;
+  --height: 10vh;
+  --background: var(--ion-color-secondary-shade);
+  font-size: 1.5rem;
+  color: white;
+}
