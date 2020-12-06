@@ -16,7 +16,7 @@ import {
 import Orders from '../Orders/Order';
 import Products from '../Products';
 import AuthGuard from '../Auth/AuthGuard';
-
+import Fire from '../../../services/Firebase';
 import { User } from '../../../types/interfaces';
 import { ROLES } from '../../../constants';
 
@@ -27,7 +27,8 @@ const Admin: React.FC<{routes: RouteComponentProps<{ id: string }>[]}> = ({ rout
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>אדמין</IonTitle>
+            <IonTitle slot="start">אדמין</IonTitle>
+            <IonButton slot="end" color="secondary" onClick={() => Fire.doSignOut()}>יציאה</IonButton>
           </IonToolbar>
         </IonHeader>
 

@@ -33,27 +33,23 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
   const history = useHistory();
 
   useEffect(() => {
-    if (order) {
+    if (orderId) {
       dispatch({ type: AdminStateActionTypes.FETCH })
       Fire.orderListener(orderId, order => {
         dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: order })
       });
     
-      return () => Fire.orderOff(order._id)
+      return () => Fire.orderOff(orderId)
     };
-  }, [order, orderId, dispatch])
+  }, [orderId, dispatch])
   // console.log('viewOrder state: ', state)
 
   return (
     <IonPage>
       <IonHeader translucent>
         <IonToolbar>
-          <IonButtons>
-            <IonButton onClick={() => history.goBack()}>
-              <IonIcon icon={chevronForwardOutline} slot="start"></IonIcon>
-              הזמנות
-            </IonButton>
-          </IonButtons>
+          <IonTitle slot="start">אדמין</IonTitle>
+          <IonButton slot="end" color="secondary" onClick={() => Fire.doSignOut()}>יציאה</IonButton>
         </IonToolbar>
       </IonHeader>
 
@@ -61,8 +57,14 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
         <IonToolbar className="order-header">
 
           <nav slot="start">
-            <IonButton onClick={() => setTab('users')} disabled={tab === 'users'}>משתמשים</IonButton>
-            <IonButton onClick={() => setTab('products')} disabled={tab === 'products'}>מוצרים</IonButton>
+            <IonButtons>
+              <IonButton onClick={() => history.goBack()}>
+                <IonIcon icon={chevronForwardOutline} slot="start"></IonIcon>
+                הזמנות
+              </IonButton>
+              <IonButton onClick={() => setTab('users')} disabled={tab === 'users'}>משתמשים</IonButton>
+              <IonButton onClick={() => setTab('products')} disabled={tab === 'products'}>מוצרים</IonButton>
+            </IonButtons>
           </nav>
 
           <IonTitle size="small">

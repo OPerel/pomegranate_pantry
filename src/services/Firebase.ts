@@ -37,6 +37,25 @@ class FirebaseService {
    */ 
 
   // Auth and user
+  public doSignIn = (email: string, password: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      this.auth
+        .signInWithEmailAndPassword(email, password)
+        .then((authUser) => {
+          console.log("Login success: ", authUser);
+          resolve();
+        })
+        .catch((err: Error) => {
+          console.log("Login error:", err);
+          reject(err.message);
+        });
+    });
+  };
+
+  public doSignOut = () => {
+    this.auth.signOut();
+  }
+
   public authStateListener = (cb: (user: User | null) => void) => {
     this.auth.onAuthStateChanged(user => {
       if (user) {
