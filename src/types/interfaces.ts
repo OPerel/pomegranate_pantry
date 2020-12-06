@@ -1,3 +1,10 @@
+export interface User {
+  _id: string;
+  name: string;
+  role: 'user' | 'rimon',
+  location: 'TA' | 'PH';
+}
+
 export interface Order {
   _id: string,
   open: boolean,

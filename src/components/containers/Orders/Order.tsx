@@ -19,7 +19,7 @@ import {
 import { addOutline } from 'ionicons/icons';
 import './Orders.css';
 
-import { useAdminStateContext, ActionTypes } from '../../context/adminState/AdminContextProvider';
+import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
 import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
 // import { Order } from '../../../types/interfaces';
 import Fire from '../../../services/Firebase';
@@ -50,9 +50,9 @@ const Orders: React.FC = () => {
   }
 
   React.useEffect(() => {
-    dispatch({ type: ActionTypes.FETCH })
+    dispatch({ type: AdminStateActionTypes.FETCH })
     Fire.ordersCollectionListener(orders => {
-      dispatch({ type: ActionTypes.SET_ORDERS, payload: orders });
+      dispatch({ type: AdminStateActionTypes.SET_ORDERS, payload: orders });
     })
   }, [dispatch])
 

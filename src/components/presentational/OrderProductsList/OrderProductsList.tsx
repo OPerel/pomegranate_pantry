@@ -11,7 +11,7 @@ import { OrderProduct } from '../../../types/interfaces';
 
 import ProductOrderListItem from '../ProductOrderListItem';
 import Fire from '../../../services/Firebase';
-import { useAdminStateContext, ActionTypes } from '../../context/adminState/AdminContextProvider';
+import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
 
 // interface OrderProductsListPropsTypes {
 //   orderProducts: OrderProduct[]
@@ -21,10 +21,10 @@ const OrderProductsList: React.FC = () => {
   const { state: { loading, order, orderProducts }, dispatch } = useAdminStateContext();
 
   useEffect(() => {
-    dispatch({ type: ActionTypes.FETCH })
+    dispatch({ type: AdminStateActionTypes.FETCH })
     if (order) {
       Fire.orderProductsCollectionListener(order._id, orderProducts => {
-        dispatch({ type: ActionTypes.SET_ORDER_PRODUCTS, payload: orderProducts });
+        dispatch({ type: AdminStateActionTypes.SET_ORDER_PRODUCTS, payload: orderProducts });
       })
     }
   }, [order, dispatch]);

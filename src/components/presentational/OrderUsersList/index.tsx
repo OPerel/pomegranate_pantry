@@ -12,7 +12,7 @@ import {
 
 import { getUser } from '../../../data/users';
 
-import { useAdminStateContext, ActionTypes } from '../../context/adminState/AdminContextProvider';
+import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
 import Fire from '../../../services/Firebase';
 
 import UserOrderListItem from '../UserOrderListItem/UserOrderListItem';
@@ -25,9 +25,10 @@ const OrderUsersList: React.FC = () => {
   const filteredUserOrders = userFilter ? orderUsers.filter(o => getUser(o.userRef).location === userFilter) : orderUsers;
 
   useEffect(() => {
+    dispatch({ type: AdminStateActionTypes.FETCH })
     if (order) {
       Fire.orderUsersCollectionListener(order._id, orderUsers => {
-        dispatch({ type: ActionTypes.SET_ORDER_USERS, payload: orderUsers })
+        dispatch({ type: AdminStateActionTypes.SET_ORDER_USERS, payload: orderUsers })
       })
     }
   }, [dispatch, order])

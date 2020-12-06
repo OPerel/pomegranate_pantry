@@ -22,7 +22,7 @@ import {
 import { addOutline } from 'ionicons/icons';
 // import './Orders.css';
 
-import { useAdminStateContext, ActionTypes  } from '../../context/adminState/AdminContextProvider';
+import { useAdminStateContext, AdminStateActionTypes  } from '../../context/adminState/AdminContextProvider';
 import ProductListItem from '../../presentational/ProductsListItem';
 
 import Fire from '../../../services/Firebase';
@@ -85,9 +85,9 @@ const Products: React.FC = () => {
   }
 
   useEffect(() => {
-    contextDispatch({ type: ActionTypes.FETCH })
+    contextDispatch({ type: AdminStateActionTypes.FETCH })
     Fire.productsCollectionListener(products => {
-      contextDispatch({ type: ActionTypes.SET_PRODUCTS, payload: products })
+      contextDispatch({ type: AdminStateActionTypes.SET_PRODUCTS, payload: products })
     })
   }, [contextDispatch])
 

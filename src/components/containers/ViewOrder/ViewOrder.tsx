@@ -17,7 +17,7 @@ import OrderProductsList from '../../presentational/OrderProductsList/OrderProdu
 import OrderUsersList from '../../presentational/OrderUsersList';
 import './ViewOrder.css';
 
-import { useAdminStateContext, ActionTypes } from '../../context/adminState/AdminContextProvider';
+import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
 import Fire from '../../../services/Firebase';
 
 const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
@@ -33,9 +33,9 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
   const history = useHistory();
 
   useEffect(() => {
-    dispatch({ type: ActionTypes.FETCH })
+    dispatch({ type: AdminStateActionTypes.FETCH })
     Fire.orderListener(orderId, order => {
-      dispatch({ type: ActionTypes.SET_ORDER, payload: order })
+      dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: order })
     })
   }, [orderId, dispatch])
   // console.log('viewOrder state: ', state)

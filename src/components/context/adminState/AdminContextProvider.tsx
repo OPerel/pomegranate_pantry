@@ -12,7 +12,7 @@ interface AdminState {
   orderProducts: OrderProduct[]
 }
 
-export enum ActionTypes {
+export enum AdminStateActionTypes {
   FETCH = 'FETCH',
   SET_ORDERS = 'SET_ORDERS',
   SET_PRODUCTS = 'SET_PRODUCTS',
@@ -22,12 +22,12 @@ export enum ActionTypes {
 }
 
 type AdminAction =
-| { type: ActionTypes.FETCH, }
-| { type: ActionTypes.SET_ORDERS, payload: Order[] }
-| { type: ActionTypes.SET_PRODUCTS, payload: Product[] }
-| { type: ActionTypes.SET_ORDER, payload: Order }
-| { type: ActionTypes.SET_ORDER_USERS, payload: UserOrder[] }
-| { type: ActionTypes.SET_ORDER_PRODUCTS, payload: OrderProduct[] }
+| { type: AdminStateActionTypes.FETCH, }
+| { type: AdminStateActionTypes.SET_ORDERS, payload: Order[] }
+| { type: AdminStateActionTypes.SET_PRODUCTS, payload: Product[] }
+| { type: AdminStateActionTypes.SET_ORDER, payload: Order }
+| { type: AdminStateActionTypes.SET_ORDER_USERS, payload: UserOrder[] }
+| { type: AdminStateActionTypes.SET_ORDER_PRODUCTS, payload: OrderProduct[] }
 
 interface ProviderValue {
   state: AdminState,
@@ -46,17 +46,17 @@ const initialState: AdminState = {
 
 const reducer = (state: AdminState, action: AdminAction): AdminState => {
   switch (action.type) {
-    case ActionTypes.FETCH:
+    case AdminStateActionTypes.FETCH:
       return { ...state, loading: true };
-    case ActionTypes.SET_ORDERS:
+    case AdminStateActionTypes.SET_ORDERS:
       return { ...state, loading: false, orders: [ ...action.payload ] };
-    case ActionTypes.SET_PRODUCTS:
+    case AdminStateActionTypes.SET_PRODUCTS:
       return { ...state, loading: false, products: [ ...action.payload ] };
-    case ActionTypes.SET_ORDER:
+    case AdminStateActionTypes.SET_ORDER:
       return { ...state, loading: false, order: { ...action.payload } };
-    case ActionTypes.SET_ORDER_USERS:
+    case AdminStateActionTypes.SET_ORDER_USERS:
       return { ...state, loading: false, orderUsers: [ ...action.payload ] };
-    case ActionTypes.SET_ORDER_PRODUCTS:
+    case AdminStateActionTypes.SET_ORDER_PRODUCTS:
       return { ...state, loading: false, orderProducts: [ ...action.payload ] };
     default:
       return state;
