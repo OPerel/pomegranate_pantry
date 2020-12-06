@@ -1,4 +1,7 @@
-import React from 'react'
+import React from 'react';
+
+import AuthGuard from '../Auth/AuthGuard';
+import { User } from '../../../types/interfaces';
 
 const Login: React.FC = () => {
   return (
@@ -8,4 +11,5 @@ const Login: React.FC = () => {
   )
 }
 
-export default Login
+const condition = (user: User) => !user;
+export default AuthGuard(condition)(Login);

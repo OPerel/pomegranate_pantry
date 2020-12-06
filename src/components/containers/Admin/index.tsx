@@ -15,6 +15,10 @@ import {
 
 import Orders from '../Orders/Order';
 import Products from '../Products';
+import AuthGuard from '../Auth/AuthGuard';
+
+import { User } from '../../../types/interfaces';
+import { ROLES } from '../../../constants';
 
 const Admin: React.FC<{routes: RouteComponentProps<{ id: string }>[]}> = ({ routes }) => {
   const [tab, setTab] = React.useState<string>('orders');
@@ -51,4 +55,5 @@ const Admin: React.FC<{routes: RouteComponentProps<{ id: string }>[]}> = ({ rout
   )
 }
 
-export default Admin;
+const condition = (user: User) => user.role === ROLES.ADMIN;
+export default AuthGuard(condition)(Admin);
