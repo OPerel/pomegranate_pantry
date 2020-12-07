@@ -78,7 +78,23 @@ class FirebaseService {
     })
   }
 
-  // Admin datd
+  // Admin data
+  public usersCollectionListener = async (cb: (users: User[]) => void) => {
+    this.getColRef('users').on('value', snapshot => {
+      const val = snapshot.val();
+      const users = Object.keys(val).map(key => ({
+        ...val[key],
+        _id: key,
+      }));
+
+      cb(users);
+    })
+  }
+
+  public usersCollectionOff = () => {
+    this.getColRef('users').off('value');
+  }
+
   public ordersCollectionListener = async (
     cb: (orders: Order[]) => void
   ) => {

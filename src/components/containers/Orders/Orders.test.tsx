@@ -5,7 +5,7 @@ import AdminStateProvider from '../../context/adminState/AdminContextProvider';
 import { render, fireEvent } from '../../../tests/testUtils';
 import '@testing-library/jest-dom/extend-expect';
 
-import Orders from './Order';
+import Orders from './Orders';
 const OrdersWithState = AdminStateProvider(Orders);
 
 describe('Order list view', () => {

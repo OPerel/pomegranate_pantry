@@ -1,10 +1,11 @@
 import React, { useReducer, createContext, useContext } from 'react';
 
-import { Order, UserOrder, OrderProduct, Product } from '../../../types/interfaces';
+import { Order, UserOrder, OrderProduct, Product, User } from '../../../types/interfaces';
 
 // Types
 interface AdminState {
   loading: boolean,
+  users: User[],
   orders: Order[],
   products: Product[],
   order: Order | null,
@@ -14,6 +15,7 @@ interface AdminState {
 
 export enum AdminStateActionTypes {
   FETCH = 'FETCH',
+  SET_USERS = 'SET_USERS',
   SET_ORDERS = 'SET_ORDERS',
   SET_PRODUCTS = 'SET_PRODUCTS',
   SET_ORDER = 'SET_ORDER',
@@ -23,6 +25,7 @@ export enum AdminStateActionTypes {
 
 type AdminAction =
 | { type: AdminStateActionTypes.FETCH, }
+| { type: AdminStateActionTypes.SET_USERS, payload: User[] }
 | { type: AdminStateActionTypes.SET_ORDERS, payload: Order[] }
 | { type: AdminStateActionTypes.SET_PRODUCTS, payload: Product[] }
 | { type: AdminStateActionTypes.SET_ORDER, payload: Order }
@@ -37,6 +40,7 @@ interface ProviderValue {
 // State
 const initialState: AdminState = {
   loading: false,
+  users: [],
   orders: [],
   products: [],
   order: null,
@@ -48,6 +52,8 @@ const reducer = (state: AdminState, action: AdminAction): AdminState => {
   switch (action.type) {
     case AdminStateActionTypes.FETCH:
       return { ...state, loading: true };
+    case AdminStateActionTypes.SET_USERS:
+      return { ...state, loading: false, users: [ ...action.payload ] };
     case AdminStateActionTypes.SET_ORDERS:
       return { ...state, loading: false, orders: [ ...action.payload ] };
     case AdminStateActionTypes.SET_PRODUCTS:

@@ -5,7 +5,7 @@ import {
   IonGrid,
   IonCol,
   IonRow,
-  } from '@ionic/react';
+} from '@ionic/react';
 
 import { Product } from '../../../types/interfaces';
 

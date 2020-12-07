@@ -10,3 +10,8 @@ export enum ROLES {
   USER = 'user',
   ADMIN = 'rimon'
 }
+
+export enum LOCATIONS {
+  TA = 'TA',
+  PH = 'PH'
+}

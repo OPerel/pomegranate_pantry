@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ROLES, ROUTES } from '../../../constants';
 
 import {
-  IonButton, IonButtons
+  IonButton
 } from '@ionic/react';
 
 import  { useAuthStateContext } from '../../context/authState/AuthContextProvider';

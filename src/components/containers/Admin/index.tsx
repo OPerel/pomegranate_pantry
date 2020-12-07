@@ -6,14 +6,14 @@ import { RouteWithSubRoutes } from '../../../App';
 import {
   IonButtons,
   IonButton,
-  // IonContent,
   IonTitle,
   IonHeader,
   IonPage,
   IonToolbar,
 } from '@ionic/react';
 
-import Orders from '../Orders/Order';
+import Users from '../Users/Users';
+import Orders from '../Orders/Orders';
 import Products from '../Products';
 import AuthGuard from '../Auth/AuthGuard';
 import { useAuthStateContext } from '../../context/authState/AuthContextProvider';
@@ -39,6 +39,7 @@ const Admin: React.FC<{routes: RouteComponentProps<{ id: string }>[]}> = ({ rout
           <IonButtons>
             <IonButton onClick={() => setTab('orders')} disabled={tab === 'orders'} data-testid="admin-orders-button">הזמנות</IonButton>
             <IonButton onClick={() => setTab('products')} disabled={tab === 'products'} data-testid="admin-products-button">מוצרים</IonButton>
+            <IonButton onClick={() => setTab('users')} disabled={tab === 'users'} data-testid="admin-users-button">משתמשים</IonButton>
           </IonButtons>
         </IonToolbar>
         
@@ -46,7 +47,11 @@ const Admin: React.FC<{routes: RouteComponentProps<{ id: string }>[]}> = ({ rout
         {tab === 'orders' ? (
           <Orders />
         ) : (
-          <Products />
+          tab === 'users' ? (
+            <Users />
+          ) : ( 
+            <Products />
+          )
         )}
       </IonPage>
 
