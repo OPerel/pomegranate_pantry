@@ -1,16 +1,18 @@
 import React from 'react';
-import AdminStateProvider from '../../context/adminState/AdminContextProvider';
 
 import { render, fireEvent } from '../../../tests/testUtils';
 import '@testing-library/jest-dom/extend-expect';
 
+// import AdminStateProvider from '../../context/adminState/AdminContextProvider';
+// import AuthGuard from '../Auth/AuthGuard';
+import AuthStateProvider from '../../context/authState/AuthContextProvider';
 import Admin from '.';
 
-const AdminWithState = AdminStateProvider(Admin)
+const AdminWithState = AuthStateProvider(Admin);
 
 test('should display admin page header', async () => {
   const { findByText } = render(<AdminWithState routes={[]} />, { route: '/admin' });
-  await findByText('אדמין');
+  await findByText('כניסה');
 });
 
 test('should display orders by default', async () => {

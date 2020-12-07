@@ -8,6 +8,13 @@ import { mockIonicReact } from '@ionic/react-test-utils';
 mockIonicReact();
 
 jest.mock('./services/Firebase', () => {
+  const userData = {
+    _id: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
+    name: 'e rimon',
+    location: 'TA',
+    role: 'rimon'
+  };
+  
   const ordersData = [
     {
       _id: '1',
@@ -136,11 +143,13 @@ jest.mock('./services/Firebase', () => {
   ];
 
   return {
+    authStateListener: (cb) => {cb(userData)},
     ordersCollectionListener: (cb) => {cb(ordersData)},
     productsCollectionListener: (cb) => {cb(productsData)},
     orderUsersCollectionListener: (id, cb) => {cb(orderUsersData)},
     orderProductsCollectionListener: (id, cb) => {cb(orderProductsData)},
     orderListener: (id, cb) => {cb(ordersData[0])},
+    ordersCollectionOff: () => {},
     addNewOrder: () => {
       // const orderWithId = { ...orderDetails, _id: (ordersData.length + 1).toString() }
       // console.log('orders before push :', ordersData)
