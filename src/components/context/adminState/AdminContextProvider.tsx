@@ -32,7 +32,7 @@ type AdminAction =
 | { type: AdminStateActionTypes.SET_ORDER_USERS, payload: UserOrder[] }
 | { type: AdminStateActionTypes.SET_ORDER_PRODUCTS, payload: OrderProduct[] }
 
-interface ProviderValue {
+interface AdminStateProviderType {
   state: AdminState,
   dispatch: React.Dispatch<AdminAction>
 }
@@ -70,7 +70,7 @@ const reducer = (state: AdminState, action: AdminAction): AdminState => {
 }
   
 // react context
-const AdminStateContext = createContext<ProviderValue>({ state: initialState, dispatch: () => {} });
+const AdminStateContext = createContext<AdminStateProviderType>({ state: initialState, dispatch: () => {} });
 export const useAdminStateContext = () => useContext(AdminStateContext);
 
 // context provider HOC

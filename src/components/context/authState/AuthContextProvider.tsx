@@ -21,7 +21,7 @@ type AuthAction =
   | { type: AuthStateActionTypes.SET_USER, payload: User | null }
   | { type: AuthStateActionTypes.SET_ERROR, payload: string };
 
-interface ProviderValue {
+interface AuthProviderType {
   state: AuthState,
   dispatch: React.Dispatch<AuthAction>
 }
@@ -47,7 +47,7 @@ const reducer = (state: AuthState, action: AuthAction): AuthState => {
 }
 
 // context
-const AuthStateContext = createContext<ProviderValue>({ state: initialState, dispatch: () => {} });
+const AuthStateContext = createContext<AuthProviderType>({ state: initialState, dispatch: () => {} });
 export const useAuthStateContext = () => useContext(AuthStateContext);
 
 const AuthStateProvider = <P extends {}>(Component: React.ComponentType<P>): React.FC<P> => {

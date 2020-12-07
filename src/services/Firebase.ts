@@ -32,6 +32,19 @@ class FirebaseService {
   private getColRef = (col: string) => this.db.ref(col);
   private getUser = (id: string) => this.db.ref(`/users/${id}`);
 
+  private parseSnapshot = <T>(snapshot: app.database.DataSnapshot): T[] => {
+    const val = snapshot.val();
+    if (!val) {
+      return [];
+    }
+    const objectsArray: T[] = Object.keys(val).map(key => ({
+      ...val[key],
+      _id: key,
+    }));
+
+    return objectsArray;
+  }
+
   /**
    * Listeners  
    */ 
@@ -81,13 +94,7 @@ class FirebaseService {
   // Admin data
   public usersCollectionListener = async (cb: (users: User[]) => void) => {
     this.getColRef('users').on('value', snapshot => {
-      const val = snapshot.val();
-      const users = Object.keys(val).map(key => ({
-        ...val[key],
-        _id: key,
-      }));
-
-      cb(users);
+      cb(this.parseSnapshot(snapshot));
     })
   }
 
@@ -124,14 +131,7 @@ class FirebaseService {
     cb: (products: Product[]) => void
   ) => {
     this.getColRef('/products').on('value', (snapshot) => {
-      // parse snapshot
-      const val = snapshot.val();
-      const products = Object.keys(val).map(key => ({
-        ...val[key],
-        _id: key
-      }))
-      // console.log('products: ', products)
-      cb(products);
+      cb(this.parseSnapshot(snapshot));
     });
   }
 
@@ -168,15 +168,7 @@ class FirebaseService {
       .orderByChild('orderRef')
       .equalTo(id)
       .on('value', snapshot => {
-        // parse snapshot
-        const val = snapshot.val();
-        if (val) {
-          const userOrders = Object.keys(val).map(key => ({
-            ...val[key],
-            _id: key
-          }))
-          cb(userOrders);
-        }
+        cb(this.parseSnapshot(snapshot));
       })
   }
 
@@ -192,15 +184,7 @@ class FirebaseService {
       .orderByChild('order')
       .equalTo(id)
       .on('value', snapshot => {
-        // parse snapshot
-        const val = snapshot.val();
-        if (val) {
-          const orderProducts = Object.keys(val).map(key => ({
-            ...val[key],
-            _id: key
-          }))
-          cb(orderProducts);
-        }
+        cb(this.parseSnapshot(snapshot));
       })
   }
 
