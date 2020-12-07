@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   IonList,
@@ -6,22 +6,34 @@ import {
   IonLabel,
   IonSelect,
   IonSelectOption,
-  IonListHeader
+  IonListHeader,
+  IonSpinner
 } from '@ionic/react';
 
 import { getUser } from '../../../data/users';
-import { UserOrder } from '../../../data/userOrders';
+
+import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
+import Fire from '../../../services/Firebase';
 
 import UserOrderListItem from '../UserOrderListItem/UserOrderListItem';
 import './OrderUsersList.css';
 
-interface OrderUsersListPropsTypes {
-  orderUsers:  UserOrder[]
-}
+const OrderUsersList: React.FC = () => {
 
-const OrderUsersList: React.FC<OrderUsersListPropsTypes> = ({ orderUsers }) => {
+  const { state: { loading, order, orderUsers }, dispatch } = useAdminStateContext();
   const [userFilter, setUserFilter] = useState<string | null>(null);
   const filteredUserOrders = userFilter ? orderUsers.filter(o => getUser(o.userRef).location === userFilter) : orderUsers;
+
+  useEffect(() => {
+    if (order) {
+      dispatch({ type: AdminStateActionTypes.FETCH })
+      Fire.orderUsersCollectionListener(order._id, orderUsers => {
+        dispatch({ type: AdminStateActionTypes.SET_ORDER_USERS, payload: orderUsers })
+      });
+      return () => Fire.orderUsersOff(order._id);
+    }
+  }, [dispatch, order])
+
   return (
     <IonList>
       <div className="ion-justify-content-between">
@@ -42,7 +54,11 @@ const OrderUsersList: React.FC<OrderUsersListPropsTypes> = ({ orderUsers }) => {
         <IonLabel>שולם</IonLabel>
         <IonLabel></IonLabel>
       </IonListHeader>
-      {filteredUserOrders?.map(o => <UserOrderListItem key={o._id} userOrder={o} />)}
+      {!loading ? (
+        orderUsers.length > 0 ? (
+          filteredUserOrders?.map(o => <UserOrderListItem key={o._id} userOrder={o} />)
+        ) : <h3 style={{ margin: '50px 0', textAlign: 'center' }}>לא נמצאו משתמשים להזמנה</h3>
+      ) : <IonSpinner color="primary" style={{ display: 'block', margin: '50px auto' }}/>}
     </IonList>
   )
 }

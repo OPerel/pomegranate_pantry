@@ -1,20 +1,4 @@
-export interface OrderProduct {
-  _id: string,
-  product: string, // ref to Product
-  order: string, // ref to Order
-  totalQty: number,
-  missing: number | null,
-  fixedTotalPrice: number,
-  finalTotalPrice: number | null,
-  priceWarn: boolean
-}
-
-// priceWarn = fixedTotalPrice < finalTotalPrice
-// missing = (totalQty % Product.minQty) !== 0
-//   ? ((Math.floor(totalQty / Product.minQty) + 1) * Product.minQty) - totalQty
-//   : null
-// totalQty = UserOrder.products.reduce((acc, {p, qty}) => acc += aty, 0) of all UserOrders in the current Order
-// fixedTotalPrice = totalQty * Product.price
+import { OrderProduct } from '../types/interfaces';
 
 export const orderProducts: OrderProduct[] = [
   {
@@ -34,6 +18,26 @@ export const orderProducts: OrderProduct[] = [
     totalQty: 3,
     missing: 9,
     fixedTotalPrice: 18,
+    finalTotalPrice: null,
+    priceWarn: false
+  },
+  {
+    _id: '789',
+    product: 'qwerty3',
+    order: '2',
+    totalQty: 2,
+    missing: 3,
+    fixedTotalPrice: 100,
+    finalTotalPrice: null,
+    priceWarn: false
+  },
+  {
+    _id: '012',
+    product: 'qwerty4',
+    order: '2',
+    totalQty: 1,
+    missing: 4,
+    fixedTotalPrice: 38,
     finalTotalPrice: null,
     priceWarn: false
   }

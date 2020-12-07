@@ -7,7 +7,7 @@ import {
   IonRow,
   } from '@ionic/react';
 
-import { Order } from '../../../data/orders';
+import { Order } from '../../../types/interfaces';
 import './OrderListItem.css';
 
 interface OrderListItemProps {
@@ -16,7 +16,7 @@ interface OrderListItemProps {
 
 const OrderListItem: React.FC<OrderListItemProps> = ({ order }) => {
   return (
-    <IonItem routerLink={`/order/${order._id}`} detail={true} data-testid="order-list-item">
+    <IonItem routerLink={`/admin/order/${order._id}`} detail={true} data-testid="order-list-item">
       <IonGrid>
         <IonRow>
           <IonCol><h3>{order.createdAt.toDateString()}</h3></IonCol>

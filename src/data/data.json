@@ -1,0 +1,137 @@
+{
+  "orders": {
+    "1": {
+      "closingTime": 1608114727688,
+      "createdAt": 1607077944995,
+      "open": true,
+      "openToUsers": true,
+      "payed": false,
+      "totalPrice": 0
+    },
+    "-MNArMQr-Jxt0gE8-Szk": {
+      "closingTime": 1609108824798,
+      "createdAt": 1606516832167,
+      "open": true,
+      "openToUsers": true,
+      "payed": false,
+      "totalPrice": 0
+    }
+  },
+  "products": {
+    "qwerty1": {
+      "name": "טחינה הר ברכה",
+      "price": 19,
+      "qtyUnit": "unit",
+      "minQty": 12
+    },
+    "qwerty2": {
+      "name": "מוטי רסק עגבניות",
+      "price": 6,
+      "qtyUnit": "unit",
+      "minQty": 12
+    },
+    "qwerty3": {
+      "name": "קשיו טבעי",
+      "price": 50,
+      "qtyUnit": "Kg",
+      "minQty": 5
+    },
+    "qwerty4": {
+      "name": "חומוס",
+      "price": 38.00,
+      "qtyUnit": "Kg",
+      "minQty": 5
+    },
+    "qwertt5": {
+      "name": "קינואה",
+      "price": 58,
+      "qtyUnit": "Kg",
+      "minQty": 5
+    },
+    "qwertyy7": {
+      "name": "עדשים כתומות",
+      "price": 29,
+      "qtyUnit": "Kg",
+      "minQty": 5
+    }
+  },
+  "userOrders": {
+    "1": {
+      "products": [
+        {
+          "product": "qwerty1",
+          "qty": "2"
+        },
+        {
+          "product": "qwerty2",
+          "qty": "3"
+        }
+      ],
+      "userRef": "a",
+      "orderRef": "1",
+      "totalPrice": "56",
+      "payed": false
+    },
+    "2": {
+      "products": [
+        {
+          "product": "qwerty3",
+          "qty": "2"
+        },
+        {
+          "product": "qwerty4",
+          "qty": "1"
+        }
+      ],
+      "userRef": "b",
+      "orderRef": "-MNArMQr-Jxt0gE8-Szk",
+      "totalPrice": "0",
+      "payed": true
+    },
+    "3": {
+      "products": [],
+      "userRef": "c",
+      "orderRef": "1",
+      "totalPrice": "0",
+      "payed": true
+    }
+  },
+  "orderProducts": {
+    "123": {
+      "product": "qwerty1",
+      "order": "1",
+      "totalQty": 2,
+      "missing": 10,
+      "fixedTotalPrice": 28,
+      "finalTotalPrice": null,
+      "priceWarn": false
+    },
+    "456": {
+      "product": "qwerty2",
+      "order": "1",
+      "totalQty": 3,
+      "missing": 9,
+      "fixedTotalPrice": 18,
+      "finalTotalPrice": null,
+      "priceWarn": false
+    },
+    "789": {
+      "product": "qwerty3",
+      "order": "-MNArMQr-Jxt0gE8-Szk",
+      "totalQty": 2,
+      "missing": 3,
+      "fixedTotalPrice": 100,
+      "finalTotalPrice": null,
+      "priceWarn": false
+    },
+    "012": {
+      "product": "qwerty4",
+      "order": "-MNArMQr-Jxt0gE8-Szk",
+      "totalQty": 1,
+      "missing": 4,
+      "fixedTotalPrice": 38,
+      "finalTotalPrice": null,
+      "priceWarn": false
+    }
+  }
+}

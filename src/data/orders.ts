@@ -1,29 +1,23 @@
-export interface Order {
-  _id: string,
-  open: boolean,
-  openToUsers: boolean,
-  createdAt: Date,
-  closingTime: Date,
-  orderProducts: string[], // array of OrderProducts` ids
-  userOrders: string[], // array of UserOrders` ids
-  totalPrice: number, // total price of UsersOrders 
-  payed: boolean
-}
-
-// Order.payed = userOrdres.every(order => order.payed)
-// Order.totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
+import { Order } from '../types/interfaces';
 
 const orders: Order[] = [
   {
     _id: '1',
     open: true, 
     openToUsers: true,
-    createdAt: new Date(234234234),
-    closingTime: new Date(234234345),
-    orderProducts: ['123', '456'],
-    userOrders: ['1', '2', '3'],
+    createdAt: new Date(1606513716688),
+    closingTime: new Date(1601241806937),
     totalPrice: 0,
     payed: false
+  },
+  {
+    _id: '-MNArMQr-Jxt0gE8-Szk',
+    closingTime: new Date(1609108824798),
+    createdAt: new Date(1606516832167),
+    open: true,
+    openToUsers: true,
+    payed: false,
+    totalPrice: 0
   }
 ];
 
@@ -31,6 +25,14 @@ const orders: Order[] = [
 export const getOrders = () => orders;
 
 export const getOrder = (_id: string) => orders.find(m => m._id === _id);
+
+export const addOrder = async (orderDetails: Order): Promise<Order> => {
+  const orderWithId = { ...orderDetails, _id: (orders.length + 1).toString() }
+  console.log('orders before push :', orders)
+  orders.push(orderWithId);
+  console.log('orders after push :', orders)
+  return orderWithId
+}
 
 
 

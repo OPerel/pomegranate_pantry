@@ -1,70 +1,87 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory, RouteComponentProps } from 'react-router-dom';
 import {
-  IonBackButton,
   IonButtons,
   IonButton,
   IonContent,
   IonHeader,
   IonPage,
   IonToolbar,
+  IonTitle,
+  IonIcon
 } from '@ionic/react';
 
-import { RouteComponentProps } from 'react-router';
+import { chevronForwardOutline } from 'ionicons/icons';
 
-import OrderProductsList from '../../presentational/OrderProductsList';
+import OrderProductsList from '../../presentational/OrderProductsList/OrderProductsList';
 import OrderUsersList from '../../presentational/OrderUsersList';
 import './ViewOrder.css';
 
-import { Order, getOrder } from '../../../data/orders'; 
-import { UserOrder, getOrderUsers } from '../../../data/userOrders';
-import { OrderProduct, getOrderProducts } from '../../../data/orderProduct';
+import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
+import Fire from '../../../services/Firebase';
 
-interface ViewOrderProps extends RouteComponentProps<{ id: string; }> { }
+const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
 
-const ViewOrder: React.FC<ViewOrderProps> = ({ match }) => {
-
-  const [order, setOrder] = useState<Order>();
-  const [orderUsers, setOrderUsers] = useState<UserOrder[]>();
-  const [orderProducts, setOrderProduct] = useState<OrderProduct[]>();
+  const { id: orderId } = match.params;
 
   const [tab, setTab] = useState<string>('users');
 
+  const { state, dispatch } = useAdminStateContext();
+  const { order } = state;
+  // const { createdAt } = order;
+
+  const history = useHistory();
+
   useEffect(() => {
-    const { id: orderId } = match.params;
-    const order = getOrder(orderId);
-    setOrder(order);
-
-    const orderUsers = getOrderUsers(orderId);
-    setOrderUsers(orderUsers);
-
-    const orderProducts = getOrderProducts(orderId);
-    setOrderProduct(orderProducts);
-  }, [match.params]);
+    if (orderId) {
+      dispatch({ type: AdminStateActionTypes.FETCH })
+      Fire.orderListener(orderId, order => {
+        dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: order })
+      });
+    
+      return () => Fire.orderOff(orderId)
+    };
+  }, [orderId, dispatch])
+  // console.log('viewOrder state: ', state)
 
   return (
     <IonPage>
       <IonHeader translucent>
         <IonToolbar>
-          <IonButtons>
-            <IonBackButton text="הזמנות" defaultHref="/home"></IonBackButton>
-          </IonButtons>
+          <IonTitle slot="start">אדמין</IonTitle>
+          <IonButton slot="end" color="secondary" onClick={() => Fire.doSignOut()}>יציאה</IonButton>
         </IonToolbar>
       </IonHeader>
 
       <IonContent>
-        <div style={{ textAlign: 'center', paddingTop: '20px', backgroundColor: 'lightgray' }}>
-          {order?.createdAt.toDateString()} &nbsp; | &nbsp; {order?.openToUsers ? 'Open' : 'Close'} &nbsp; | &nbsp; {order?.closingTime.toDateString()}
-          <nav style={{ display: 'flex', borderBottom: '1px solid' }}>
-            <IonButton onClick={() => setTab('users')} disabled={tab === 'users'} expand="full">משתמשים</IonButton>
-            <IonButton onClick={() => setTab('products')} disabled={tab === 'products'} expand="full">מוצרים</IonButton>
+        <IonToolbar className="order-header">
+
+          <nav slot="start">
+            <IonButtons>
+              <IonButton onClick={() => history.goBack()}>
+                <IonIcon icon={chevronForwardOutline} slot="start"></IonIcon>
+                הזמנות
+              </IonButton>
+              <IonButton onClick={() => setTab('users')} disabled={tab === 'users'}>משתמשים</IonButton>
+              <IonButton onClick={() => setTab('products')} disabled={tab === 'products'}>מוצרים</IonButton>
+            </IonButtons>
           </nav>
-        </div>
+
+          <IonTitle size="small">
+            {`הזמנה ${order?.createdAt.getDate()}/${order?.createdAt.getMonth()}/${order?.createdAt.getFullYear()}`} &nbsp; | &nbsp;
+            {order?.openToUsers ? 'הזמנה פעילה' : 'הזמנה סגורה'} &nbsp; | &nbsp;
+            {`נסגר ב - ${order?.closingTime.getDate()}/${order?.closingTime.getMonth()}/${order?.closingTime.getFullYear()}`}
+          </IonTitle>
+
+          <IonButton color="danger" slot="primary">סגור הזמנה</IonButton>
+        
+        </IonToolbar>
 
         <div>
-          {tab === 'users' && orderUsers ? (
-            <OrderUsersList orderUsers={orderUsers} />
+          {tab === 'users' ? (
+            <OrderUsersList />
           ) : (
-            orderProducts && <OrderProductsList orderProducts={orderProducts} />
+            <OrderProductsList />
           )}
         </div>
       </IonContent>

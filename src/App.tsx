@@ -1,9 +1,10 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Orders from './components/containers/Orders/Orders';
-import ViewOrder from './components/containers/ViewOrder/ViewOrder';
+
+import { routes } from './routes';
+import AuthStateProvider, { useAuthStateContext } from './components/context/authState/AuthContextProvider';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -24,16 +25,35 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/home" component={Orders} exact={true} />
-        <Route path="/order/:id" component={ViewOrder} exact={true} />
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+export function RouteWithSubRoutes(route: any) {
+  return (
+    <Route
+      path={route.path}
+      render={props => (
+        // pass the sub-routes down to keep nesting
+        <route.component {...props} routes={route.routes} />
+      )}
+    />
+  );
+}
 
-export default App;
+const App: React.FC = () => {
+  const { state } = useAuthStateContext();
+  console.log('auth state: ', state)
+  
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Switch>
+            {routes.map((route, i) => (
+              <RouteWithSubRoutes key={i} {...route} />
+            ))}
+          </Switch>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  );
+}
+
+export default AuthStateProvider(App);

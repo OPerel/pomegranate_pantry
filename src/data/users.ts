@@ -1,9 +1,4 @@
-export interface User {
-  _id: string;
-  name: string;
-  role: 'user' | 'rimon',
-  location: 'TA' | 'PH';
-}
+import { User } from '../types/interfaces';
 
 const users: User[] = [
   {

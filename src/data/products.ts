@@ -1,10 +1,4 @@
-export interface Product {
-  _id: string,
-  name: string,
-  price: number,
-  minQty: number,
-  qtyUnit: 'unit' | 'Kg'
-}
+import { Product } from '../types/interfaces';
 
 const products: Product[] = [
   {
@@ -22,7 +16,7 @@ const products: Product[] = [
     minQty: 12,
   },
   {
-    _id: 'qwery3',
+    _id: 'qwerty3',
     name: 'קשיו טבעי',
     price: 50.00,
     qtyUnit: 'Kg',

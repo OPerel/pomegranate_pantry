@@ -12,7 +12,8 @@ import {
 } from '@ionic/react';
 import { arrowDownCircleOutline, arrowUpCircleOutline } from 'ionicons/icons';
 
-import { UserOrder } from '../../../data/userOrders';
+import { UserOrder } from '../../../types/interfaces';
+
 import { getUser } from '../../../data/users';
 import { getProductsById } from '../../../data/products';
 // import './UserOrderListItem.css';
@@ -26,9 +27,15 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
   const [itemOpen, setItemOpen] = useState<boolean>(false);
   // const [userProducts, setUserProducts] = useState<Product[]>([]);
 
+  /**
+ * for each row I need:
+ * 1. the User object for the row itself
+ * 2. all the UserOrder's Products for the row's details dropdown
+ */
+
   return (
     <>
-      <IonItem button onClick={() => setItemOpen(!itemOpen)}>
+      <IonItem button onClick={() => setItemOpen(!itemOpen)} data-testid="order-user-list-item">
         <IonGrid>
           <IonRow>
             <IonCol><h3>{getUser(userOrder.userRef).name}</h3></IonCol>
@@ -47,7 +54,7 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
             <IonLabel>כמות</IonLabel>
             <IonLabel>סה"כ</IonLabel>
           </IonListHeader>
-          {userOrder.products.map(({ product, qty }) => (
+          {userOrder.products?.map(({ product, qty }) => (
             <IonItem key={product}>
               <IonGrid>
                 <IonRow onClick={() => setItemOpen(!itemOpen)}>
