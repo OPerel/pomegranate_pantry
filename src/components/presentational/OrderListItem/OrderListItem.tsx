@@ -5,9 +5,12 @@ import {
   IonGrid,
   IonCol,
   IonRow,
-  } from '@ionic/react';
+  IonIcon
+} from '@ionic/react';
+import { checkmarkOutline, closeOutline } from 'ionicons/icons';
 
 import { Order } from '../../../types/interfaces';
+import { ROUTES } from '../../../constants';
 import './OrderListItem.css';
 
 interface OrderListItemProps {
@@ -16,12 +19,12 @@ interface OrderListItemProps {
 
 const OrderListItem: React.FC<OrderListItemProps> = ({ order }) => {
   return (
-    <IonItem routerLink={`/admin/order/${order._id}`} detail={true} data-testid="order-list-item">
+    <IonItem routerLink={`${ROUTES.ORDER}/${order._id}`} detail={true} data-testid="order-list-item">
       <IonGrid>
         <IonRow>
-          <IonCol><h3>{order.createdAt.toDateString()}</h3></IonCol>
+          <IonCol><h4>{order.createdAt.toDateString()}</h4></IonCol>
           <IonCol><h4>{order.totalPrice}</h4></IonCol>
-          <IonCol><h4>{order.payed ? <span>&#10003;</span> : 'X'}</h4></IonCol>
+          <IonCol><h4><IonIcon icon={order.payed ? checkmarkOutline : closeOutline}></IonIcon></h4></IonCol>
         </IonRow>
       </IonGrid>
     </IonItem>

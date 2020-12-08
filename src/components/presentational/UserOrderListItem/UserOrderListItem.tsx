@@ -10,7 +10,7 @@ import {
   IonLabel,
   IonIcon
 } from '@ionic/react';
-import { arrowDownCircleOutline, arrowUpCircleOutline } from 'ionicons/icons';
+import { chevronDownOutline, chevronUpOutline, closeOutline, checkmarkOutline } from 'ionicons/icons';
 
 import { UserOrder } from '../../../types/interfaces';
 
@@ -38,24 +38,24 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
       <IonItem button onClick={() => setItemOpen(!itemOpen)} data-testid="order-user-list-item">
         <IonGrid>
           <IonRow>
-            <IonCol><h3>{getUser(userOrder.userRef).name}</h3></IonCol>
+            <IonCol><h4>{getUser(userOrder.userRef).name}</h4></IonCol>
             <IonCol><h4>{getUser(userOrder.userRef)?.location === 'TA' ? 'תל אביב' : 'פרדס חנה'}</h4></IonCol>
             <IonCol><h4>{userOrder.totalPrice}</h4></IonCol>
-            <IonCol><h4>{userOrder.payed ? <span>&#10003;</span> : 'X'}</h4></IonCol>
-            <IonCol><IonIcon icon={itemOpen ? arrowUpCircleOutline : arrowDownCircleOutline}></IonIcon></IonCol>
+            <IonCol><h4><IonIcon icon={userOrder.payed ? checkmarkOutline : closeOutline}></IonIcon></h4></IonCol>
+            <IonCol><h4><IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline}></IonIcon></h4></IonCol>
           </IonRow>
         </IonGrid>
       </IonItem>
       {itemOpen ? (
-        <IonList style={{ backgroundColor: 'lightgray' }}>
-          <IonListHeader>
+        <IonList>
+          <IonListHeader className="nested-list">
             <IonLabel>מוצר</IonLabel>
             <IonLabel>מחיר</IonLabel>
             <IonLabel>כמות</IonLabel>
             <IonLabel>סה"כ</IonLabel>
           </IonListHeader>
           {userOrder.products?.map(({ product, qty }) => (
-            <IonItem key={product}>
+            <IonItem>
               <IonGrid>
                 <IonRow onClick={() => setItemOpen(!itemOpen)}>
                   <IonCol><h3>{getProductsById(product)?.name}</h3></IonCol>

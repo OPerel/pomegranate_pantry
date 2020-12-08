@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, RouteComponentProps } from 'react-router-dom';
+import { useHistory, Link, RouteComponentProps } from 'react-router-dom';
 import {
   IonButtons,
   IonButton,
@@ -19,6 +19,7 @@ import './ViewOrder.css';
 
 import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
 import Fire from '../../../services/Firebase';
+import { ROUTES } from '../../../constants'; 
 
 const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
 
@@ -49,12 +50,13 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
       <IonHeader translucent>
         <IonToolbar>
           <IonTitle slot="start">אדמין</IonTitle>
+          <Link to={`${ROUTES.USER}/admin`} style={{ color: 'white', marginLeft: '2%' }} slot="end">משתמש</Link>
           <IonButton slot="end" color="secondary" onClick={() => Fire.doSignOut()}>יציאה</IonButton>
         </IonToolbar>
       </IonHeader>
 
       <IonContent>
-        <IonToolbar className="order-header">
+        <IonToolbar className={`order-header ${order?.open ? 'order-header-open' : (order?.payed ? 'order-header-success' : 'order-header-danger')}`}>
 
           <nav slot="start">
             <IonButtons>
@@ -73,7 +75,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
             {`נסגר ב - ${order?.closingTime.getDate()}/${order?.closingTime.getMonth()}/${order?.closingTime.getFullYear()}`}
           </IonTitle>
 
-          <IonButton color="danger" slot="primary">סגור הזמנה</IonButton>
+          {order?.open && <IonButton color="danger" slot="primary">סגור הזמנה</IonButton>}
         
         </IonToolbar>
 

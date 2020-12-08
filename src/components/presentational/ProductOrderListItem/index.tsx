@@ -8,9 +8,10 @@ import {
   // IonList,
   // IonListHeader,
   // IonLabel,
+  IonInput,
   IonIcon
   } from '@ionic/react';
-  import { arrowDownCircleOutline, arrowUpCircleOutline } from 'ionicons/icons'
+  import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
 
 import { OrderProduct } from '../../../types/interfaces';
 
@@ -47,12 +48,12 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
       <IonItem button onClick={() => setItemOpen(!itemOpen)} data-testid="product-order-list-item">
         <IonGrid>
           <IonRow>
-            <IonCol><h3>{getProductsById(orderProduct.product)?.name}</h3></IonCol>
+            <IonCol><h4>{getProductsById(orderProduct.product)?.name}</h4></IonCol>
             <IonCol><h4>{orderProduct.totalQty}</h4></IonCol>
             <IonCol><h4>{orderProduct.missing}</h4></IonCol>
             <IonCol><h4>{orderProduct.fixedTotalPrice}</h4></IonCol>
-            <IonCol><input /></IonCol>
-            <IonCol><IonIcon icon={itemOpen ? arrowUpCircleOutline : arrowDownCircleOutline}></IonIcon></IonCol>
+            <IonCol><IonInput type="number" className="final-price" /></IonCol>
+            <IonCol><h4><IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline}></IonIcon></h4></IonCol>
           </IonRow>
         </IonGrid>
       </IonItem>
