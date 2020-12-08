@@ -22,9 +22,10 @@ const OrderListItem: React.FC<OrderListItemProps> = ({ order }) => {
     <IonItem routerLink={`${ROUTES.ORDER}/${order._id}`} detail={true} data-testid="order-list-item">
       <IonGrid>
         <IonRow>
-          <IonCol><h4>{order.createdAt.toDateString()}</h4></IonCol>
-          <IonCol><h4>{order.totalPrice}</h4></IonCol>
-          <IonCol><h4><IonIcon icon={order.payed ? checkmarkOutline : closeOutline}></IonIcon></h4></IonCol>
+          <IonCol>{order.createdAt.toDateString()}</IonCol>
+          <IonCol>{order.totalPrice}</IonCol>
+          <IonCol><IonIcon icon={order.payed ? checkmarkOutline : closeOutline} /></IonCol>
+          <IonCol><IonIcon icon={order.payed ? checkmarkOutline : closeOutline} /></IonCol>
         </IonRow>
       </IonGrid>
     </IonItem>

@@ -71,7 +71,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
 
           <IonTitle size="small">
             {`הזמנה ${order?.createdAt.getDate()}/${order?.createdAt.getMonth()}/${order?.createdAt.getFullYear()}`} &nbsp; | &nbsp;
-            {order?.openToUsers ? 'הזמנה פעילה' : 'הזמנה סגורה'} &nbsp; | &nbsp;
+            <b>{order?.open ? 'הזמנה פעילה' : 'הזמנה סגורה'}</b> &nbsp; | &nbsp;
             {`נסגר ב - ${order?.closingTime.getDate()}/${order?.closingTime.getMonth()}/${order?.closingTime.getFullYear()}`}
           </IonTitle>
 

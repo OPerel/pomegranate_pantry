@@ -8,11 +8,15 @@ import {
   IonList,
   IonListHeader,
   IonLabel,
-  IonIcon
+  IonIcon,
+  IonButton
 } from '@ionic/react';
 import { chevronDownOutline, chevronUpOutline, closeOutline, checkmarkOutline } from 'ionicons/icons';
 
+import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 import { UserOrder } from '../../../types/interfaces';
+
+import Fire from '../../../services/Firebase';
 
 import { getUser } from '../../../data/users';
 import { getProductsById } from '../../../data/products';
@@ -26,6 +30,7 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
 
   const [itemOpen, setItemOpen] = useState<boolean>(false);
   // const [userProducts, setUserProducts] = useState<Product[]>([]);
+  const { state: { order } } = useAdminStateContext();
 
   /**
  * for each row I need:
@@ -35,14 +40,29 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
 
   return (
     <>
-      <IonItem button onClick={() => setItemOpen(!itemOpen)} data-testid="order-user-list-item">
+      <IonItem>
         <IonGrid>
           <IonRow>
-            <IonCol><h4>{getUser(userOrder.userRef).name}</h4></IonCol>
-            <IonCol><h4>{getUser(userOrder.userRef)?.location === 'TA' ? 'תל אביב' : 'פרדס חנה'}</h4></IonCol>
-            <IonCol><h4>{userOrder.totalPrice}</h4></IonCol>
-            <IonCol><h4><IonIcon icon={userOrder.payed ? checkmarkOutline : closeOutline}></IonIcon></h4></IonCol>
-            <IonCol><h4><IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline}></IonIcon></h4></IonCol>
+            <IonCol>{getUser(userOrder.userRef).name}</IonCol>
+            <IonCol>{getUser(userOrder.userRef)?.location === 'TA' ? 'תל אביב' : 'פרדס חנה'}</IonCol>
+            <IonCol>{userOrder.totalPrice}</IonCol>
+            <IonCol>
+              <IonButton
+                fill="outline"
+                disabled={order?.open}
+                color={!order?.open && !userOrder.payed ? 'danger' : 'primary'}
+                onClick={() => {
+                  Fire.updateEntry('userOrders', userOrder._id, { ...userOrder, payed: !userOrder.payed });
+                }}
+              >
+                <IonIcon icon={userOrder.payed ? checkmarkOutline : closeOutline} />
+              </IonButton>
+            </IonCol>
+            <IonCol>
+              <IonButton fill="clear" onClick={() => setItemOpen(!itemOpen)} data-testid="order-user-list-item">
+                <IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} />
+              </IonButton>
+            </IonCol>
           </IonRow>
         </IonGrid>
       </IonItem>
@@ -55,7 +75,7 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
             <IonLabel>סה"כ</IonLabel>
           </IonListHeader>
           {userOrder.products?.map(({ product, qty }) => (
-            <IonItem>
+            <IonItem key={product}>
               <IonGrid>
                 <IonRow onClick={() => setItemOpen(!itemOpen)}>
                   <IonCol><h3>{getProductsById(product)?.name}</h3></IonCol>

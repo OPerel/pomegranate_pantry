@@ -6,12 +6,12 @@ import {
   IonCol,
   IonRow,
   // IonList,
-  // IonListHeader,
+  IonButton,
   // IonLabel,
   IonInput,
   IonIcon
-  } from '@ionic/react';
-  import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
+} from '@ionic/react';
+import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
 
 import { OrderProduct } from '../../../types/interfaces';
 
@@ -45,15 +45,15 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
 
   return (
     <>
-      <IonItem button onClick={() => setItemOpen(!itemOpen)} data-testid="product-order-list-item">
+      <IonItem>
         <IonGrid>
           <IonRow>
-            <IonCol><h4>{getProductsById(orderProduct.product)?.name}</h4></IonCol>
-            <IonCol><h4>{orderProduct.totalQty}</h4></IonCol>
-            <IonCol><h4>{orderProduct.missing}</h4></IonCol>
-            <IonCol><h4>{orderProduct.fixedTotalPrice}</h4></IonCol>
-            <IonCol><IonInput type="number" className="final-price" /></IonCol>
-            <IonCol><h4><IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline}></IonIcon></h4></IonCol>
+            <IonCol>{getProductsById(orderProduct.product)?.name}</IonCol>
+            <IonCol>{orderProduct.totalQty}</IonCol>
+            <IonCol>{orderProduct.missing}</IonCol>
+            <IonCol>{orderProduct.fixedTotalPrice}</IonCol>
+            <IonCol><div><IonInput type="number" className="final-price" /></div></IonCol>
+            <IonCol><IonButton fill="clear" onClick={() => setItemOpen(!itemOpen)} data-testid="product-order-list-item"><IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} /></IonButton></IonCol>
           </IonRow>
         </IonGrid>
       </IonItem>
