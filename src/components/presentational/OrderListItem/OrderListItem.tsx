@@ -19,12 +19,12 @@ interface OrderListItemProps {
 
 const OrderListItem: React.FC<OrderListItemProps> = ({ order }) => {
   return (
-    <IonItem routerLink={`${ROUTES.ORDER}/${order._id}`} detail={true} data-testid="order-list-item">
+    <IonItem routerLink={`${ROUTES.ORDER}/${order._id}`} detail={true} color={!order.open && !order.payed ? 'warning' : ''} data-testid="order-list-item">
       <IonGrid>
         <IonRow>
-          <IonCol>{order.createdAt.toDateString()}</IonCol>
+          <IonCol>{`${order?.createdAt.getDate()}/${order?.createdAt.getMonth()}/${order?.createdAt.getFullYear()}`}</IonCol>
           <IonCol>{order.totalPrice}</IonCol>
-          <IonCol><IonIcon icon={order.payed ? checkmarkOutline : closeOutline} /></IonCol>
+          <IonCol><IonIcon icon={order.open ? checkmarkOutline : closeOutline} /></IonCol>
           <IonCol><IonIcon icon={order.payed ? checkmarkOutline : closeOutline} /></IonCol>
         </IonRow>
       </IonGrid>

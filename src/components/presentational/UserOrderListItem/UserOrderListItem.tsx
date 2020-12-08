@@ -43,9 +43,9 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
       <IonItem>
         <IonGrid>
           <IonRow>
-            <IonCol>{getUser(userOrder.userRef).name}</IonCol>
-            <IonCol>{getUser(userOrder.userRef)?.location === 'TA' ? 'תל אביב' : 'פרדס חנה'}</IonCol>
-            <IonCol>{userOrder.totalPrice}</IonCol>
+            <IonCol><p>{getUser(userOrder.userRef).name}</p></IonCol>
+            <IonCol><p>{getUser(userOrder.userRef)?.location === 'TA' ? 'תל אביב' : 'פרדס חנה'}</p></IonCol>
+            <IonCol><p>{userOrder.totalPrice}</p></IonCol>
             <IonCol>
               <IonButton
                 fill="outline"
@@ -78,10 +78,10 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
             <IonItem key={product}>
               <IonGrid>
                 <IonRow onClick={() => setItemOpen(!itemOpen)}>
-                  <IonCol><h3>{getProductsById(product)?.name}</h3></IonCol>
-                  <IonCol><h4>{getProductsById(product)?.price}</h4></IonCol>
-                  <IonCol><h4>{qty}</h4></IonCol>
-                  <IonCol><h4>{qty * (getProductsById(product)?.price as number)}</h4></IonCol>
+                  <IonCol><p>{getProductsById(product)?.name}</p></IonCol>
+                  <IonCol><p>{getProductsById(product)?.price}</p></IonCol>
+                  <IonCol><p>{qty}</p></IonCol>
+                  <IonCol><p>{qty * (getProductsById(product)?.price as number)}</p></IonCol>
                 </IonRow>
               </IonGrid>
             </IonItem>

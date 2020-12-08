@@ -48,11 +48,11 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
       <IonItem>
         <IonGrid>
           <IonRow>
-            <IonCol>{getProductsById(orderProduct.product)?.name}</IonCol>
-            <IonCol>{orderProduct.totalQty}</IonCol>
-            <IonCol>{orderProduct.missing}</IonCol>
-            <IonCol>{orderProduct.fixedTotalPrice}</IonCol>
-            <IonCol><div><IonInput type="number" className="final-price" /></div></IonCol>
+            <IonCol><p>{getProductsById(orderProduct.product)?.name}</p></IonCol>
+            <IonCol><p>{orderProduct.totalQty}</p></IonCol>
+            <IonCol><p>{orderProduct.missing}</p></IonCol>
+            <IonCol><p>{orderProduct.fixedTotalPrice}</p></IonCol>
+            <IonCol><IonInput type="number" className="final-price" /></IonCol>
             <IonCol><IonButton fill="clear" onClick={() => setItemOpen(!itemOpen)} data-testid="product-order-list-item"><IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} /></IonButton></IonCol>
           </IonRow>
         </IonGrid>
