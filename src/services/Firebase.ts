@@ -174,9 +174,11 @@ class FirebaseService {
       })
   }
 
+  // create a listener just for payed fields instead
   private updateOrderOnUserOrdersChange = async (id: string, objList: UserOrder[]) => {
     const payed = objList.every(userOrder => userOrder.payed);
-    this.updateEntry('orders', id, { payed })
+    const totalPrice = objList.reduce((acc: number, userOrder) => acc + userOrder.totalPrice, 0);
+    this.updateEntry('orders', id, { payed, totalPrice })
   }
 
   public orderUsersOff = (id: string) => {
@@ -233,8 +235,8 @@ class FirebaseService {
 
   public updateEntry = async (collection: string, id: string, updatedObj: any) => {
     try {
-      const res = await this.db.ref(`${collection}/${id}`).update(updatedObj);
-      console.log('updated item: ', res);
+      await this.db.ref(`${collection}/${id}`).update(updatedObj);
+      console.log('item updated');
     } catch (err) {
       console.log('error updating entry: ', err)
     }

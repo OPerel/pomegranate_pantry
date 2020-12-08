@@ -14,6 +14,7 @@ import {
 import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
 
 import { OrderProduct } from '../../../types/interfaces';
+import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 
 import { getProductsById } from '../../../data/products';
 import { getOrderUsers } from '../../../data/userOrders';
@@ -26,6 +27,7 @@ interface OrderProductListItemProps {
 const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduct }) => {
 
   const [itemOpen, setItemOpen] = useState<boolean>(false);
+  const { state: { order } } = useAdminStateContext();
 
   /**
    * for each row I need:
@@ -52,8 +54,12 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
             <IonCol><p>{orderProduct.totalQty}</p></IonCol>
             <IonCol><p>{orderProduct.missing}</p></IonCol>
             <IonCol><p>{orderProduct.fixedTotalPrice}</p></IonCol>
-            <IonCol><IonInput type="number" className="final-price" /></IonCol>
-            <IonCol><IonButton fill="clear" onClick={() => setItemOpen(!itemOpen)} data-testid="product-order-list-item"><IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} /></IonButton></IonCol>
+            <IonCol><IonItem disabled={order?.open}><IonInput type="number" className="final-price" /></IonItem></IonCol>
+            <IonCol>
+              <IonButton fill="clear" onClick={() => setItemOpen(!itemOpen)} data-testid="product-order-list-item">
+                <IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} />
+              </IonButton>
+            </IonCol>
           </IonRow>
         </IonGrid>
       </IonItem>
