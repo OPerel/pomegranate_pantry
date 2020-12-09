@@ -14,11 +14,11 @@ import {
 import { chevronDownOutline, chevronUpOutline, closeOutline, checkmarkOutline } from 'ionicons/icons';
 
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
-import { UserOrder } from '../../../types/interfaces';
+import { UserOrder, User } from '../../../types/interfaces';
 
 import Fire from '../../../services/Firebase';
 
-import { getUser } from '../../../data/users';
+// import { getUser } from '../../../data/users';
 import { getProductsById } from '../../../data/products';
 // import './UserOrderListItem.css';
 
@@ -29,7 +29,7 @@ interface UserOrderListItemProps {
 const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
 
   const [itemOpen, setItemOpen] = useState<boolean>(false);
-  // const [userProducts, setUserProducts] = useState<Product[]>([]);
+  const [userInfo, setUserInfo] = useState<User>({} as User);
   const { state: { order } } = useAdminStateContext();
 
   /**
@@ -37,14 +37,21 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
  * 1. the User object for the row itself
  * 2. all the UserOrder's Products for the row's details dropdown
  */
+  React.useEffect(() => {
+    Fire.getUser(userOrder.userRef, user => {
+      setUserInfo(user)
+    });
+
+    return () => Fire.userOff(userOrder.userRef);
+  }, [userOrder.userRef])
 
   return (
     <>
       <IonItem>
         <IonGrid>
           <IonRow>
-            <IonCol><p>{getUser(userOrder.userRef).name}</p></IonCol>
-            <IonCol><p>{getUser(userOrder.userRef)?.location === 'TA' ? 'תל אביב' : 'פרדס חנה'}</p></IonCol>
+            <IonCol><p>{userInfo.name}</p></IonCol>
+            <IonCol><p>{userInfo.location === 'TA' ? 'תל אביב' : 'פרדס חנה'}</p></IonCol>
             <IonCol><p>{userOrder.totalPrice}</p></IonCol>
             <IonCol>
               <IonButton

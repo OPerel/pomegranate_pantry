@@ -30,7 +30,7 @@ class FirebaseService {
 
   // utils and refs
   private getColRef = (col: string) => this.db.ref(col);
-  private getUser = (id: string) => this.db.ref(`/users/${id}`);
+  private getUserRef = (id: string) => this.db.ref(`/users/${id}`);
 
   private parseSnapshot = <T>(snapshot: app.database.DataSnapshot): T[] => {
     const val = snapshot.val();
@@ -46,9 +46,19 @@ class FirebaseService {
   }
 
   /**
-   * Listeners  
-   */ 
+   * get by id
+   */
 
+  public getUser = async (userId: string, cb: (user: User) => void) => {
+    await this.getUserRef(userId).once('value', snapshot => {
+      cb(snapshot.val());
+    });
+  };
+  public userOff = (userId: string) => {
+    this.getUserRef(userId).off('value');
+  }
+
+  
   // Auth and user
   public doSignIn = (email: string, password: string): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -64,15 +74,19 @@ class FirebaseService {
         });
     });
   };
-
+  
   public doSignOut = () => {
     this.auth.signOut();
   }
-
+  
+  /**
+   * Listeners  
+   */
+  // Auth
   public authStateListener = (cb: (user: User | null) => void) => {
     this.auth.onAuthStateChanged(user => {
       if (user) {
-        this.getUser(user.uid)
+        this.getUserRef(user.uid)
         .once('value')
         .then(snapshot => {
           const dbUser = snapshot.val();
@@ -236,7 +250,7 @@ class FirebaseService {
   public updateEntry = async (collection: string, id: string, updatedObj: any) => {
     try {
       await this.db.ref(`${collection}/${id}`).update(updatedObj);
-      console.log('item updated');
+      console.log(`item ${collection}/${id} updated`);
     } catch (err) {
       console.log('error updating entry: ', err)
     }

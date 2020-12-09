@@ -54,7 +54,7 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
             <IonCol><p>{orderProduct.totalQty}</p></IonCol>
             <IonCol><p>{orderProduct.missing}</p></IonCol>
             <IonCol><p>{orderProduct.fixedTotalPrice}</p></IonCol>
-            <IonCol><IonItem disabled={order?.open}><IonInput type="number" className="final-price" /></IonItem></IonCol>
+            <IonCol><IonItem disabled={order?.open} className="final-price"><IonInput type="number" /></IonItem></IonCol>
             <IonCol>
               <IonButton fill="clear" onClick={() => setItemOpen(!itemOpen)} data-testid="product-order-list-item">
                 <IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} />

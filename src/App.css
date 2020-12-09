@@ -17,8 +17,9 @@ ion-icon {
 
 .final-price {
   --background: #cbdbe1;
-  --padding-start: 5%;
-  --padding-end: 5%;
-  /* --color: var(--ion-color-primary); */
-  border-radius: 5px;
+  --border-radius: 5px;
+}
+
+ion-row {
+  align-items: center;
 }

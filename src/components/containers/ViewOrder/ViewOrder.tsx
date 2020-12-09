@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   IonButtons,
   IonButton,
+  IonBackButton,
   IonContent,
   IonHeader,
   IonPage,
   IonToolbar,
   IonTitle,
-  IonIcon
 } from '@ionic/react';
 
 import { chevronForwardOutline } from 'ionicons/icons';
@@ -29,9 +29,6 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
 
   const { state, dispatch } = useAdminStateContext();
   const { order } = state;
-  // const { createdAt } = order;
-
-  const history = useHistory();
 
   useEffect(() => {
     if (orderId) {
@@ -60,10 +57,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
 
           <nav slot="start">
             <IonButtons>
-              <IonButton onClick={() => history.goBack()}>
-                <IonIcon icon={chevronForwardOutline} slot="start"></IonIcon>
-                הזמנות
-              </IonButton>
+              <IonBackButton defaultHref={ROUTES.ADMIN} icon={chevronForwardOutline} text="הזמנות" />
               <IonButton onClick={() => setTab('users')} disabled={tab === 'users'}>משתמשים</IonButton>
               <IonButton onClick={() => setTab('products')} disabled={tab === 'products'}>מוצרים</IonButton>
             </IonButtons>
