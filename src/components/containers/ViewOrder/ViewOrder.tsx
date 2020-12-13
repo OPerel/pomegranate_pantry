@@ -32,7 +32,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
 
   useEffect(() => {
     if (orderId) {
-      dispatch({ type: AdminStateActionTypes.FETCH })
+      dispatch({ type: AdminStateActionTypes.FETCH });
       Fire.orderListener(orderId, order => {
         dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: order })
       });

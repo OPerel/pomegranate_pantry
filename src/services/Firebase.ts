@@ -182,17 +182,8 @@ class FirebaseService {
       .orderByChild('orderRef')
       .equalTo(id)
       .on('value', snapshot => {
-        const objList: UserOrder[] = this.parseSnapshot(snapshot);
-        cb(objList);
-        this.updateOrderOnUserOrdersChange(id, objList)
+        cb(this.parseSnapshot(snapshot));
       })
-  }
-
-  // create a listener just for payed fields instead
-  private updateOrderOnUserOrdersChange = async (id: string, objList: UserOrder[]) => {
-    const payed = objList.every(userOrder => userOrder.payed);
-    const totalPrice = objList.reduce((acc: number, userOrder) => acc + userOrder.totalPrice, 0);
-    this.updateEntry('orders', id, { payed, totalPrice })
   }
 
   public orderUsersOff = (id: string) => {
@@ -250,10 +241,33 @@ class FirebaseService {
   public updateEntry = async (collection: string, id: string, updatedObj: any) => {
     try {
       await this.db.ref(`${collection}/${id}`).update(updatedObj);
-      console.log(`item ${collection}/${id} updated`);
+      console.log(`item "${collection}/${id}" updated`);
     } catch (err) {
       console.log('error updating entry: ', err)
     }
+  }
+
+  /**
+   * Transactions
+   */
+
+  // update userOrder.payed and Order.payed
+  public updateOrderPayedStatus = async (orderId: string, userOrderId: string) => {
+    this.getColRef('userOrders').child(userOrderId).child('payed').transaction(payed => {
+      return !payed
+    }, (error, committed) => {
+      if (error) {
+        console.log('userOrder.payed and order.payed Transaction failed abnormally: ', error);
+      } else if (!committed) {
+        console.log('Transaction aborted');
+      } else {
+        this.getColRef('userOrders').orderByChild('orderRef').equalTo(orderId).once('value', snapshot => {
+          const userOrders: UserOrder[] = this.parseSnapshot(snapshot);
+          const newPayed = userOrders.every(o => o.payed);
+          this.db.ref(`orders/${orderId}`).transaction(currentOrder => ({ ...currentOrder, payed: newPayed }))
+        })
+      }
+    })
   }
 }
 

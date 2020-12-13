@@ -58,9 +58,9 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
                 fill="outline"
                 disabled={order?.open}
                 color={!order?.open && !userOrder.payed ? 'danger' : 'primary'}
-                onClick={() => {
-                  Fire.updateEntry('userOrders', userOrder._id, { ...userOrder, payed: !userOrder.payed });
-                }}
+                onClick={order ? () => {
+                  Fire.updateOrderPayedStatus(order._id, userOrder._id);
+                } : () => {}}
               >
                 <IonIcon icon={userOrder.payed ? checkmarkOutline : closeOutline} />
               </IonButton>
