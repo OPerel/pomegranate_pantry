@@ -21,13 +21,16 @@ const Login: React.FC = () => {
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
   
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    setError(null);
     e.preventDefault();
     try {
       await Fire.doSignIn(email, password);
     } catch (err) {
-      console.warn('Error logging in: ', err)
+      console.warn('Error logging in: ', err);
+      setError(err);
     }
   }
 
@@ -58,6 +61,8 @@ const Login: React.FC = () => {
 
           <IonButton type="submit">כניסה</IonButton>
         </form>
+
+        {error && <IonTitle dir="ltr" color="danger" style={{ textAlign: 'center', margin: '2%' }}>{error}</IonTitle>}
       </IonContent>
 
     </IonPage>

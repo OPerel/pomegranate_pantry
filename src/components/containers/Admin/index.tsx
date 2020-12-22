@@ -64,5 +64,5 @@ const Admin: React.FC<{routes: RouteComponentProps<{ id: string }>[]}> = ({ rout
   )
 }
 
-const condition = (user: User) => user.role === ROLES.ADMIN;
+const condition = (user: User) => !!user && user.role === ROLES.ADMIN;
 export default AuthGuard(condition)(Admin);

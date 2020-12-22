@@ -15,3 +15,8 @@ export enum LOCATIONS {
   TA = 'TA',
   PH = 'PH'
 }
+
+export enum UNIT_TYPE {
+  UNIT = 'unit',
+  KG = 'Kg'
+}
