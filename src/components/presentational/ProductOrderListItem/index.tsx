@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   IonItem,
@@ -13,12 +13,10 @@ import {
 } from '@ionic/react';
 import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
 
-import { OrderProduct } from '../../../types/interfaces';
+import { OrderProduct, User, UserOrder, Product } from '../../../types/interfaces';
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 
-import { getProductsById } from '../../../data/products';
-import { getOrderUsers } from '../../../data/userOrders';
-import { getUser } from '../../../data/users';
+import Fire from '../../../services/Firebase';
 
 interface OrderProductListItemProps {
   orderProduct: OrderProduct;
@@ -34,10 +32,37 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
    * 1. the Product object for the row itself
    * 2. the UserOrders containing the Product, and the user's location, for the row's details dropdown
    */
-  const userOrdersWithProduct = getOrderUsers(orderProduct.order).filter(uo => uo.products.map(p => p.product).includes(orderProduct.product));
+
+  const [product, setProduct] = useState<Product>({} as Product);
+  const [users, setUsers] = useState<User[]>([]);
+  const [userOrders, setUserOrders] = useState<UserOrder[]>([]);
+
+  
+
+  useEffect(() => {
+    const getProduct = async (): Promise<void> => {
+      const product = await Fire.getProduct(orderProduct.product);
+      setProduct(product);
+    }
+  
+    const getUsers = async (): Promise<void> => {
+      const users = await Fire.getUsers();
+      setUsers(users);
+    }
+  
+    const getUserOrders = async () => {
+      const userOrders = await Fire.getOrderUserOrders(orderProduct.order);
+      setUserOrders(userOrders);
+    }
+    getProduct();
+    getUsers();
+    getUserOrders();
+  }, [orderProduct.order, orderProduct.product]);
+
+  const userOrdersWithProduct = userOrders.filter(uo => uo.products?.map(p => p.product).includes(orderProduct.product));
 
   const orderProductLocations: { ta: number, ph: number } = userOrdersWithProduct.reduce((acc, userOrder) => {
-    const { location } = getUser(userOrder.userRef);
+    const { location } = (users as any)[userOrder.userRef];
     if (location === 'TA') {
       return { ...acc, ta: acc.ta += userOrder.products.find(p => p.product === orderProduct.product)?.qty as number}
     } else {
@@ -50,7 +75,7 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
       <IonItem>
         <IonGrid>
           <IonRow>
-            <IonCol><p>{getProductsById(orderProduct.product)?.name}</p></IonCol>
+            <IonCol><p>{product?.name}</p></IonCol>
             <IonCol><p>{orderProduct.totalQty}</p></IonCol>
             <IonCol><p>{orderProduct.missing}</p></IonCol>
             <IonCol><p>{orderProduct.fixedTotalPrice}</p></IonCol>

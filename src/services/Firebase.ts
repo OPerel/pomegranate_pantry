@@ -49,7 +49,15 @@ class FirebaseService {
    * Get collection
    */
 
-   public getUsers = async () => (await this.getColRef('users').get()).val();
+  public getUsers = async () => (await this.getColRef('users').get()).val();
+  public getOrderUserOrders = async (orderId: string) => {
+    const userOrders = await this.getColRef('userOrders')
+      .orderByChild('orderRef')
+      .equalTo(orderId)
+      .get();
+
+    return this.parseSnapshot(userOrders) as UserOrder[];
+  }
 
   /**
    * get by id
@@ -60,10 +68,12 @@ class FirebaseService {
       cb(snapshot.val());
     });
   };
+
   public userOff = (userId: string) => {
     this.getUserRef(userId).off('value');
-  }
+  };
 
+  public getProduct = async (productId: string) => (await this.db.ref(`products/${productId}`).get()).val();
   
   // Auth and user
   public doSignIn = (email: string, password: string): Promise<void> => {
@@ -247,14 +257,14 @@ class FirebaseService {
     }
   }
 
-  public updateEntry = async (collection: string, id: string, updatedObj: any) => {
-    try {
-      await this.db.ref(`${collection}/${id}`).update(updatedObj);
-      console.log(`item "${collection}/${id}" updated`);
-    } catch (err) {
-      console.log('error updating entry: ', err)
-    }
-  }
+  // public updateEntry = async (collection: string, id: string, updatedObj: any) => {
+  //   try {
+  //     await this.db.ref(`${collection}/${id}`).update(updatedObj);
+  //     console.log(`item "${collection}/${id}" updated`);
+  //   } catch (err) {
+  //     console.log('error updating entry: ', err)
+  //   }
+  // }
 
   /**
    * Transactions
