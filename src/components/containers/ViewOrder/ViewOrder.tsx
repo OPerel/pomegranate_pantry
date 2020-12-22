@@ -74,8 +74,8 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
         </IonToolbar>
 
         <div>
-          {tab === 'users' ? (
-            <OrderUsersList />
+          {tab === 'users' && order ? (
+            <OrderUsersList order={order} />
           ) : (
             <OrderProductsList />
           )}

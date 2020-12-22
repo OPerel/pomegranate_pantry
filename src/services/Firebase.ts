@@ -46,6 +46,12 @@ class FirebaseService {
   }
 
   /**
+   * Get collection
+   */
+
+   public getUsers = async () => (await this.getColRef('users').get()).val();
+
+  /**
    * get by id
    */
 
@@ -83,7 +89,7 @@ class FirebaseService {
    * Listeners  
    */
   // Auth
-  public authStateListener = (cb: (user: User | null) => void) => {
+  public authStateListener = (cb: (user: User | null, error: string | null) => void) => {
     this.auth.onAuthStateChanged(user => {
       if (user) {
         this.getUserRef(user.uid)
@@ -97,11 +103,14 @@ class FirebaseService {
             ...dbUser,
           };
 
-          cb(mergedUser);
+          cb(mergedUser, null);
         });
       } else {
-        cb(null);
+        cb(null, null);
       }
+    }, error => {
+      console.log('Error listening to auth state: ', error);
+      cb(null, error.message);
     })
   }
 
@@ -257,14 +266,24 @@ class FirebaseService {
       return !payed
     }, (error, committed) => {
       if (error) {
-        console.log('userOrder.payed and order.payed Transaction failed abnormally: ', error);
+        console.log('userOrder.payed Transaction failed abnormally: ', error);
       } else if (!committed) {
-        console.log('Transaction aborted');
+        console.log('userOrder.payed Transaction aborted');
       } else {
         this.getColRef('userOrders').orderByChild('orderRef').equalTo(orderId).once('value', snapshot => {
           const userOrders: UserOrder[] = this.parseSnapshot(snapshot);
           const newPayed = userOrders.every(o => o.payed);
-          this.db.ref(`orders/${orderId}`).transaction(currentOrder => ({ ...currentOrder, payed: newPayed }))
+          this.db.ref(`orders/${orderId}`).transaction(currentOrder => {
+            return { ...currentOrder, payed: newPayed }
+          }, (error, committed) => {
+            if (error) {
+              console.log('order.payed Transaction failed abnormally: ', error);
+            } else if (!committed) {
+              console.log('order.payed Transaction aborted');
+            } else {
+              console.log('userOrder.payed and order.payed Transaction complete')
+            }
+          })
         })
       }
     })

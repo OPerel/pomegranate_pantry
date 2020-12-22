@@ -10,29 +10,32 @@ import {
   IonSpinner
 } from '@ionic/react';
 
-import { getUser } from '../../../data/users';
-
 import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
 import Fire from '../../../services/Firebase';
-
+import { Order, User } from '../../../types/interfaces';
 import UserOrderListItem from '../UserOrderListItem/UserOrderListItem';
 import './OrderUsersList.css';
 
-const OrderUsersList: React.FC = () => {
+const OrderUsersList: React.FC<{order: Order}> = ({ order }) => {
 
-  const { state: { loading, order, orderUsers }, dispatch } = useAdminStateContext();
+  const { state: { loading, orderUsers }, dispatch } = useAdminStateContext();
   const [userFilter, setUserFilter] = useState<string | null>(null);
-  const filteredUserOrders = userFilter ? orderUsers.filter(o => getUser(o.userRef).location === userFilter) : orderUsers;
+  const [users, setUsers] = useState<User[]>([]);
+  
+  const filteredUserOrders = userFilter ? orderUsers.filter(({ userRef }) => (users as any)[userRef].location === userFilter) : orderUsers;
+
+  const getUsers = async (): Promise<void> => {
+    const users = await Fire.getUsers();
+    setUsers(users);
+  }
 
   useEffect(() => {
-    if (order) {
-      dispatch({ type: AdminStateActionTypes.FETCH })
-      Fire.orderUsersCollectionListener(order._id, orderUsers => {
-        dispatch({ type: AdminStateActionTypes.SET_ORDER_USERS, payload: orderUsers })
-      });
-      return () => Fire.orderUsersOff(order._id);
-    }
-  }, [dispatch, order])
+    dispatch({ type: AdminStateActionTypes.FETCH })
+    Fire.orderUsersCollectionListener(order._id, orderUsers => {
+      dispatch({ type: AdminStateActionTypes.SET_ORDER_USERS, payload: orderUsers });
+    });
+    return () => Fire.orderUsersOff(order._id);
+  }, [dispatch, order._id]);
 
   return (
     <IonList>
@@ -40,7 +43,7 @@ const OrderUsersList: React.FC = () => {
         <h2>רשימת משתמשים</h2>
         <IonItem>
           <IonLabel position="fixed" color="primary">סנן לפי מיקום</IonLabel>
-          <IonSelect interface="popover" value={userFilter} onIonChange={e => setUserFilter(e.detail.value)}>
+          <IonSelect interface="popover" value={userFilter} onIonChange={e => setUserFilter(e.detail.value)} onIonFocus={getUsers}>
             <IonSelectOption value={null}>הכל</IonSelectOption>
             <IonSelectOption value="TA">תל אביב</IonSelectOption>
             <IonSelectOption value="PH">פרדס חנה</IonSelectOption>

@@ -50,13 +50,18 @@ const reducer = (state: AuthState, action: AuthAction): AuthState => {
 const AuthStateContext = createContext<AuthProviderType>({ state: initialState, dispatch: () => {} });
 export const useAuthStateContext = () => useContext(AuthStateContext);
 
+// HOC
 const AuthStateProvider = <P extends {}>(Component: React.ComponentType<P>): React.FC<P> => {
   const WithAuth: React.ComponentType<P> = (props) => {
 
     useEffect(() => {
       dispatch({ type: AuthStateActionTypes.FETCH });
-      const unsubscribe = Fire.authStateListener(user => {
-        dispatch({ type: AuthStateActionTypes.SET_USER, payload: user })
+      const unsubscribe = Fire.authStateListener((user, error) => {
+        if (error) {
+          dispatch({ type: AuthStateActionTypes.SET_ERROR, payload: error });
+        } else {
+          dispatch({ type: AuthStateActionTypes.SET_USER, payload: user });
+        }
       });
 
       return unsubscribe;
