@@ -7,9 +7,9 @@ import {
   IonSpinner
 } from '@ionic/react';
 
-import { OrderProduct } from '../../../types/interfaces';
+// import { OrderProduct } from '../../../types/interfaces';
 
-import ProductOrderListItem from '../ProductOrderListItem';
+import OrderProductListItem from '../OrderProductListItem/OrderProductListItem';
 import Fire from '../../../services/Firebase';
 import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
 
@@ -44,7 +44,7 @@ const OrderProductsList: React.FC = () => {
       {loading ? (
         <IonSpinner color="primary" style={{ display: 'block', margin: '50px auto' }}/>
       ) : (
-        orderProducts.map(o => <ProductOrderListItem key={o.product} orderProduct={o} />)
+        orderProducts.map(o => <OrderProductListItem key={o.product} orderProduct={o} />)
       )}
     </IonList>
   )

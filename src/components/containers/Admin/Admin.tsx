@@ -14,7 +14,7 @@ import {
 
 import Users from '../Users/Users';
 import Orders from '../Orders/Orders';
-import Products from '../Products';
+import Products from '../Products/Products';
 import AuthGuard from '../Auth/AuthGuard';
 import { useAuthStateContext } from '../../context/authState/AuthContextProvider';
 import Fire from '../../../services/Firebase';

@@ -14,7 +14,7 @@ import {
 import { chevronForwardOutline } from 'ionicons/icons';
 
 import OrderProductsList from '../../presentational/OrderProductsList/OrderProductsList';
-import OrderUsersList from '../../presentational/OrderUsersList';
+import OrderUsersList from '../../presentational/OrderUsersList/OrderUsersList';
 import './ViewOrder.css';
 
 import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';

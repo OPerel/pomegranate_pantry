@@ -14,19 +14,18 @@ import {
 import { chevronDownOutline, chevronUpOutline, closeOutline, checkmarkOutline } from 'ionicons/icons';
 
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
-import { UserOrder, User } from '../../../types/interfaces';
+import { OrderUser, User } from '../../../types/interfaces';
 
 import Fire from '../../../services/Firebase';
 
 // import { getUser } from '../../../data/users';
 import { getProductsById } from '../../../data/products';
-// import './UserOrderListItem.css';
 
-interface UserOrderListItemProps {
-  userOrder: UserOrder;
+interface OrderUserListItemProps {
+  orderUser: OrderUser;
 }
 
-const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
+const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => {
 
   const [itemOpen, setItemOpen] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<User>({} as User);
@@ -35,15 +34,15 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
   /**
  * for each row I need:
  * 1. the User object for the row itself
- * 2. all the UserOrder's Products for the row's details dropdown
+ * 2. all the OrderUsers' Products for the row's details dropdown
  */
   React.useEffect(() => {
-    Fire.getUser(userOrder.userRef, user => {
+    Fire.getUser(orderUser.userRef, user => {
       setUserInfo(user)
     });
 
-    return () => Fire.userOff(userOrder.userRef);
-  }, [userOrder.userRef])
+    return () => Fire.userOff(orderUser.userRef);
+  }, [orderUser.userRef])
 
   return (
     <>
@@ -52,17 +51,17 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
           <IonRow>
             <IonCol><p>{userInfo.name}</p></IonCol>
             <IonCol><p>{userInfo.location === 'TA' ? 'תל אביב' : 'פרדס חנה'}</p></IonCol>
-            <IonCol><p>{userOrder.totalPrice}</p></IonCol>
+            <IonCol><p>{orderUser.totalPrice}</p></IonCol>
             <IonCol>
               <IonButton
                 fill="outline"
                 disabled={order?.open}
-                color={!order?.open && !userOrder.payed ? 'danger' : 'primary'}
+                color={!order?.open && !orderUser.payed ? 'danger' : 'primary'}
                 onClick={order ? () => {
-                  Fire.updateOrderPayedStatus(order._id, userOrder._id);
+                  Fire.updateOrderPayedStatus(order._id, orderUser._id);
                 } : () => {}}
               >
-                <IonIcon icon={userOrder.payed ? checkmarkOutline : closeOutline} />
+                <IonIcon icon={orderUser.payed ? checkmarkOutline : closeOutline} />
               </IonButton>
             </IonCol>
             <IonCol>
@@ -81,7 +80,7 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
             <IonLabel>כמות</IonLabel>
             <IonLabel>סה"כ</IonLabel>
           </IonListHeader>
-          {userOrder.products?.map(({ product, qty }) => (
+          {orderUser.products?.map(({ product, qty }) => (
             <IonItem key={product}>
               <IonGrid>
                 <IonRow onClick={() => setItemOpen(!itemOpen)}>
@@ -99,4 +98,4 @@ const UserOrderListItem: React.FC<UserOrderListItemProps> = ({ userOrder }) => {
   );
 };
 
-export default UserOrderListItem;
+export default OrderUsersListItem;

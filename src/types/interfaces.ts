@@ -5,14 +5,16 @@ export interface User {
   location: 'TA' | 'PH';
 }
 
+type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed';
+
 export interface Order {
   _id: string,
-  open: boolean,
-  openToUsers: boolean,
+  status: OrderStatus,
   createdAt: Date,
   closingTime: Date,
   totalPrice: number, // total price of UsersOrders 
-  payed: boolean
+  // orderProducts: OrderProduct[], // array of OrderProducts
+  // OrderUsers: OrderUser[], // array of OrderUsers
 }
 
 // Order.payed = userOrdres.every(order => order.payed)
@@ -33,17 +35,17 @@ export interface OrderProduct {
 // missing = (totalQty % Product.minQty) !== 0
 //   ? ((Math.floor(totalQty / Product.minQty) + 1) * Product.minQty) - totalQty
 //   : null
-// totalQty = UserOrder.products.reduce((acc, {p, qty}) => acc += aty, 0) of all UserOrders in the current Order
+// totalQty = OrderUser.products.reduce((acc, {p, qty}) => acc += aty, 0) of all OrderUsers in the current Order
 // fixedTotalPrice = totalQty * Product.price
 
-export interface UserOrderProducts {
+export interface OrderUserProducts {
   product: string, // ref to Product
   qty: number
 }
 
-export interface UserOrder {
+export interface OrderUser {
   _id: string;
-  products: UserOrderProducts[]; // array of Products`
+  products: OrderUserProducts[]; // array of Products`
   userRef: string // a ref to the user
   orderRef: string // a ref to the order
   totalPrice: number; // total price of products.qty

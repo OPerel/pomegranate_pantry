@@ -1,6 +1,6 @@
 import React, { useReducer, createContext, useContext } from 'react';
 
-import { Order, UserOrder, OrderProduct, Product, User } from '../../../types/interfaces';
+import { Order, OrderUser, OrderProduct, Product, User } from '../../../types/interfaces';
 
 // Types
 interface AdminState {
@@ -9,7 +9,7 @@ interface AdminState {
   orders: Order[],
   products: Product[],
   order: Order | null,
-  orderUsers: UserOrder[],
+  orderUsers: OrderUser[],
   orderProducts: OrderProduct[]
 }
 
@@ -29,7 +29,7 @@ type AdminAction =
 | { type: AdminStateActionTypes.SET_ORDERS, payload: Order[] }
 | { type: AdminStateActionTypes.SET_PRODUCTS, payload: Product[] }
 | { type: AdminStateActionTypes.SET_ORDER, payload: Order }
-| { type: AdminStateActionTypes.SET_ORDER_USERS, payload: UserOrder[] }
+| { type: AdminStateActionTypes.SET_ORDER_USERS, payload: OrderUser[] }
 | { type: AdminStateActionTypes.SET_ORDER_PRODUCTS, payload: OrderProduct[] }
 
 interface AdminStateProviderType {

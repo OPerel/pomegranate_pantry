@@ -6,7 +6,7 @@ import '@testing-library/jest-dom/extend-expect';
 // import AdminStateProvider from '../../context/adminState/AdminContextProvider';
 // import AuthGuard from '../Auth/AuthGuard';
 import AuthStateProvider from '../../context/authState/AuthContextProvider';
-import Admin from '.';
+import Admin from './Admin';
 
 const AdminWithState = AuthStateProvider(Admin);
 

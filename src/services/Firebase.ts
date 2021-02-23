@@ -3,7 +3,7 @@ import app from 'firebase/app';
 import "firebase/database";
 import 'firebase/auth';
 
-import { User, Order, UserOrder, OrderProduct, Product } from '../types/interfaces';
+import { User, Order, OrderUser, OrderProduct, Product } from '../types/interfaces';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -50,13 +50,13 @@ class FirebaseService {
    */
 
   public getUsers = async () => (await this.getColRef('users').get()).val();
-  public getOrderUserOrders = async (orderId: string) => {
-    const userOrders = await this.getColRef('userOrders')
+  public getOrderUsers = async (orderId: string) => {
+    const orderUsers = await this.getColRef('orderUsers')
       .orderByChild('orderRef')
       .equalTo(orderId)
       .get();
 
-    return this.parseSnapshot(userOrders) as UserOrder[];
+    return this.parseSnapshot(orderUsers) as OrderUser[];
   }
 
   /**
@@ -195,9 +195,9 @@ class FirebaseService {
 
   public orderUsersCollectionListener = async (
     id: string,
-    cb: (userOrders: UserOrder[]) => void
+    cb: (orderUsers: OrderUser[]) => void
   ) => {
-    this.getColRef('/userOrders')
+    this.getColRef('/orderUsers')
       .orderByChild('orderRef')
       .equalTo(id)
       .on('value', snapshot => {
@@ -206,7 +206,7 @@ class FirebaseService {
   }
 
   public orderUsersOff = (id: string) => {
-    this.getColRef('/userOrders').orderByChild('orderRef').equalTo(id).off('value');
+    this.getColRef('/orderUsers').orderByChild('orderRef').equalTo(id).off('value');
   }
 
   public orderProductsCollectionListener = async (
@@ -270,19 +270,19 @@ class FirebaseService {
    * Transactions
    */
 
-  // update userOrder.payed and Order.payed
-  public updateOrderPayedStatus = async (orderId: string, userOrderId: string) => {
-    this.getColRef('userOrders').child(userOrderId).child('payed').transaction(payed => {
+  // update orderUsers.payed and Order.payed
+  public updateOrderPayedStatus = async (orderId: string, orderUsersId: string) => {
+    this.getColRef('orderUsers').child(orderUsersId).child('payed').transaction(payed => {
       return !payed
     }, (error, committed) => {
       if (error) {
-        console.log('userOrder.payed Transaction failed abnormally: ', error);
+        console.log('orderUsers.payed Transaction failed abnormally: ', error);
       } else if (!committed) {
-        console.log('userOrder.payed Transaction aborted');
+        console.log('orderUsers.payed Transaction aborted');
       } else {
-        this.getColRef('userOrders').orderByChild('orderRef').equalTo(orderId).once('value', snapshot => {
-          const userOrders: UserOrder[] = this.parseSnapshot(snapshot);
-          const newPayed = userOrders.every(o => o.payed);
+        this.getColRef('orderUsers').orderByChild('orderRef').equalTo(orderId).once('value', snapshot => {
+          const orderUsers: OrderUser[] = this.parseSnapshot(snapshot);
+          const newPayed = orderUsers.every(o => o.payed);
           this.db.ref(`orders/${orderId}`).transaction(currentOrder => {
             return { ...currentOrder, payed: newPayed }
           }, (error, committed) => {
@@ -291,7 +291,7 @@ class FirebaseService {
             } else if (!committed) {
               console.log('order.payed Transaction aborted');
             } else {
-              console.log('userOrder.payed and order.payed Transaction complete')
+              console.log('orderUsers.payed and order.payed Transaction complete')
             }
           })
         })

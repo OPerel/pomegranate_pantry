@@ -15,19 +15,16 @@ Let's help Elad help us shop for cheap!!
 
 ### Order
 ```ts
+type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed'
+
 {
   id: string,
-  open: boolean,
-  openToUsers: boolean,
+  status: OrderStatus,
   createdAt: Date,
   closingTime: Date,
-  orderProducts: string[], // array of OrderProducts` ids
-  userOrders: string[], // array of UserOrders` ids
   totalPrice: number, // total price of UsersOrders 
-  payed: boolean
 }
 
-Order.payed = userOrdres.every(order => order.payed)
 Order.totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
 ```
 
@@ -39,9 +36,7 @@ Order.totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
   order: string, // ref to Order
   totalQty: number,
   missing: number | null,
-  fixedTotalPrice: number,
-  finalTotalPrice: number,
-  priceWarn: boolean
+  price: number
 }
 
 priceWarn = fixedTotalPrice < finalTotalPrice
@@ -60,24 +55,24 @@ missing = (totalQty % Product.minQty) !== 0
 }
 ```
 
-### UserOrder
+### OrderUser
 ```ts
 {
   id: string,
   userRef: string, // User's id
   orderRef: string, // Order's id
-  products: UserOrderProducts[],
+  products: OrderUserProducts[],
   totalPrice: number, // total price of products
   payed: boolean
 }
 
-totalPrice = products.reduce((acc, product) => acc += product.price, 0)
+totalPrice = products.reduce((acc, { product, qty }) => acc += product.price, 0)
 ```
 
-#### UserOrderProducts
+#### OrderUserProducts
 ```ts
 {
-  product: string, // ref to Product
+  product: string, // ref to OrderProduct
   qty: number
 }
 ```
@@ -93,6 +88,22 @@ totalPrice = products.reduce((acc, product) => acc += product.price, 0)
 }
 ```
 
+
+## State Interface
+### Auth
+### Admin
+#### Order
+```ts
+type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed';
+
+{
+  id: string,
+  status: OrderStatus,
+  createdAt: Date,
+  closingTime: Date,
+  totalPrice: number, // total price of UsersOrders
+}
+```
 ## Views
 ### 1 Rimon Views
 Rimon's main view is divided to Orders and Products using tabs.

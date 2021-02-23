@@ -13,7 +13,7 @@ import {
 } from '@ionic/react';
 import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
 
-import { OrderProduct, User, UserOrder, Product } from '../../../types/interfaces';
+import { OrderProduct, User, OrderUser, Product } from '../../../types/interfaces';
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 
 import Fire from '../../../services/Firebase';
@@ -30,12 +30,12 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
   /**
    * for each row I need:
    * 1. the Product object for the row itself
-   * 2. the UserOrders containing the Product, and the user's location, for the row's details dropdown
+   * 2. the OrderUsers containing the Product, and the user's location, for the row's details dropdown
    */
 
   const [product, setProduct] = useState<Product>({} as Product);
   const [users, setUsers] = useState<User[]>([]);
-  const [userOrders, setUserOrders] = useState<UserOrder[]>([]);
+  const [orderUsers, setOrderUsers] = useState<OrderUser[]>([]);
 
   
 
@@ -50,23 +50,23 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
       setUsers(users);
     }
   
-    const getUserOrders = async () => {
-      const userOrders = await Fire.getOrderUserOrders(orderProduct.order);
-      setUserOrders(userOrders);
+    const getOrderUsers = async () => {
+      const orderUsers = await Fire.getOrderUsers(orderProduct.order);
+      setOrderUsers(orderUsers);
     }
     getProduct();
     getUsers();
-    getUserOrders();
+    getOrderUsers();
   }, [orderProduct.order, orderProduct.product]);
 
-  const userOrdersWithProduct = userOrders.filter(uo => uo.products?.map(p => p.product).includes(orderProduct.product));
+  const orderUsersWithProduct = orderUsers.filter(uo => uo.products?.map(p => p.product).includes(orderProduct.product));
 
-  const orderProductLocations: { ta: number, ph: number } = userOrdersWithProduct.reduce((acc, userOrder) => {
-    const { location } = (users as any)[userOrder.userRef];
+  const orderProductLocations: { ta: number, ph: number } = orderUsersWithProduct.reduce((acc, orderUsers) => {
+    const { location } = (users as any)[orderUsers.userRef];
     if (location === 'TA') {
-      return { ...acc, ta: acc.ta += userOrder.products.find(p => p.product === orderProduct.product)?.qty as number}
+      return { ...acc, ta: acc.ta += orderUsers.products.find(p => p.product === orderProduct.product)?.qty as number}
     } else {
-      return { ...acc, ph: acc.ph += userOrder.products.find(p => p.product === orderProduct.product)?.qty as number}      
+      return { ...acc, ph: acc.ph += orderUsers.products.find(p => p.product === orderProduct.product)?.qty as number}      
     }
   }, { ta: 0, ph: 0 });
 

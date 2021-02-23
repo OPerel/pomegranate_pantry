@@ -1,6 +1,6 @@
-import Admin from './components/containers/Admin';
+import Admin from './components/containers/Admin/Admin';
 import ViewOrder from './components/containers/ViewOrder/ViewOrder';
-import User from './components/containers/User';
+import User from './components/containers/User/User';
 import Login from './components/containers/Login/Login';
 
 import AdminStateProvider from './components/context/adminState/AdminContextProvider';

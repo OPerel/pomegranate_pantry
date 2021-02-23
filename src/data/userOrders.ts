@@ -1,6 +1,6 @@
-import { UserOrder } from '../types/interfaces';
+import { OrderUser } from '../types/interfaces';
 
-const userOrders: UserOrder[] = [
+const userOrders: OrderUser[] = [
   {
     _id: '1',
     products: [{ product: 'qwerty1', qty: 2 }, { product: 'qwerty2', qty: 3 }],
