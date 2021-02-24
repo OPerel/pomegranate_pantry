@@ -5,7 +5,7 @@ import { Order, Product, User } from '../../../types/interfaces';
 // Types
 interface AdminState {
   loading: boolean,
-  users: User[],
+  users: { [key: string]: User },
   orders: Order[],
   products: Product[],
   order: Order | null
@@ -21,7 +21,7 @@ export enum AdminStateActionTypes {
 
 type AdminAction =
 | { type: AdminStateActionTypes.FETCH, }
-| { type: AdminStateActionTypes.SET_USERS, payload: User[] }
+| { type: AdminStateActionTypes.SET_USERS, payload: { [key: string]: User } }
 | { type: AdminStateActionTypes.SET_ORDERS, payload: Order[] }
 | { type: AdminStateActionTypes.SET_PRODUCTS, payload: Product[] }
 | { type: AdminStateActionTypes.SET_ORDER, payload: Order }
@@ -34,7 +34,7 @@ interface AdminStateProviderType {
 // State
 const initialState: AdminState = {
   loading: false,
-  users: [],
+  users: {},
   orders: [],
   products: [],
   order: null
@@ -45,7 +45,7 @@ const reducer = (state: AdminState, action: AdminAction): AdminState => {
     case AdminStateActionTypes.FETCH:
       return { ...state, loading: true };
     case AdminStateActionTypes.SET_USERS:
-      return { ...state, loading: false, users: [ ...action.payload ] };
+      return { ...state, loading: false, users: { ...action.payload } };
     case AdminStateActionTypes.SET_ORDERS:
       return { ...state, loading: false, orders: [ ...action.payload ] };
     case AdminStateActionTypes.SET_PRODUCTS:

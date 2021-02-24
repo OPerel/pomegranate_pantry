@@ -41,7 +41,6 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
       return () => Fire.orderOff(orderId)
     };
   }, [orderId, dispatch])
-  // console.log('viewOrder state: ', state)
 
   return (
     <IonPage>

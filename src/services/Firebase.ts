@@ -8,7 +8,7 @@ import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { getOrderStatus } from '../utils/mapOrderStatus';
-import { User, Order, OrderUser, OrderProduct, Product } from '../types/interfaces';
+import { User, Order, OrderProduct, Product } from '../types/interfaces';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -105,7 +105,9 @@ class FirebaseService {
    * Listeners  
    */
   // Auth
-  public authStateListener = (cb: (user: User | null, error: string | null) => void) => {
+  public authStateListener = (
+    cb: (user: User | null, error: string | null) => void
+  ) => {
     this.auth.onAuthStateChanged(user => {
       if (user) {
         this.getUserRef(user.uid)
@@ -131,15 +133,6 @@ class FirebaseService {
   }
 
   // Admin data
-  public usersCollectionListener = async (cb: (users: User[]) => void) => {
-    this.getColRef('users').on('value', snapshot => {
-      cb(this.parseSnapshot(snapshot));
-    })
-  }
-
-  public usersCollectionOff = () => {
-    this.getColRef('users').off('value');
-  }
 
   public ordersCollectionListener = async (
     cb: (orders: Order[]) => void
@@ -230,7 +223,6 @@ class FirebaseService {
       return orderObj;
     })
     .subscribe(async data => {
-      console.log(await data);
       cb(await data);
     })
   }

@@ -1,8 +1,8 @@
 export interface User {
-  _id: string;
   name: string;
   role: 'user' | 'rimon',
   location: 'TA' | 'PH';
+  _id?: string;
 }
 
 export type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed';

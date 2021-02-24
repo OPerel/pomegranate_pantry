@@ -13,7 +13,7 @@ import {
 } from '@ionic/react';
 import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
 
-import { OrderProduct, User, OrderUser, Product, Order } from '../../../types/interfaces';
+import { OrderProduct, Product, Order } from '../../../types/interfaces';
 import { ORDER_STATUS } from '../../../constants';
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 
@@ -26,7 +26,8 @@ interface OrderProductListItemProps {
 const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduct }) => {
 
   const [itemOpen, setItemOpen] = useState<boolean>(false);
-  const { state: { order } } = useAdminStateContext();
+  const { state } = useAdminStateContext();
+  const { order, users } = state;
   const { orderUsers } = order as Order;
   /**
    * for each row I need:
@@ -35,39 +36,26 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
    */
 
   const [product, setProduct] = useState<Product>({} as Product);
-  const [users, setUsers] = useState<User[]>([]);
-  // const [orderUsers, setOrderUsers] = useState<OrderUser[]>([]);
-
-  
 
   useEffect(() => {
     const getProduct = async (): Promise<void> => {
       const product = await Fire.getProduct(orderProduct.productRef);
       setProduct(product);
     }
-  
-    const getUsers = async (): Promise<void> => {
-      const users = await Fire.getUsers();
-      setUsers(users);
-    }
-  
-    // const getOrderUsers = async () => {
-    //   const orderUsers = await Fire.getOrderUsers(orderProduct.orderRef);
-    //   setOrderUsers(orderUsers);
-    // }
     getProduct();
-    getUsers();
-    // getOrderUsers();
   }, [orderProduct.orderRef, orderProduct.productRef]);
 
-  const orderUsersWithProduct = orderUsers.filter(uo => uo.products?.map(p => p.productRef).includes(orderProduct.productRef));
+  const orderUsersWithProduct = orderUsers.filter(orderUser => {
+    const orderUserProductsRefs = orderUser.products?.map(p => p.productRef);
+    return orderUserProductsRefs?.includes(orderProduct.productRef);
+  });
 
-  const orderProductLocations: { ta: number, ph: number } = orderUsersWithProduct.reduce((acc, orderUsers) => {
-    const { location } = (users as any)[orderUsers.userRef];
+  const orderProductLocations: { ta: number, ph: number } = orderUsersWithProduct.reduce((acc, orderUser) => {
+    const { location } = users[orderUser.userRef];
     if (location === 'TA') {
-      return { ...acc, ta: acc.ta += orderUsers.products.find(p => p.productRef === orderProduct.productRef)?.qty as number}
+      return { ...acc, ta: acc.ta += orderUser.products.find(p => p.productRef === orderProduct.productRef)?.qty as number}
     } else {
-      return { ...acc, ph: acc.ph += orderUsers.products.find(p => p.productRef === orderProduct.productRef)?.qty as number}      
+      return { ...acc, ph: acc.ph += orderUser.products.find(p => p.productRef === orderProduct.productRef)?.qty as number}      
     }
   }, { ta: 0, ph: 0 });
 
