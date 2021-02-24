@@ -7,7 +7,7 @@ interface AdminState {
   loading: boolean,
   users: { [key: string]: User },
   orders: Order[],
-  products: Product[],
+  products: { [key: string]: Product },
   order: Order | null
 }
 
@@ -23,7 +23,7 @@ type AdminAction =
 | { type: AdminStateActionTypes.FETCH, }
 | { type: AdminStateActionTypes.SET_USERS, payload: { [key: string]: User } }
 | { type: AdminStateActionTypes.SET_ORDERS, payload: Order[] }
-| { type: AdminStateActionTypes.SET_PRODUCTS, payload: Product[] }
+| { type: AdminStateActionTypes.SET_PRODUCTS, payload: { [key: string]: Product } }
 | { type: AdminStateActionTypes.SET_ORDER, payload: Order }
 
 interface AdminStateProviderType {
@@ -36,7 +36,7 @@ const initialState: AdminState = {
   loading: false,
   users: {},
   orders: [],
-  products: [],
+  products: {},
   order: null
 }
 
@@ -49,7 +49,7 @@ const reducer = (state: AdminState, action: AdminAction): AdminState => {
     case AdminStateActionTypes.SET_ORDERS:
       return { ...state, loading: false, orders: [ ...action.payload ] };
     case AdminStateActionTypes.SET_PRODUCTS:
-      return { ...state, loading: false, products: [ ...action.payload ] };
+      return { ...state, loading: false, products: { ...action.payload } };
     case AdminStateActionTypes.SET_ORDER:
       return { ...state, loading: false, order: { ...action.payload } };
     default:

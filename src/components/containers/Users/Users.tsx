@@ -15,7 +15,7 @@ import UsersListItem from '../../presentational/UsersListItem/UsersListItem';
 const Orders: React.FC = () => {
 
   const { state: { users } } = useAdminStateContext();
-  console.log(users)
+
   return (
     <IonContent fullscreen data-testid="admin-users-list">
 

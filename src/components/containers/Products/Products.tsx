@@ -1,18 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   IonContent,
   IonHeader,
   IonList,
-  // IonPage,
-  // IonRefresher,
-  // IonRefresherContent,
   IonTitle,
   IonToolbar,
   IonListHeader,
   IonLabel,
   IonButton,
   IonIcon,
-  IonSpinner,
   IonModal,
   IonItem,
   IonInput,
@@ -20,9 +16,8 @@ import {
   IonSelectOption,
 } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
-// import './Orders.css';
 
-import { useAdminStateContext, AdminStateActionTypes  } from '../../context/adminState/AdminContextProvider';
+import { useAdminStateContext  } from '../../context/adminState/AdminContextProvider';
 import ProductListItem from '../../presentational/ProductsListItem/ProductsListItem';
 
 import Fire from '../../../services/Firebase';
@@ -65,11 +60,10 @@ const reducer = (state: ProductFormState, action: ProductFormAction): ProductFor
 
 const Products: React.FC = () => {
 
-  const { state: { products, loading }, dispatch: contextDispatch } = useAdminStateContext();
+  const { state: { products } } = useAdminStateContext();
 
   const [showProductForm, setShowProductForm] = React.useState<boolean>(false);
   const [{ name, price, minQty, qtyUnit }, dispatch] = React.useReducer(reducer, initialState);
-  // console.log({ name, price, minQty, qtyUnit })
 
   const addProduct = async (): Promise<void> => {
     const product = {
@@ -84,14 +78,6 @@ const Products: React.FC = () => {
     }
   }
 
-  useEffect(() => {
-    contextDispatch({ type: AdminStateActionTypes.FETCH })
-    Fire.productsCollectionListener(products => {
-      contextDispatch({ type: AdminStateActionTypes.SET_PRODUCTS, payload: products })
-    });
-
-    return () => Fire.productsCollectionOff();
-  }, [contextDispatch])
 
   return (
     <IonContent fullscreen data-testid="admin-products-list">
@@ -116,15 +102,10 @@ const Products: React.FC = () => {
       <IonList>
         <IonListHeader>
           <IonLabel>שם</IonLabel>
-          <IonLabel>מחיר</IonLabel>
           <IonLabel>כמות מינימום</IonLabel>
           <IonLabel>סוג יחידה</IonLabel>
         </IonListHeader>
-        {!loading ? (
-          products.length > 0 ? (
-            products.map(p => <ProductListItem key={p._id} product={p} />) 
-          ) : <h3 style={{ margin: '50px 0', textAlign: 'center' }}>לא נמצאו מוצרים</h3>
-        ) : <IonSpinner color="primary" style={{ display: 'block', margin: '50px auto' }}/>}
+        {Object.keys(products).map(productKey => <ProductListItem key={productKey} product={products[productKey]} />)}
       </IonList>
       
       <IonModal isOpen={showProductForm} backdropDismiss={false}>product details
@@ -132,7 +113,11 @@ const Products: React.FC = () => {
           <IonLabel>
             שם
             <IonItem>
-              <IonInput type="text" value={name} onIonChange={e => dispatch({ type: 'name', payload: e.detail.value as string })}></IonInput>
+              <IonInput
+                type="text"
+                value={name}
+                onIonChange={e => dispatch({ type: 'name', payload: e.detail.value as string })}
+              ></IonInput>
             </IonItem>
           </IonLabel>
           {/* <IonItemDivider /> */}
@@ -140,7 +125,11 @@ const Products: React.FC = () => {
           <IonLabel>
             מחיר
             <IonItem>
-              <IonInput type="number" value={price} onIonChange={e => dispatch({ type: 'price', payload: Number(e.detail.value) })}></IonInput>
+              <IonInput
+                type="number"
+                value={price}
+                onIonChange={e => dispatch({ type: 'price', payload: Number(e.detail.value) })}
+              ></IonInput>
             </IonItem>
           </IonLabel>
           
@@ -149,7 +138,11 @@ const Products: React.FC = () => {
           <IonLabel>
             כמות מינימום
             <IonItem>
-              <IonInput type="number" value={minQty} onIonChange={e => dispatch({ type: 'minQty', payload: Number(e.detail.value) })}></IonInput>
+              <IonInput
+                type="number"
+                value={minQty}
+                onIonChange={e => dispatch({ type: 'minQty', payload: Number(e.detail.value) })}
+              ></IonInput>
             </IonItem>
           </IonLabel>
           {/* <IonItemDivider /> */}
@@ -157,7 +150,11 @@ const Products: React.FC = () => {
           <IonLabel>
             סוג יחידה
             <IonItem>
-              <IonSelect interface="popover" value={qtyUnit} onIonChange={e => dispatch({ type: 'qtyUnit', payload: e.detail.value as "unit" | "Kg" })}>
+              <IonSelect
+                interface="popover"
+                value={qtyUnit}
+                onIonChange={e => dispatch({ type: 'qtyUnit', payload: e.detail.value as "unit" | "Kg" })}
+              >
                 <IonSelectOption value="unit">יחידה</IonSelectOption>
                 <IonSelectOption value="Kg">ק"ג</IonSelectOption>
               </IonSelect>

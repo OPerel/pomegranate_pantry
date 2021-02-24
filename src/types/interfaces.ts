@@ -17,7 +17,6 @@ export interface Order {
   orderProducts: OrderProduct[], // array of OrderProducts
 }
 
-// Order.payed = userOrdres.every(order => order.payed)
 // Order.totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
 
 export interface OrderProduct {
@@ -29,7 +28,6 @@ export interface OrderProduct {
   price: number,
 }
 
-// priceWarn = fixedTotalPrice < finalTotalPrice
 // missing = (totalQty % Product.minQty) !== 0
 //   ? ((Math.floor(totalQty / Product.minQty) + 1) * Product.minQty) - totalQty
 //   : null
@@ -51,9 +49,7 @@ export interface OrderUser {
 }
 
 export interface Product {
-  _id: string,
   name: string,
-  price: number,
   minQty: number,
   qtyUnit: 'unit' | 'Kg'
 }

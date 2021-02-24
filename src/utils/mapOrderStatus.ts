@@ -1,6 +1,5 @@
 import { ORDER_STATUS } from '../constants';
 import { OrderStatus, Order } from '../types/interfaces';
-import Fire from '../services/Firebase';
 
 // const orderSeq = {
 //   [ORDER_STATUS.OPEN]: 0,
@@ -25,8 +24,7 @@ const getOrderStatus = async (order: Order): Promise<string> => {
   }
 
   if (order.status === ORDER_STATUS.SHOPPING) {
-    const orderProducts = await Fire.getOrderProducts(order._id);
-    const orderHasPrices = orderProducts.every(product => product.price > 0);
+    const orderHasPrices = order.orderProducts.every(product => product.price > 0);
     if (orderHasPrices) {
       return ORDER_STATUS.PAYING;
     }

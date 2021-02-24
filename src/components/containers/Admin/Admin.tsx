@@ -1,3 +1,10 @@
+/**
+ * TODO:
+ * 1. make sure order status changes and add buttons.
+ * 2. orderProduct.totalQty should be calculated from orderUsers,
+ *    maybe do not save totalQty to DB...?
+ */
+
 import React, { useEffect } from 'react';
 import { Switch, RouteComponentProps, Link } from 'react-router-dom';
 
@@ -25,12 +32,17 @@ import { ROLES, ROUTES } from '../../../constants';
 const Admin: React.FC<{routes: RouteComponentProps<{ id: string }>[]}> = ({ routes }) => {
   const [tab, setTab] = React.useState<string>('orders');
   const { state: { user } } = useAuthStateContext();
-  const { state, dispatch } = useAdminStateContext();
+  const { dispatch } = useAdminStateContext();
 
   useEffect(() => {
     dispatch({ type: AdminStateActionTypes.FETCH })
     Fire.getUsers().then(users => {
       dispatch({ type: AdminStateActionTypes.SET_USERS, payload: users });
+    });
+
+    dispatch({ type: AdminStateActionTypes.FETCH })
+    Fire.getProducts().then(products => {
+      dispatch({ type: AdminStateActionTypes.SET_PRODUCTS, payload: products })
     })
   }, [dispatch]);
 

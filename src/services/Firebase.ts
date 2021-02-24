@@ -8,7 +8,7 @@ import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { getOrderStatus } from '../utils/mapOrderStatus';
-import { User, Order, OrderProduct, Product } from '../types/interfaces';
+import { User, Order, Product } from '../types/interfaces';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -55,15 +55,7 @@ class FirebaseService {
    */
 
   public getUsers = async () => (await this.getColRef('users').get()).val();
-
-  public getOrderProducts = async (orderId: string) => {
-    const orderProducts = await this.getColRef('orderProducts')
-      .orderByChild('order')
-      .equalTo(orderId)
-      .get();
-
-    return this.parseSnapshot(orderProducts) as OrderProduct[];
-  }
+  public getProducts = async () => (await this.getColRef('products').get()).val();
 
   /**
    * get by id
@@ -74,12 +66,6 @@ class FirebaseService {
       cb(snapshot.val());
     });
   };
-
-  public userOff = (userId: string) => {
-    this.getUserRef(userId).off('value');
-  };
-
-  public getProduct = async (productId: string) => (await this.db.ref(`products/${productId}`).get()).val();
   
   // Auth and user
   public doSignIn = (email: string, password: string): Promise<void> => {

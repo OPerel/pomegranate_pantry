@@ -19,8 +19,9 @@ const OrderProductsList: React.FC<{ orderProducts: OrderProduct[] }> = ({ orderP
         <IonLabel>מוצר</IonLabel>
         <IonLabel>כמות</IonLabel>
         <IonLabel>חסר</IonLabel>
-        <IonLabel>מחיר סופי ליחידה</IonLabel>
+        <IonLabel>מחיר ליחידה</IonLabel>
         <IonLabel>סה"כ</IonLabel>
+        <IonLabel></IonLabel>
       </IonListHeader>
       {orderProducts.length > 0 ? (
         orderProducts.map(o => <OrderProductListItem key={o.productRef} orderProduct={o} />)

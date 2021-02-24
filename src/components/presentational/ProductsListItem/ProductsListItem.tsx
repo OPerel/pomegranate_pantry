@@ -15,7 +15,6 @@ const ProductsListItem: React.FC<{product: Product}> = ({ product }) => {
       <IonGrid>
         <IonRow>
           <IonCol><h3>{product.name}</h3></IonCol>
-          <IonCol><h4>{product.price}</h4></IonCol>
           <IonCol><h4>{product.minQty}</h4></IonCol>
           <IonCol><h4>{product.qtyUnit}</h4></IonCol>
         </IonRow>
