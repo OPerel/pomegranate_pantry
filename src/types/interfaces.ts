@@ -12,9 +12,9 @@ export interface Order {
   status: OrderStatus,
   createdAt: Date,
   closingTime: Date,
-  totalPrice: number, // total price of UsersOrders 
-  // orderProducts: OrderProduct[], // array of OrderProducts
-  // OrderUsers: OrderUser[], // array of OrderUsers
+  totalPrice: number | null, // total price of UsersOrders 
+  orderUsers: OrderUser[], // array of OrderUsers
+  orderProducts: OrderProduct[], // array of OrderProducts
 }
 
 // Order.payed = userOrdres.every(order => order.payed)
@@ -22,8 +22,8 @@ export interface Order {
 
 export interface OrderProduct {
   _id: string,
-  product: string, // ref to Product
-  order: string, // ref to Order
+  productRef: string, // ref to Product
+  orderRef: string, // ref to Order
   totalQty: number,
   missing: number | null,
   price: number,
@@ -37,7 +37,7 @@ export interface OrderProduct {
 // fixedTotalPrice = totalQty * Product.price
 
 export interface OrderUserProducts {
-  product: string, // ref to Product
+  productRef: string, // ref to Product
   qty: number
 }
 

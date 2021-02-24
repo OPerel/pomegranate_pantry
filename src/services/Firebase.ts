@@ -3,6 +3,11 @@ import app from 'firebase/app';
 import "firebase/database";
 import 'firebase/auth';
 
+import { list, object } from 'rxfire/database';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { getOrderStatus } from '../utils/mapOrderStatus';
 import { User, Order, OrderUser, OrderProduct, Product } from '../types/interfaces';
 
 const firebaseConfig = {
@@ -50,14 +55,7 @@ class FirebaseService {
    */
 
   public getUsers = async () => (await this.getColRef('users').get()).val();
-  public getOrderUsers = async (orderId: string) => {
-    const orderUsers = await this.getColRef('orderUsers')
-      .orderByChild('orderRef')
-      .equalTo(orderId)
-      .get();
 
-    return this.parseSnapshot(orderUsers) as OrderUser[];
-  }
   public getOrderProducts = async (orderId: string) => {
     const orderProducts = await this.getColRef('orderProducts')
       .orderByChild('order')
@@ -146,22 +144,24 @@ class FirebaseService {
   public ordersCollectionListener = async (
     cb: (orders: Order[]) => void
   ) => {
-    this.getColRef('/orders').on('value', (snapshot) => {
-      // parse snapshot
-      const val = snapshot.val();
-      if (val) {
-        const orders = Object.keys(val).map(key => ({
-          ...val[key],
-          _id: key,
-          createdAt: new Date(val[key].createdAt),
-          closingTime: new Date(val[key].closingTime)
-        }))
-        // console.log('orders: ', orders)
-        cb(orders);
-      } else {
-        cb([])
-      }
-    });
+    const ordersRef = this.getColRef('/orders');
+    const orders$ = list(ordersRef)
+    orders$.pipe(
+      map(orders => {
+        const ordersList = orders.map(order => {
+          const orderData = order.snapshot.val()
+          return {
+            ...orderData,
+            _id: order.snapshot.key,
+            createdAt: new Date(orderData.createdAt),
+            closingTime: new Date(orderData.closingTime)
+          }
+        });
+        return ordersList
+      })
+    ).subscribe(orders => {
+      cb(orders)
+    })
   }
 
   public ordersCollectionOff = () => {
@@ -180,61 +180,63 @@ class FirebaseService {
     this.getColRef('/products').off('value');
   }
 
+  /** 
+   * listen to order location in DB
+   * along with its users and products
+   * and combines all to one object
+   * @param {string} orderId - the id of the order to listen to
+   * @param {function} cb - a callback that fires on every value change with the full obj
+   * @returns {void}
+   */
   public orderListener = async (
-    id: string,
+    orderId: string,
     cb: (order: Order) => void
   ) => {
-    this.getColRef('orders').child(id).on('value', snapshot => {
-      const data = snapshot.val();
-      const { closingTime, createdAt } = data;
-      const order = {
-        ...data,
-        _id: id,
-        closingTime: new Date(closingTime),
-        createdAt: new Date(createdAt)
+    const orderRef = this.getColRef('orders').child(orderId);
+    const orderUsersRef = this.getColRef('orderUsers')
+      .orderByChild('orderRef')
+      .equalTo(orderId);
+    const orderProductsRef = this.getColRef('orderProducts')
+      .orderByChild('orderRef')
+      .equalTo(orderId);
+    
+    const orderState$ = object(orderRef);
+    const orderUsersList$ = list(orderUsersRef);
+    const orderProductsList$ = list(orderProductsRef);
+    combineLatest(orderState$, orderUsersList$, orderProductsList$, async (order, orderUsers, orderProducts) => {
+      const val = order.snapshot.val();
+      const orderObj = {
+        ...val,
+        createdAt: new Date(val.createdAt),
+        closingTime: new Date(val.closingTime),
+        _id: order.snapshot.key,
+        orderUsers: orderUsers.map(user => ({
+          ...user.snapshot.val(),
+          _id: user.snapshot.key
+        })),
+        orderProducts: orderProducts.map(product => ({
+          ...product.snapshot.val(),
+          _id: product.snapshot.key
+        }))
       }
-      cb(order);
+      const updateOrderStatus = await getOrderStatus(orderObj);
+      if (updateOrderStatus !== orderObj.status) {
+        this.updateEntry('orders', orderObj._id, {
+          ...val,
+          status: updateOrderStatus
+        })
+      }
+
+      return orderObj;
+    })
+    .subscribe(async data => {
+      console.log(await data);
+      cb(await data);
     })
   }
 
   public orderOff = (id: string) => {
     this.getColRef('orders').child(id).off('value');
-  }
-
-  public orderUsersCollectionListener = async (
-    id: string,
-    cb: (orderUsers: OrderUser[]) => void
-  ) => {
-    this.getColRef('/orderUsers')
-      .orderByChild('orderRef')
-      .equalTo(id)
-      .on('value', snapshot => {
-        cb(this.parseSnapshot(snapshot));
-      })
-  }
-
-  public orderUsersOff = (id: string) => {
-    this.getColRef('/orderUsers').orderByChild('orderRef').equalTo(id).off('value');
-  }
-
-  public orderProductsCollectionListener = async (
-    id: string,
-    cb: (orderProducts: OrderProduct[]) => void
-  ) => {
-    this.getColRef('/orderProducts')
-      .orderByChild('order')
-      .equalTo(id)
-      .on('value', snapshot => {
-        cb(this.parseSnapshot(snapshot));
-      })
-  }
-
-  public orderProductsOff = (id: string) => {
-    try {
-      this.getColRef('/orderProducts').orderByChild('order').equalTo(id).off('value');
-    } catch (err) {
-      console.log('Error unsubscribing: ', err)
-    }
   }
 
   // write
@@ -265,47 +267,15 @@ class FirebaseService {
     }
   }
 
-  // public updateEntry = async (collection: string, id: string, updatedObj: any) => {
-  //   try {
-  //     await this.db.ref(`${collection}/${id}`).update(updatedObj);
-  //     console.log(`item "${collection}/${id}" updated`);
-  //   } catch (err) {
-  //     console.log('error updating entry: ', err)
-  //   }
-  // }
-
-  /**
-   * Transactions
-   */
-
-  // update orderUsers.payed and Order.payed
-  public updateOrderPayedStatus = async (orderId: string, orderUsersId: string) => {
-    this.getColRef('orderUsers').child(orderUsersId).child('payed').transaction(payed => {
-      return !payed
-    }, (error, committed) => {
-      if (error) {
-        console.log('orderUsers.payed Transaction failed abnormally: ', error);
-      } else if (!committed) {
-        console.log('orderUsers.payed Transaction aborted');
-      } else {
-        this.getColRef('orderUsers').orderByChild('orderRef').equalTo(orderId).once('value', snapshot => {
-          const orderUsers: OrderUser[] = this.parseSnapshot(snapshot);
-          const newPayed = orderUsers.every(o => o.payed);
-          this.db.ref(`orders/${orderId}`).transaction(currentOrder => {
-            return { ...currentOrder, payed: newPayed }
-          }, (error, committed) => {
-            if (error) {
-              console.log('order.payed Transaction failed abnormally: ', error);
-            } else if (!committed) {
-              console.log('order.payed Transaction aborted');
-            } else {
-              console.log('orderUsers.payed and order.payed Transaction complete')
-            }
-          })
-        })
-      }
-    })
+  public updateEntry = async (collection: string, id: string, updatedObj: any) => {
+    try {
+      await this.db.ref(`${collection}/${id}`).update(updatedObj);
+      console.log(`item "${collection}/${id}" updated`);
+    } catch (err) {
+      console.log('error updating entry: ', err)
+    }
   }
+
 }
 
 const Fire = new FirebaseService();

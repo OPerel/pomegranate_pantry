@@ -59,7 +59,10 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
                 disabled={order?.status !== ORDER_STATUS.PAYING}
                 color={order?.status === ORDER_STATUS.PAYING && !orderUser.payed ? 'danger' : 'primary'}
                 onClick={order ? () => {
-                  Fire.updateOrderPayedStatus(order._id, orderUser._id);
+                  Fire.updateEntry('orderUsers', orderUser._id, {
+                    ...orderUser,
+                    payed: !orderUser.payed
+                  });
                 } : () => {}}
               >
                 <IonIcon icon={orderUser.payed ? checkmarkOutline : closeOutline} />
@@ -81,14 +84,14 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
             <IonLabel>כמות</IonLabel>
             <IonLabel>סה"כ</IonLabel>
           </IonListHeader>
-          {orderUser.products?.map(({ product, qty }) => (
-            <IonItem key={product}>
+          {orderUser.products?.map(({ productRef, qty }) => (
+            <IonItem key={productRef}>
               <IonGrid>
                 <IonRow onClick={() => setItemOpen(!itemOpen)}>
-                  <IonCol><p>{getProductsById(product)?.name}</p></IonCol>
-                  <IonCol><p>{getProductsById(product)?.price}</p></IonCol>
+                  <IonCol><p>{getProductsById(productRef)?.name}</p></IonCol>
+                  <IonCol><p>{getProductsById(productRef)?.price}</p></IonCol>
                   <IonCol><p>{qty}</p></IonCol>
-                  <IonCol><p>{qty * (getProductsById(product)?.price as number)}</p></IonCol>
+                  <IonCol><p>{qty * (getProductsById(productRef)?.price as number)}</p></IonCol>
                 </IonRow>
               </IonGrid>
             </IonItem>

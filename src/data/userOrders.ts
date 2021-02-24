@@ -3,7 +3,7 @@ import { OrderUser } from '../types/interfaces';
 const userOrders: OrderUser[] = [
   {
     _id: '1',
-    products: [{ product: 'qwerty1', qty: 2 }, { product: 'qwerty2', qty: 3 }],
+    products: [{ productRef: 'qwerty1', qty: 2 }, { productRef: 'qwerty2', qty: 3 }],
     userRef: 'a',
     orderRef: '1',
     totalPrice: 56,
@@ -11,7 +11,7 @@ const userOrders: OrderUser[] = [
   },
   {
     _id: '2',
-    products: [{ product: 'qwerty3', qty: 2 }, { product: 'qwerty4', qty: 1 }],
+    products: [{ productRef: 'qwerty3', qty: 2 }, { productRef: 'qwerty4', qty: 1 }],
     userRef: 'b',
     orderRef: '-MNArMQr-Jxt0gE8-Szk',
     totalPrice: 0,

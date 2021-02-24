@@ -18,11 +18,9 @@ Let's help Elad help us shop for cheap!!
 type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed'
 
 {
-  id: string,
-  status: OrderStatus,
   createdAt: Date,
   closingTime: Date,
-  totalPrice: number, // total price of UsersOrders 
+  totalPrice: number | null, // total price of OrderUsers, null until OrderProduct.price is filled for every product in the order   
 }
 
 Order.totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)

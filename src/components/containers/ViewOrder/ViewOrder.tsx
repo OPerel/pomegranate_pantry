@@ -65,9 +65,9 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
           </nav>
 
           <IonTitle size="small">
-            {`הזמנה ${order?.createdAt.getDate()}/${order?.createdAt.getMonth()}/${order?.createdAt.getFullYear()}`} &nbsp; | &nbsp;
+            {`הזמנה ${order.createdAt.toLocaleDateString('he')}`} &nbsp; | &nbsp;
             <b>{mapOrderStatusToText(order.status)}</b> &nbsp; | &nbsp;
-            {`נסגר ב - ${order?.closingTime.getDate()}/${order?.closingTime.getMonth()}/${order?.closingTime.getFullYear()}`}
+            {`נסגר ב - ${order.closingTime.toLocaleDateString('he')}`}
           </IonTitle>
 
           {order.status !== ORDER_STATUS.CLOSED && <IonButton color="danger" slot="primary">סגור הזמנה</IonButton>}
@@ -76,9 +76,9 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
 
         <div>
           {tab === 'users' ? (
-            <OrderUsersList order={order} />
+            <OrderUsersList orderUsers={order.orderUsers} />
           ) : (
-            <OrderProductsList />
+            <OrderProductsList orderProducts={order.orderProducts} />
           )}
         </div>
       </IonContent>)}
