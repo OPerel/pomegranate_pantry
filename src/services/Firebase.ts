@@ -58,6 +58,14 @@ class FirebaseService {
 
     return this.parseSnapshot(orderUsers) as OrderUser[];
   }
+  public getOrderProducts = async (orderId: string) => {
+    const orderProducts = await this.getColRef('orderProducts')
+      .orderByChild('order')
+      .equalTo(orderId)
+      .get();
+
+    return this.parseSnapshot(orderProducts) as OrderProduct[];
+  }
 
   /**
    * get by id

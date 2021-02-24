@@ -20,3 +20,11 @@ export enum UNIT_TYPE {
   UNIT = 'unit',
   KG = 'Kg'
 }
+
+export enum ORDER_STATUS {
+  OPEN = 'open',
+  COMPLETION = 'completion',
+  SHOPPING = 'shopping',
+  PAYING = 'paying',
+  CLOSED = 'closed'
+}

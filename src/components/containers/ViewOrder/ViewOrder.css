@@ -2,17 +2,17 @@
   width: 15vw;
 } */
 
-.order-header-open {
+.order-header {
   --background: var(--ion-color-dark-tint);
 }
 
-.order-header-success {
+/* .order-header-success {
   --background: var(--ion-color-success-tint);
 }
 
 .order-header-danger {
   --background: var(--ion-color-danger-tint);
-}
+} */
 
 .order-header nav {
   padding: 1.2% 2%;

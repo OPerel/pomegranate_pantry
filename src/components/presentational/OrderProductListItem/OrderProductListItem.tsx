@@ -14,6 +14,7 @@ import {
 import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
 
 import { OrderProduct, User, OrderUser, Product } from '../../../types/interfaces';
+import { ORDER_STATUS } from '../../../constants';
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 
 import Fire from '../../../services/Firebase';
@@ -78,8 +79,8 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
             <IonCol><p>{product?.name}</p></IonCol>
             <IonCol><p>{orderProduct.totalQty}</p></IonCol>
             <IonCol><p>{orderProduct.missing}</p></IonCol>
-            <IonCol><p>{orderProduct.fixedTotalPrice}</p></IonCol>
-            <IonCol><IonItem disabled={order?.open} className="final-price"><IonInput type="number" /></IonItem></IonCol>
+            {/* <IonCol><p>{orderProduct.fixedTotalPrice}</p></IonCol> */}
+            <IonCol><IonItem disabled={order?.status !== ORDER_STATUS.SHOPPING} className="final-price"><IonInput type="number" /></IonItem></IonCol>
             <IonCol>
               <IonButton fill="clear" onClick={() => setItemOpen(!itemOpen)} data-testid="product-order-list-item">
                 <IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} />

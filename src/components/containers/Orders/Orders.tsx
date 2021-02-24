@@ -82,8 +82,7 @@ const Orders: React.FC = () => {
         <IonListHeader>
           <IonLabel>תאריך</IonLabel>
           <IonLabel>סה"כ</IonLabel>
-          <IonLabel>פתוח להזמנות</IonLabel>
-          <IonLabel>שולם</IonLabel>
+          <IonLabel>סטטוס</IonLabel>
         </IonListHeader>
         {!loading ? (
           orders.length > 0 ? (

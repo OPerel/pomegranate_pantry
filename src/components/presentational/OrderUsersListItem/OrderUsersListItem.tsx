@@ -15,6 +15,7 @@ import { chevronDownOutline, chevronUpOutline, closeOutline, checkmarkOutline } 
 
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 import { OrderUser, User } from '../../../types/interfaces';
+import { ORDER_STATUS } from '../../../constants';
 
 import Fire from '../../../services/Firebase';
 
@@ -55,8 +56,8 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
             <IonCol>
               <IonButton
                 fill="outline"
-                disabled={order?.open}
-                color={!order?.open && !orderUser.payed ? 'danger' : 'primary'}
+                disabled={order?.status !== ORDER_STATUS.PAYING}
+                color={order?.status === ORDER_STATUS.PAYING && !orderUser.payed ? 'danger' : 'primary'}
                 onClick={order ? () => {
                   Fire.updateOrderPayedStatus(order._id, orderUser._id);
                 } : () => {}}

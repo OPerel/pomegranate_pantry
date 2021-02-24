@@ -7,9 +7,7 @@ export const orderProducts: OrderProduct[] = [
     order: '1',
     totalQty: 2,
     missing: 10,
-    fixedTotalPrice: 28,
-    finalTotalPrice: null,
-    priceWarn: false
+    price: 0
   },
   {
     _id: '456',
@@ -17,9 +15,7 @@ export const orderProducts: OrderProduct[] = [
     order: '1',
     totalQty: 3,
     missing: 9,
-    fixedTotalPrice: 18,
-    finalTotalPrice: null,
-    priceWarn: false
+    price: 0
   },
   {
     _id: '789',
@@ -27,9 +23,7 @@ export const orderProducts: OrderProduct[] = [
     order: '2',
     totalQty: 2,
     missing: 3,
-    fixedTotalPrice: 100,
-    finalTotalPrice: null,
-    priceWarn: false
+    price: 0
   },
   {
     _id: '012',
@@ -37,9 +31,7 @@ export const orderProducts: OrderProduct[] = [
     order: '2',
     totalQty: 1,
     missing: 4,
-    fixedTotalPrice: 38,
-    finalTotalPrice: null,
-    priceWarn: false
+    price: 0
   }
 ]
 

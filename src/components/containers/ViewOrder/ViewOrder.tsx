@@ -19,7 +19,8 @@ import './ViewOrder.css';
 
 import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
 import Fire from '../../../services/Firebase';
-import { ROUTES } from '../../../constants'; 
+import { ROUTES, ORDER_STATUS } from '../../../constants';
+import { mapOrderStatusToText } from '../../../utils/mapOrderStatus';
 
 const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
 
@@ -52,8 +53,8 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
         </IonToolbar>
       </IonHeader>
 
-      <IonContent>
-        <IonToolbar className={`order-header ${order?.open ? 'order-header-open' : (order?.payed ? 'order-header-success' : 'order-header-danger')}`}>
+      {order && (<IonContent>
+        <IonToolbar className="order-header">
 
           <nav slot="start">
             <IonButtons>
@@ -65,22 +66,22 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
 
           <IonTitle size="small">
             {`הזמנה ${order?.createdAt.getDate()}/${order?.createdAt.getMonth()}/${order?.createdAt.getFullYear()}`} &nbsp; | &nbsp;
-            <b>{order?.open ? 'הזמנה פעילה' : 'הזמנה סגורה'}</b> &nbsp; | &nbsp;
+            <b>{mapOrderStatusToText(order.status)}</b> &nbsp; | &nbsp;
             {`נסגר ב - ${order?.closingTime.getDate()}/${order?.closingTime.getMonth()}/${order?.closingTime.getFullYear()}`}
           </IonTitle>
 
-          {order?.open && <IonButton color="danger" slot="primary">סגור הזמנה</IonButton>}
+          {order.status !== ORDER_STATUS.CLOSED && <IonButton color="danger" slot="primary">סגור הזמנה</IonButton>}
         
         </IonToolbar>
 
         <div>
-          {tab === 'users' && order ? (
+          {tab === 'users' ? (
             <OrderUsersList order={order} />
           ) : (
             <OrderProductsList />
           )}
         </div>
-      </IonContent>
+      </IonContent>)}
     </IonPage>
   );
 };

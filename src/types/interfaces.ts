@@ -5,7 +5,7 @@ export interface User {
   location: 'TA' | 'PH';
 }
 
-type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed';
+export type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed';
 
 export interface Order {
   _id: string,
@@ -26,9 +26,7 @@ export interface OrderProduct {
   order: string, // ref to Order
   totalQty: number,
   missing: number | null,
-  fixedTotalPrice: number,
-  finalTotalPrice: number | null,
-  priceWarn: boolean
+  price: number,
 }
 
 // priceWarn = fixedTotalPrice < finalTotalPrice
