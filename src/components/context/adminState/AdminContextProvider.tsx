@@ -1,16 +1,14 @@
 import React, { useReducer, createContext, useContext } from 'react';
 
-import { Order, OrderUser, OrderProduct, Product, User } from '../../../types/interfaces';
+import { Order, Product, User } from '../../../types/interfaces';
 
 // Types
 interface AdminState {
   loading: boolean,
-  users: User[],
+  users: { [key: string]: User },
   orders: Order[],
-  products: Product[],
-  order: Order | null,
-  orderUsers: OrderUser[],
-  orderProducts: OrderProduct[]
+  products: { [key: string]: Product },
+  order: Order | null
 }
 
 export enum AdminStateActionTypes {
@@ -19,18 +17,14 @@ export enum AdminStateActionTypes {
   SET_ORDERS = 'SET_ORDERS',
   SET_PRODUCTS = 'SET_PRODUCTS',
   SET_ORDER = 'SET_ORDER',
-  SET_ORDER_USERS = 'SET_ORDER_USERS',
-  SET_ORDER_PRODUCTS = 'SET_ORDER_PRODUCTS',
 }
 
 type AdminAction =
 | { type: AdminStateActionTypes.FETCH, }
-| { type: AdminStateActionTypes.SET_USERS, payload: User[] }
+| { type: AdminStateActionTypes.SET_USERS, payload: { [key: string]: User } }
 | { type: AdminStateActionTypes.SET_ORDERS, payload: Order[] }
-| { type: AdminStateActionTypes.SET_PRODUCTS, payload: Product[] }
+| { type: AdminStateActionTypes.SET_PRODUCTS, payload: { [key: string]: Product } }
 | { type: AdminStateActionTypes.SET_ORDER, payload: Order }
-| { type: AdminStateActionTypes.SET_ORDER_USERS, payload: OrderUser[] }
-| { type: AdminStateActionTypes.SET_ORDER_PRODUCTS, payload: OrderProduct[] }
 
 interface AdminStateProviderType {
   state: AdminState,
@@ -40,12 +34,10 @@ interface AdminStateProviderType {
 // State
 const initialState: AdminState = {
   loading: false,
-  users: [],
+  users: {},
   orders: [],
-  products: [],
-  order: null,
-  orderUsers: [],
-  orderProducts: [],
+  products: {},
+  order: null
 }
 
 const reducer = (state: AdminState, action: AdminAction): AdminState => {
@@ -53,17 +45,13 @@ const reducer = (state: AdminState, action: AdminAction): AdminState => {
     case AdminStateActionTypes.FETCH:
       return { ...state, loading: true };
     case AdminStateActionTypes.SET_USERS:
-      return { ...state, loading: false, users: [ ...action.payload ] };
+      return { ...state, loading: false, users: { ...action.payload } };
     case AdminStateActionTypes.SET_ORDERS:
       return { ...state, loading: false, orders: [ ...action.payload ] };
     case AdminStateActionTypes.SET_PRODUCTS:
-      return { ...state, loading: false, products: [ ...action.payload ] };
+      return { ...state, loading: false, products: { ...action.payload } };
     case AdminStateActionTypes.SET_ORDER:
       return { ...state, loading: false, order: { ...action.payload } };
-    case AdminStateActionTypes.SET_ORDER_USERS:
-      return { ...state, loading: false, orderUsers: [ ...action.payload ] };
-    case AdminStateActionTypes.SET_ORDER_PRODUCTS:
-      return { ...state, loading: false, orderProducts: [ ...action.payload ] };
     default:
       return state;
   }

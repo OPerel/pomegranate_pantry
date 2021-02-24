@@ -17,7 +17,7 @@ const UsersListItem: React.FC<{user: User}> = ({ user }) => {
         <IonRow>
           <IonCol><span>{user.name}</span></IonCol>
           <IonCol><span>{user.location === LOCATIONS.TA ? 'תל-אביב' : 'פרדס-חנה'}</span></IonCol>
-          <IonCol><span>{user._id}</span></IonCol>
+          {/* <IonCol><span>{user._id}</span></IonCol> */}
         </IonRow>
       </IonGrid>
     </IonItem>

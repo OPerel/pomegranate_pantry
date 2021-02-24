@@ -14,13 +14,10 @@ import {
 import { chevronDownOutline, chevronUpOutline, closeOutline, checkmarkOutline } from 'ionicons/icons';
 
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
-import { OrderUser, User } from '../../../types/interfaces';
+import { OrderUser } from '../../../types/interfaces';
 import { ORDER_STATUS } from '../../../constants';
 
 import Fire from '../../../services/Firebase';
-
-// import { getUser } from '../../../data/users';
-import { getProductsById } from '../../../data/products';
 
 interface OrderUserListItemProps {
   orderUser: OrderUser;
@@ -29,21 +26,9 @@ interface OrderUserListItemProps {
 const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => {
 
   const [itemOpen, setItemOpen] = useState<boolean>(false);
-  const [userInfo, setUserInfo] = useState<User>({} as User);
-  const { state: { order } } = useAdminStateContext();
+  const { state: { order, users, products } } = useAdminStateContext();
 
-  /**
- * for each row I need:
- * 1. the User object for the row itself
- * 2. all the OrderUsers' Products for the row's details dropdown
- */
-  React.useEffect(() => {
-    Fire.getUser(orderUser.userRef, user => {
-      setUserInfo(user)
-    });
-
-    return () => Fire.userOff(orderUser.userRef);
-  }, [orderUser.userRef])
+  const userInfo = users[orderUser.userRef];
 
   return (
     <>
@@ -59,7 +44,10 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
                 disabled={order?.status !== ORDER_STATUS.PAYING}
                 color={order?.status === ORDER_STATUS.PAYING && !orderUser.payed ? 'danger' : 'primary'}
                 onClick={order ? () => {
-                  Fire.updateOrderPayedStatus(order._id, orderUser._id);
+                  Fire.updateEntry('orderUsers', orderUser._id, {
+                    ...orderUser,
+                    payed: !orderUser.payed
+                  });
                 } : () => {}}
               >
                 <IonIcon icon={orderUser.payed ? checkmarkOutline : closeOutline} />
@@ -81,18 +69,21 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
             <IonLabel>כמות</IonLabel>
             <IonLabel>סה"כ</IonLabel>
           </IonListHeader>
-          {orderUser.products?.map(({ product, qty }) => (
-            <IonItem key={product}>
-              <IonGrid>
-                <IonRow onClick={() => setItemOpen(!itemOpen)}>
-                  <IonCol><p>{getProductsById(product)?.name}</p></IonCol>
-                  <IonCol><p>{getProductsById(product)?.price}</p></IonCol>
-                  <IonCol><p>{qty}</p></IonCol>
-                  <IonCol><p>{qty * (getProductsById(product)?.price as number)}</p></IonCol>
-                </IonRow>
-              </IonGrid>
-            </IonItem>
-          ))}
+          {orderUser.products?.map(({ productRef, qty }) => {
+            const orderProduct = order?.orderProducts.find(p => p.productRef === productRef);
+            return (
+              <IonItem key={productRef}>
+                <IonGrid>
+                  <IonRow onClick={() => setItemOpen(!itemOpen)}>
+                    <IonCol><p>{products[productRef].name}</p></IonCol>
+                    <IonCol><p>{orderProduct?.price}</p></IonCol>
+                    <IonCol><p>{qty}</p></IonCol>
+                    <IonCol><p>{qty * (orderProduct?.price as number)}</p></IonCol>
+                  </IonRow>
+                </IonGrid>
+              </IonItem>
+            )}
+          )}
         </IonList>
       ) : null}
     </>

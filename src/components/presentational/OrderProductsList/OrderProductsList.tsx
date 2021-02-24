@@ -1,34 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import {
   IonList,
   IonLabel,
   IonListHeader,
-  IonSpinner
 } from '@ionic/react';
 
-// import { OrderProduct } from '../../../types/interfaces';
+import { OrderProduct } from '../../../types/interfaces';
 
 import OrderProductListItem from '../OrderProductListItem/OrderProductListItem';
-import Fire from '../../../services/Firebase';
-import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
 
-// interface OrderProductsListPropsTypes {
-//   orderProducts: OrderProduct[]
-// }
-const OrderProductsList: React.FC = () => {
-
-  const { state: { loading, order, orderProducts }, dispatch } = useAdminStateContext();
-
-  useEffect(() => {
-    if (order) {
-      dispatch({ type: AdminStateActionTypes.FETCH })
-      Fire.orderProductsCollectionListener(order._id, orderProducts => {
-        dispatch({ type: AdminStateActionTypes.SET_ORDER_PRODUCTS, payload: orderProducts });
-      });
-      return () => Fire.orderProductsOff(order._id);
-    }
-  }, [order, dispatch]);
+const OrderProductsList: React.FC<{ orderProducts: OrderProduct[] }> = ({ orderProducts }) => {
 
   return (
     <IonList>
@@ -37,14 +19,14 @@ const OrderProductsList: React.FC = () => {
         <IonLabel>מוצר</IonLabel>
         <IonLabel>כמות</IonLabel>
         <IonLabel>חסר</IonLabel>
+        <IonLabel>מחיר ליחידה</IonLabel>
         <IonLabel>סה"כ</IonLabel>
-        <IonLabel>מחיר סופי</IonLabel>
         <IonLabel></IonLabel>
       </IonListHeader>
-      {loading ? (
-        <IonSpinner color="primary" style={{ display: 'block', margin: '50px auto' }}/>
+      {orderProducts.length > 0 ? (
+        orderProducts.map(o => <OrderProductListItem key={o.productRef} orderProduct={o} />)
       ) : (
-        orderProducts.map(o => <OrderProductListItem key={o.product} orderProduct={o} />)
+        <h3 style={{ margin: '50px 0', textAlign: 'center' }}>לא נמצאו מוצרים להזמנה</h3>
       )}
     </IonList>
   )

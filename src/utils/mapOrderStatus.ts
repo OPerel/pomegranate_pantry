@@ -1,27 +1,32 @@
 import { ORDER_STATUS } from '../constants';
 import { OrderStatus, Order } from '../types/interfaces';
-import Fire from '../services/Firebase';
+
+// const orderSeq = {
+//   [ORDER_STATUS.OPEN]: 0,
+//   [ORDER_STATUS.COMPLETION]: 1,
+//   [ORDER_STATUS.SHOPPING]: 2,
+//   [ORDER_STATUS.PAYING]: 3,
+//   [ORDER_STATUS.CLOSED]: 4
+// };
 
 const getOrderStatus = async (order: Order): Promise<string> => {
-  if (order.status === ORDER_STATUS.OPEN || ORDER_STATUS.SHOPPING || ORDER_STATUS.PAYING) {
-    if (order.closingTime < new Date()) {
+  if (order.status === ORDER_STATUS.OPEN) {
+    if (order.closingTime.getTime() < new Date().getTime()) {
       return ORDER_STATUS.COMPLETION;
     }
+  }
 
-    if (order.status === ORDER_STATUS.PAYING) {
-      const orderUsers = await Fire.getOrderUsers(order._id);
-      const orderPayed = orderUsers.every(user => user.payed);
-      if (orderPayed) {
-        return ORDER_STATUS.CLOSED;
-      }
+  if (order.status === ORDER_STATUS.PAYING) {
+    const orderPayed = order.orderUsers.every(user => user.payed);
+    if (orderPayed) {
+      return ORDER_STATUS.CLOSED;
     }
+  }
 
-    if (order.status === ORDER_STATUS.SHOPPING) {
-      const orderProducts = await Fire.getOrderProducts(order._id);
-      const orderHasPrices = orderProducts.every(product => product.price > 0);
-      if (orderHasPrices) {
-        return ORDER_STATUS.PAYING;
-      }
+  if (order.status === ORDER_STATUS.SHOPPING) {
+    const orderHasPrices = order.orderProducts.every(product => product.price > 0);
+    if (orderHasPrices) {
+      return ORDER_STATUS.PAYING;
     }
   }
 

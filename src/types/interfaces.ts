@@ -1,8 +1,8 @@
 export interface User {
-  _id: string;
   name: string;
   role: 'user' | 'rimon',
   location: 'TA' | 'PH';
+  _id?: string;
 }
 
 export type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed';
@@ -12,24 +12,22 @@ export interface Order {
   status: OrderStatus,
   createdAt: Date,
   closingTime: Date,
-  totalPrice: number, // total price of UsersOrders 
-  // orderProducts: OrderProduct[], // array of OrderProducts
-  // OrderUsers: OrderUser[], // array of OrderUsers
+  totalPrice: number | null, // total price of UsersOrders 
+  orderUsers: OrderUser[], // array of OrderUsers
+  orderProducts: OrderProduct[], // array of OrderProducts
 }
 
-// Order.payed = userOrdres.every(order => order.payed)
 // Order.totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
 
 export interface OrderProduct {
   _id: string,
-  product: string, // ref to Product
-  order: string, // ref to Order
+  productRef: string, // ref to Product
+  orderRef: string, // ref to Order
   totalQty: number,
   missing: number | null,
   price: number,
 }
 
-// priceWarn = fixedTotalPrice < finalTotalPrice
 // missing = (totalQty % Product.minQty) !== 0
 //   ? ((Math.floor(totalQty / Product.minQty) + 1) * Product.minQty) - totalQty
 //   : null
@@ -37,7 +35,7 @@ export interface OrderProduct {
 // fixedTotalPrice = totalQty * Product.price
 
 export interface OrderUserProducts {
-  product: string, // ref to Product
+  productRef: string, // ref to Product
   qty: number
 }
 
@@ -51,9 +49,7 @@ export interface OrderUser {
 }
 
 export interface Product {
-  _id: string,
   name: string,
-  price: number,
   minQty: number,
   qtyUnit: 'unit' | 'Kg'
 }

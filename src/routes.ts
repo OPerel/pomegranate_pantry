@@ -12,7 +12,7 @@ export const routes = [
     routes: [
       {
         path: '/admin/order/:id',
-        component: AdminStateProvider(ViewOrder),
+        component: ViewOrder,
         exact: true
       }
     ]
