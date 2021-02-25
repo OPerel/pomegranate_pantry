@@ -1,10 +1,3 @@
-/**
- * TODO:
- * 1. orderProduct.totalQty should be calculated from orderUsers,
- *    and so is orderProduct.missing
- *    maybe do not save totalQty to DB...?
- */
-
 import React, { useEffect } from 'react';
 import { Switch, RouteComponentProps, Link } from 'react-router-dom';
 

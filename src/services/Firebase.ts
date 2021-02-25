@@ -8,7 +8,7 @@ import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { getOrderStatus } from '../utils/mapOrderStatus';
-import { User, Order, Product } from '../types/interfaces';
+import { User, Order, Product, OrderUser, OrderProduct, OrderUserProduct } from '../types/interfaces';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -66,6 +66,10 @@ class FirebaseService {
       cb(snapshot.val());
     });
   };
+
+  private getProduct = async (productId: string): Promise<Product> => {
+    return (await this.getColRef('products').child(productId).get()).val();
+  } 
   
   // Auth and user
   public doSignIn = (email: string, password: string): Promise<void> => {
@@ -171,6 +175,8 @@ class FirebaseService {
     orderId: string,
     cb: (order: Order) => void
   ) => {
+
+    // collections refs
     const orderRef = this.getColRef('orders').child(orderId);
     const orderUsersRef = this.getColRef('orderUsers')
       .orderByChild('orderRef')
@@ -179,34 +185,81 @@ class FirebaseService {
       .orderByChild('orderRef')
       .equalTo(orderId);
     
+    // observables
     const orderState$ = object(orderRef);
     const orderUsersList$ = list(orderUsersRef);
     const orderProductsList$ = list(orderProductsRef);
-    combineLatest(orderState$, orderUsersList$, orderProductsList$, (order, orderUsers, orderProducts) => {
-      const val = order.snapshot.val();
-      const orderObj = {
-        ...val,
-        createdAt: new Date(val.createdAt),
-        closingTime: new Date(val.closingTime),
-        _id: order.snapshot.key,
-        orderUsers: orderUsers.map(user => ({
-          ...user.snapshot.val(),
-          _id: user.snapshot.key
-        })),
-        orderProducts: orderProducts.map(product => ({
-          ...product.snapshot.val(),
-          _id: product.snapshot.key
-        }))
-      }
-      const updateOrderStatus = getOrderStatus(orderObj);
-      if (updateOrderStatus !== orderObj.status) {
-        this.updateEntry('orders', orderObj._id, {
-          status: updateOrderStatus
-        })
-      }
 
-      return orderObj;
-    })
+    combineLatest(orderState$, orderUsersList$, orderProductsList$)
+    .pipe(
+      // turns each observable into the desired object
+      map(([order, orderUsers, orderProducts]): [Order, OrderUser[], OrderProduct[]] => {
+        const val = order.snapshot.val();
+        const orderObj = {
+          ...val,
+          _id: order.snapshot.key,
+          createdAt: new Date(val.createdAt),
+          closingTime: new Date(val.closingTime)
+        };
+        const orderUsersObjList = orderUsers.map(orderUser => ({
+          ...orderUser.snapshot.val(),
+          _id: orderUser.snapshot.key
+        }));
+        const orderProductsObjList = orderProducts.map(orderProduct => ({
+          ...orderProduct.snapshot.val(),
+          _id: orderProduct.snapshot.key 
+        }));
+        return [orderObj, orderUsersObjList, orderProductsObjList];
+      }),
+      // merge the users and products into the order object
+      map(async ([order, orderUsers, orderProducts]) => {
+        order = {
+          ...order,
+          orderUsers,
+          // the order products have to be further transformed for totalQty and missing
+          orderProducts: await Promise.all(orderProducts.map(async orderProduct => {
+            const { minQty } = await this.getProduct(orderProduct.productRef);
+
+            /** 
+             * total qty of orderProduct
+             * first reduce al product object from orderUsers to one array,
+             * then filter the relevant product,
+             * reduce the qty from the users' products objects
+             */
+            const totalQty = orderUsers.reduce((acc, orderUser) => {
+              return acc.concat(orderUser.products);
+            }, [] as OrderUserProduct[])
+              .filter(p => p?.productRef === orderProduct.productRef)
+              .reduce((acc, { qty }) => acc += qty, 0);
+
+            /**
+             * calculate missing qty by total and product min
+             */
+            const missing = (totalQty % minQty) !== 0
+            ? ((Math.floor(totalQty / minQty) + 1) * minQty) - totalQty
+            : null;
+            
+            return {
+              ...orderProduct,
+              totalQty,
+              missing
+            }
+          }))
+        }
+        return order;
+      }),
+      // check for order status and update if needed
+      map(async order => {
+        const orderObj = await order;
+        const updateOrderStatus = getOrderStatus(orderObj);
+        if (updateOrderStatus !== orderObj.status) {
+          this.updateEntry('orders', orderObj._id, {
+            status: updateOrderStatus
+          })
+        }
+        return orderObj;
+      })
+    )
     .subscribe(async data => {
       cb(await data);
     })

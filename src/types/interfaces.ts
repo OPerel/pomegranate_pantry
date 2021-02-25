@@ -34,14 +34,14 @@ export interface OrderProduct {
 // totalQty = OrderUser.products.reduce((acc, {p, qty}) => acc += aty, 0) of all OrderUsers in the current Order
 // fixedTotalPrice = totalQty * Product.price
 
-export interface OrderUserProducts {
+export interface OrderUserProduct {
   productRef: string, // ref to Product
   qty: number
 }
 
 export interface OrderUser {
   _id: string;
-  products: OrderUserProducts[]; // array of Products`
+  products: OrderUserProduct[]; // array of Products`
   userRef: string // a ref to the user
   orderRef: string // a ref to the order
   totalPrice: number; // total price of products.qty

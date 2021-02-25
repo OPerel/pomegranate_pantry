@@ -29,11 +29,8 @@ Order.totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
 ### OrderProduct
 ```ts
 {
-  id: string,
   product: string, // ref to Product
   order: string, // ref to Order
-  totalQty: number,
-  missing: number | null,
   price: number
 }
 
@@ -46,7 +43,6 @@ missing = (totalQty % Product.minQty) !== 0
 ### User
 ```ts
 {
-  id: string,
   name: string,
   role: 'user' | 'rimon', // user is either a shopper or the one we now call Elad
   location: 'TA' | 'PH'
@@ -56,7 +52,6 @@ missing = (totalQty % Product.minQty) !== 0
 ### OrderUser
 ```ts
 {
-  id: string,
   userRef: string, // User's id
   orderRef: string, // Order's id
   products: OrderUserProducts[],
@@ -70,7 +65,7 @@ totalPrice = products.reduce((acc, { product, qty }) => acc += product.price, 0)
 #### OrderUserProducts
 ```ts
 {
-  product: string, // ref to OrderProduct
+  productRef: string, // ref to OrderProduct
   qty: number
 }
 ```
@@ -78,7 +73,6 @@ totalPrice = products.reduce((acc, { product, qty }) => acc += product.price, 0)
 ### Product
 ```ts
 {
-  id: string,
   name: string,
   price: number,
   minQty: number,
@@ -95,7 +89,7 @@ totalPrice = products.reduce((acc, { product, qty }) => acc += product.price, 0)
 type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed';
 
 {
-  id: string,
+  _id: string,
   status: OrderStatus,
   createdAt: Date,
   closingTime: Date,
