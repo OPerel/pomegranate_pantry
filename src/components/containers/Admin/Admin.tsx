@@ -1,7 +1,7 @@
 /**
  * TODO:
- * 1. make sure order status changes and add buttons.
- * 2. orderProduct.totalQty should be calculated from orderUsers,
+ * 1. orderProduct.totalQty should be calculated from orderUsers,
+ *    and so is orderProduct.missing
  *    maybe do not save totalQty to DB...?
  */
 

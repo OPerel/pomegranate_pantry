@@ -201,7 +201,6 @@ class FirebaseService {
       const updateOrderStatus = getOrderStatus(orderObj);
       if (updateOrderStatus !== orderObj.status) {
         this.updateEntry('orders', orderObj._id, {
-          ...val,
           status: updateOrderStatus
         })
       }

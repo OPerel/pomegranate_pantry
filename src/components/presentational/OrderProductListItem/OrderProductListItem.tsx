@@ -5,14 +5,14 @@ import {
   IonGrid,
   IonCol,
   IonRow,
-  // IonList,
   IonButton,
-  // IonLabel,
+  IonLabel,
   IonInput,
   IonIcon
 } from '@ionic/react';
-import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
+import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons';
 
+import Fire from '../../../services/Firebase';
 import { OrderProduct, Order } from '../../../types/interfaces';
 import { ORDER_STATUS } from '../../../constants';
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
@@ -23,10 +23,13 @@ interface OrderProductListItemProps {
 
 const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduct }) => {
 
-  const [itemOpen, setItemOpen] = useState<boolean>(false);
   const { state: { order, users, products } } = useAdminStateContext();
   const { orderUsers } = order as Order;
   const { productRef } = orderProduct;
+
+  const [itemOpen, setItemOpen] = useState<boolean>(false);
+  const [priceInput, setPriceInput] = useState<number>();
+
   /**
    * for each row I need:
    * 1. the Product object for the row itself
@@ -59,14 +62,29 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
               <IonItem  className="final-price">
                 <IonInput
                   type="number"
-                  value={orderProduct.price}
-                  disabled={!(order?.status === ORDER_STATUS.SHOPPING)} 
+                  value={priceInput || orderProduct.price}
+                  disabled={!(order?.status === ORDER_STATUS.SHOPPING)}
+                  onIonChange={e => setPriceInput(Number(e.detail.value))}
                 />
               </IonItem>
             </IonCol>
+            <IonCol>
+              <IonButton
+                disabled={!priceInput}
+                onClick={() => Fire.updateEntry('orderProducts', orderProduct._id, {
+                  price: priceInput
+                })}
+              >
+                <IonLabel>קבע מחיר</IonLabel>
+              </IonButton>
+            </IonCol>
             <IonCol><p>{orderProduct.price * orderProduct.totalQty}</p></IonCol>
             <IonCol>
-              <IonButton fill="clear" onClick={() => setItemOpen(!itemOpen)} data-testid="product-order-list-item">
+              <IonButton
+                fill="clear"
+                onClick={() => setItemOpen(!itemOpen)}
+                data-testid="product-order-list-item"
+              >
                 <IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} />
               </IonButton>
             </IonCol>
