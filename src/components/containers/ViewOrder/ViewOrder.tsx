@@ -19,8 +19,9 @@ import './ViewOrder.css';
 
 import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
 import Fire from '../../../services/Firebase';
-import { ROUTES, ORDER_STATUS } from '../../../constants';
-import { mapOrderStatusToText } from '../../../utils/mapOrderStatus';
+import { ROUTES } from '../../../constants';
+import { OrderStatus } from '../../../types/interfaces';
+import { mapOrderStatusToText, orderSeq, getOrderStatusBtn } from '../../../utils/mapOrderStatus';
 
 const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
 
@@ -30,6 +31,11 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
 
   const { state, dispatch } = useAdminStateContext();
   const { order } = state;
+
+  const {
+    orderStatusBtnText,
+    orderStatusBtnFunction
+  } = getOrderStatusBtn(order?._id as string, order?.status as OrderStatus);
 
   useEffect(() => {
     if (orderId) {
@@ -69,7 +75,14 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
             {`נסגר ב - ${order.closingTime.toLocaleDateString('he')}`}
           </IonTitle>
 
-          {order.status !== ORDER_STATUS.CLOSED && <IonButton color="danger" slot="primary">סגור הזמנה</IonButton>}
+          {orderStatusBtnText && 
+            <IonButton
+              slot="primary"
+              color={orderSeq(order.status) > 1 ? 'danger' : 'primary'}
+              onClick={orderStatusBtnFunction}
+            >
+              {orderStatusBtnText}
+            </IonButton>}
         
         </IonToolbar>
 

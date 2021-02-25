@@ -182,7 +182,7 @@ class FirebaseService {
     const orderState$ = object(orderRef);
     const orderUsersList$ = list(orderUsersRef);
     const orderProductsList$ = list(orderProductsRef);
-    combineLatest(orderState$, orderUsersList$, orderProductsList$, async (order, orderUsers, orderProducts) => {
+    combineLatest(orderState$, orderUsersList$, orderProductsList$, (order, orderUsers, orderProducts) => {
       const val = order.snapshot.val();
       const orderObj = {
         ...val,
@@ -198,7 +198,7 @@ class FirebaseService {
           _id: product.snapshot.key
         }))
       }
-      const updateOrderStatus = await getOrderStatus(orderObj);
+      const updateOrderStatus = getOrderStatus(orderObj);
       if (updateOrderStatus !== orderObj.status) {
         this.updateEntry('orders', orderObj._id, {
           ...val,

@@ -1,15 +1,16 @@
+import Fire from '../services/Firebase';
 import { ORDER_STATUS } from '../constants';
 import { OrderStatus, Order } from '../types/interfaces';
 
-// const orderSeq = {
-//   [ORDER_STATUS.OPEN]: 0,
-//   [ORDER_STATUS.COMPLETION]: 1,
-//   [ORDER_STATUS.SHOPPING]: 2,
-//   [ORDER_STATUS.PAYING]: 3,
-//   [ORDER_STATUS.CLOSED]: 4
-// };
+const orderSeq = (status: OrderStatus) => ({
+  [ORDER_STATUS.OPEN]: 0,
+  [ORDER_STATUS.COMPLETION]: 1,
+  [ORDER_STATUS.SHOPPING]: 2,
+  [ORDER_STATUS.PAYING]: 3,
+  [ORDER_STATUS.CLOSED]: 4
+}[status]);
 
-const getOrderStatus = async (order: Order): Promise<string> => {
+const getOrderStatus = (order: Order): string => {
   if (order.status === ORDER_STATUS.OPEN) {
     if (order.closingTime.getTime() < new Date().getTime()) {
       return ORDER_STATUS.COMPLETION;
@@ -43,7 +44,40 @@ const mapOrderStatusToText = (status: OrderStatus) => {
   }[status]
 }
 
+const getOrderStatusBtn = (orderId: string, status: OrderStatus) => {
+
+  const btnCb = (orderId: string, newStatus: OrderStatus) => {
+    Fire.updateEntry('orders', orderId, { status: newStatus });
+  }
+
+  if (status === ORDER_STATUS.OPEN) {
+    return {
+      orderStatusBtnText: 'עבור להשלמות',
+      orderStatusBtnFunction: () => btnCb(orderId, ORDER_STATUS.COMPLETION)
+    }
+  }
+
+  if (status === ORDER_STATUS.COMPLETION) {
+    return {
+      orderStatusBtnText: 'סגור השלמות',
+      orderStatusBtnFunction: () => btnCb(orderId, ORDER_STATUS.SHOPPING)
+    }
+  }
+
+  return {
+    orderStatusBtnText: 'סגור הזמנה',
+    orderStatusBtnFunction: () => {
+      Fire.updateEntry('orders', orderId, {
+        status: ORDER_STATUS.CLOSED,
+        closingTime: new Date()
+      });
+    }
+  }
+}
+
 export {
   getOrderStatus,
-  mapOrderStatusToText
+  orderSeq,
+  mapOrderStatusToText,
+  getOrderStatusBtn
 }
