@@ -24,7 +24,7 @@ type AdminAction =
 | { type: AdminStateActionTypes.SET_USERS, payload: { [key: string]: User } }
 | { type: AdminStateActionTypes.SET_ORDERS, payload: Order[] }
 | { type: AdminStateActionTypes.SET_PRODUCTS, payload: { [key: string]: Product } }
-| { type: AdminStateActionTypes.SET_ORDER, payload: Order }
+| { type: AdminStateActionTypes.SET_ORDER, payload: Order | null }
 
 interface AdminStateProviderType {
   state: AdminState,
@@ -51,7 +51,7 @@ const reducer = (state: AdminState, action: AdminAction): AdminState => {
     case AdminStateActionTypes.SET_PRODUCTS:
       return { ...state, loading: false, products: { ...action.payload } };
     case AdminStateActionTypes.SET_ORDER:
-      return { ...state, loading: false, order: { ...action.payload } };
+      return { ...state, loading: false, order: action.payload };
     default:
       return state;
   }

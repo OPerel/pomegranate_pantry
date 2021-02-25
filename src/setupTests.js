@@ -18,12 +18,45 @@ jest.mock('./services/Firebase', () => {
   const ordersData = [
     {
       _id: '1',
-      open: true, 
-      openToUsers: true,
+      status: 'open',
       createdAt: new Date(1606513716688),
       closingTime: new Date(1601241806937),
-      totalPrice: 0,
-      payed: false
+      orderUsers: [
+        {
+          _id: '1',
+          products: [{ product: 'qwerty1', qty: 2 }, { product: 'qwerty2', qty: 3 }],
+          userRef: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
+          orderRef: '1',
+          totalPrice: 56,
+          payed: false
+        },
+        {
+          _id: '3',
+          products: [],
+          userRef: 'c',
+          orderRef: '1',
+          totalPrice: 0,
+          payed: true
+        }
+      ],
+      orderProducts: [
+        {
+          _id: '123',
+          product: 'qwerty1',
+          orderRef: '1',
+          totalQty: 2,
+          missing: 10,
+          price: 28,
+        },
+        {
+          _id: '456',
+          product: 'qwerty2',
+          orderRef: '1',
+          totalQty: 3,
+          missing: 9,
+          price: 18,
+        }
+      ]
     }
   ];
 
@@ -103,22 +136,18 @@ jest.mock('./services/Firebase', () => {
     {
       _id: '123',
       product: 'qwerty1',
-      order: '1',
+      orderRef: '1',
       totalQty: 2,
       missing: 10,
-      fixedTotalPrice: 28,
-      finalTotalPrice: null,
-      priceWarn: false
+      price: 28,
     },
     {
       _id: '456',
       product: 'qwerty2',
-      order: '1',
+      orderRef: '1',
       totalQty: 3,
       missing: 9,
-      fixedTotalPrice: 18,
-      finalTotalPrice: null,
-      priceWarn: false
+      price: 18,
     },
     {
       _id: '789',
@@ -144,6 +173,8 @@ jest.mock('./services/Firebase', () => {
 
   return {
     authStateListener: (cb) => {cb(userData)},
+    getUsers: async () => userData,
+    getProducts: async () => productsData,
     ordersCollectionListener: (cb) => {cb(ordersData)},
     productsCollectionListener: (cb) => {cb(productsData)},
     orderUsersCollectionListener: (id, cb) => {cb(orderUsersData)},

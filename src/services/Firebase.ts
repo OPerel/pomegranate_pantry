@@ -58,7 +58,7 @@ class FirebaseService {
   public getProducts = async () => (await this.getColRef('products').get()).val();
 
   /**
-   * get by id
+   * Get by id
    */
 
   public getUser = async (userId: string, cb: (user: User) => void) => {
@@ -71,7 +71,9 @@ class FirebaseService {
     return (await this.getColRef('products').child(productId).get()).val();
   } 
   
-  // Auth and user
+  /**
+   * Auth and User
+   */
   public doSignIn = (email: string, password: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       this.auth
@@ -123,7 +125,6 @@ class FirebaseService {
   }
 
   // Admin data
-
   public ordersCollectionListener = async (
     cb: (orders: Order[]) => void
   ) => {
@@ -147,21 +148,22 @@ class FirebaseService {
     })
   }
 
+  // check if needed
   public ordersCollectionOff = () => {
     this.getColRef('/orders').off('value');
   }
 
-  public productsCollectionListener = async (
-    cb: (products: Product[]) => void
-  ) => {
-    this.getColRef('/products').on('value', (snapshot) => {
-      cb(this.parseSnapshot(snapshot));
-    });
-  }
+  // public productsCollectionListener = async (
+  //   cb: (products: Product[]) => void
+  // ) => {
+  //   this.getColRef('/products').on('value', (snapshot) => {
+  //     cb(this.parseSnapshot(snapshot));
+  //   });
+  // }
 
-  public productsCollectionOff = () => {
-    this.getColRef('/products').off('value');
-  }
+  // public productsCollectionOff = () => {
+  //   this.getColRef('/products').off('value');
+  // }
 
   /** 
    * listen to order location in DB
@@ -169,12 +171,11 @@ class FirebaseService {
    * and combines all to one object
    * @param {string} orderId - the id of the order to listen to
    * @param {function} cb - a callback that fires on every value change with the full obj
-   * @returns {void}
    */
   public orderListener = async (
     orderId: string,
     cb: (order: Order) => void
-  ) => {
+  ): Promise<void> => {
 
     // collections refs
     const orderRef = this.getColRef('orders').child(orderId);
@@ -265,19 +266,19 @@ class FirebaseService {
     })
   }
 
+  // check if needed
   public orderOff = (id: string) => {
     this.getColRef('orders').child(id).off('value');
   }
 
-  // write
+  /**
+   * Write
+   */
   public addNewOrder = async (closingTime: Date) => {
     const newOrder = {
-      open: true, 
-      openToUsers: true,
+      status: 'open',
       createdAt: app.database.ServerValue.TIMESTAMP,
       closingTime: closingTime.getTime(),
-      totalPrice: 0,
-      payed: false
     }
 
     try {

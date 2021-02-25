@@ -64,12 +64,19 @@ const getOrderStatusBtn = (orderId: string, status: OrderStatus) => {
     }
   }
 
+  if (status === ORDER_STATUS.CLOSED) {
+    return {
+      orderStatusBtnText: '',
+      orderStatusBtnFunction: () => {}
+    }
+  }
+
   return {
     orderStatusBtnText: 'סגור הזמנה',
     orderStatusBtnFunction: () => {
       Fire.updateEntry('orders', orderId, {
         status: ORDER_STATUS.CLOSED,
-        closingTime: new Date()
+        closingTime: new Date().getTime()
       });
     }
   }

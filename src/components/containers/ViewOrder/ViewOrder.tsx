@@ -44,7 +44,10 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
         dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: order })
       });
 
-      return () => Fire.orderOff(orderId)
+      return () => {
+        dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: null });
+        Fire.orderOff(orderId);
+      }
     };
   }, [orderId, dispatch])
 
