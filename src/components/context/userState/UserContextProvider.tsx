@@ -1,5 +1,5 @@
 import React, { useReducer, createContext, useContext, useEffect } from 'react';
-import { User, Order, OrderUser } from '../../../types/interfaces';
+import { User, Order, OrderUser, Product } from '../../../types/interfaces';
 
 import Fire from '../../../services/Firebase';
 
@@ -9,6 +9,7 @@ interface UserState {
   user: User | null,
   openOrder: Order | null,
   userOrders: OrderUser[],
+  products: { [key: string ]: Product },
   error: string | null
 };
 
@@ -17,6 +18,7 @@ export enum UserStateActionTypes {
   SET_USER = 'SET_USER',
   SET_OPEN_ORDER = 'SET_OPEN_ORDER',
   SET_USER_ORDERS = 'SET_USER_ORDERS',
+  SET_PRODUCTS = 'SET_PRODUCTS',
   SET_ERROR = 'SET_ERROR'
 };
 
@@ -25,6 +27,7 @@ type UserAction =
   | { type: UserStateActionTypes.SET_USER, payload: User | null }
   | { type: UserStateActionTypes.SET_OPEN_ORDER, payload: Order | null }
   | { type: UserStateActionTypes.SET_USER_ORDERS, payload: OrderUser[] }
+  | { type: UserStateActionTypes.SET_PRODUCTS, payload: { [key: string ]: Product } }
   | { type: UserStateActionTypes.SET_ERROR, payload: string };
 
 interface UserProviderType {
@@ -38,6 +41,7 @@ const initialState: UserState = {
   user: null,
   openOrder: null,
   userOrders: [],
+  products: {},
   error: null
 }
 
@@ -51,6 +55,8 @@ const reducer = (state: UserState, action: UserAction): UserState => {
       return { ...state, loading: false, openOrder: action.payload };
     case UserStateActionTypes.SET_USER_ORDERS:
       return { ...state, loading: false, userOrders: action.payload };
+    case UserStateActionTypes.SET_PRODUCTS:
+      return { ...state, loading: false, products: action.payload };
     case UserStateActionTypes.SET_ERROR:
       return { ...state, loading: false, error: action.payload };
     default:

@@ -3,7 +3,7 @@ import app from 'firebase/app';
 import "firebase/database";
 import 'firebase/auth';
 
-import { list, object } from 'rxfire/database';
+import { list, object, stateChanges } from 'rxfire/database';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -272,17 +272,34 @@ class FirebaseService {
   }
 
   // User data
-  public openOrderListener = async (cb: (order: Order) => void) => {
+
+  public openOrderListener = async (cb: (orderId: Order | null) => void) => {
     const openOrderRef = this.getColRef('orders').orderByChild('status').equalTo('open');
-    const openOrder$ = object(openOrderRef);
-    openOrder$.pipe(
-      map(order => ({
-        ...order.snapshot.val(),
-        _id: order.snapshot.key
-      }))
+    const openOrder$ = stateChanges(openOrderRef);
+    openOrder$.subscribe(orderData => {
+      cb({
+        ...orderData.snapshot.val(),
+        _id: orderData.snapshot.key
+      });
+    })
+  }
+
+  public userOrdersListener = async (
+    userId: string,
+    cb: (userOrders: OrderUser[]) => void
+  ) => {
+    const userOrdersRef = this.getColRef('orderUsers').orderByChild('userRef').equalTo(userId);
+    const userOrders$ = list(userOrdersRef);
+    userOrders$.pipe(
+      map(userOrders => {
+        return userOrders.map(order => ({
+          ...order.snapshot.val(),
+          _id: order.snapshot.key
+        }))
+      })
     )
-    .subscribe(orderData => {
-      cb(orderData);
+    .subscribe(data => {
+      cb(data)
     })
   }
 
