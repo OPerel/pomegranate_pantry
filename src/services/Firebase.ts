@@ -271,6 +271,21 @@ class FirebaseService {
     this.getColRef('orders').child(id).off('value');
   }
 
+  // User data
+  public openOrderListener = async (cb: (order: Order) => void) => {
+    const openOrderRef = this.getColRef('orders').orderByChild('status').equalTo('open');
+    const openOrder$ = object(openOrderRef);
+    openOrder$.pipe(
+      map(order => ({
+        ...order.snapshot.val(),
+        _id: order.snapshot.key
+      }))
+    )
+    .subscribe(orderData => {
+      cb(orderData);
+    })
+  }
+
   /**
    * Write
    */

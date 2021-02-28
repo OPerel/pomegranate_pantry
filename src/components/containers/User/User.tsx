@@ -1,14 +1,19 @@
 import React from 'react';
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButton,
+  IonContent
+} from '@ionic/react';
 import { Link } from 'react-router-dom';
  
 import { ROLES, ROUTES } from '../../../constants';
 
-import {
-  IonButton
-} from '@ionic/react';
-
 import  { useAuthStateContext } from '../../context/authState/AuthContextProvider';
 import AuthGuard from '../Auth/AuthGuard';
+import { useUserStateContext } from '../../context/userState/UserContextProvider';
 import { User } from '../../../types/interfaces';
 
 import Fire from '../../../services/Firebase';
@@ -16,17 +21,30 @@ import Fire from '../../../services/Firebase';
 const UserPage: React.FC = () => {
 
   const { state: { user } } = useAuthStateContext();
+  const { state: { openOrder } } = useUserStateContext();
 
   return (
-    <div>
-      <h2>Uesr {user?.name}</h2>
-      <pre dir="ltr">
-        {JSON.stringify(user, null, 2)}
-      </pre>
-      <IonButton onClick={() => Fire.doSignOut()}>יציאה</IonButton>
-      &nbsp;
-      {user?.role === ROLES.ADMIN && <Link to={ROUTES.ADMIN}>אדמין</Link>}
-    </div>
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle slot="start">
+            שלום {user?.name}
+          </IonTitle>
+          {user?.role === ROLES.ADMIN && 
+            <Link
+              to={ROUTES.ADMIN}
+              style={{ color: 'white', marginLeft: '2%' }}
+              slot="end"
+            >אדמין</Link>
+          }
+          <IonButton slot="end" color="secondary" onClick={() => Fire.doSignOut()}>יציאה</IonButton>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent dir="ltr">
+        {JSON.stringify(openOrder, null, 2)}
+      </IonContent>
+            
+    </IonPage>
   )
 }
 

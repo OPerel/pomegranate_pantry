@@ -4,6 +4,7 @@ import User from './components/containers/User/User';
 import Login from './components/containers/Login/Login';
 
 import AdminStateProvider from './components/context/adminState/AdminContextProvider';
+import UserStateProvider from './components/context/userState/UserContextProvider';
 
 export const routes = [
   {
@@ -19,7 +20,7 @@ export const routes = [
   },
   {
     path: '/user/:id',
-    component: User,
+    component: UserStateProvider(User),
     exact: true
   },
   {
