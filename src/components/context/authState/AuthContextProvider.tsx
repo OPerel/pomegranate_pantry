@@ -47,7 +47,7 @@ const reducer = (state: AuthState, action: AuthAction): AuthState => {
 }
 
 // context
-const AuthStateContext = createContext<AuthProviderType>({ state: initialState, dispatch: () => {} });
+export const AuthStateContext = createContext<AuthProviderType>({ state: initialState, dispatch: () => {} });
 export const useAuthStateContext = () => useContext(AuthStateContext);
 
 // HOC

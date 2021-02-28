@@ -1,10 +1,12 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import { Router, Route } from 'react-router-dom';
 import { createMemoryHistory, History, MemoryHistory } from 'history';
 
-// import AuthStateProvider from '../components/context/authState/AuthContextProvider';
-
+import { AuthStateContext } from '../components/context/authState/AuthContextProvider';
+import AdminStateProvider from '../components/context/adminState/AdminContextProvider';
+// import { User, Product, Order } from '../types/interfaces';
+// import { userData ,productsData, ordersData } from '../setupTests';
 
 type CustomRenderPropsTypes = {
   route?: string,
@@ -20,12 +22,31 @@ const customRender = (
   }: CustomRenderPropsTypes = {} as CustomRenderPropsTypes
 ) => {
 
+  const StateWrapper: React.FC = ({ children }) => <>{children}</>;
+  const RenderWithAdminState = AdminStateProvider(StateWrapper);
+
   const RenderWithRouter: React.FC = ({ children }) => (
-    <Router history={history}>
-      <Route path={route}>
-        {children}
-      </Route>
-    </Router>
+    <AuthStateContext.Provider value={{
+      state: {
+        loading: false,
+        user: {
+          _id: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
+          name: 'e rimon',
+          location: 'TA',
+          role: 'rimon'
+        },
+        error: null
+      },
+      dispatch: () => {}
+    }}>
+      <Router history={history}>
+        <Route path={route}>
+          <RenderWithAdminState>
+            {children}
+          </RenderWithAdminState>
+        </Route>
+      </Router>
+    </AuthStateContext.Provider>
   )
   
 

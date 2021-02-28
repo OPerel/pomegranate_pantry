@@ -46,10 +46,10 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
 
       return () => {
         dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: null });
-        Fire.orderOff(orderId);
+        // Fire.orderOff(orderId);
       }
     };
-  }, [orderId, dispatch])
+  }, [orderId, dispatch]);
 
   return (
     <IonPage>
@@ -102,6 +102,3 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
 };
 
 export default ViewOrder;
-
-
-

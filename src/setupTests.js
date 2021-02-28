@@ -7,58 +7,50 @@ import '@testing-library/jest-dom/extend-expect';
 import { mockIonicReact } from '@ionic/react-test-utils';
 mockIonicReact();
 
+
+
 jest.mock('./services/Firebase', () => {
+
   const userData = {
-    _id: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
-    name: 'e rimon',
-    location: 'TA',
-    role: 'rimon'
-  };
-  
-  const ordersData = [
-    {
-      _id: '1',
-      status: 'open',
-      createdAt: new Date(1606513716688),
-      closingTime: new Date(1601241806937),
-      orderUsers: [
-        {
-          _id: '1',
-          products: [{ product: 'qwerty1', qty: 2 }, { product: 'qwerty2', qty: 3 }],
-          userRef: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
-          orderRef: '1',
-          totalPrice: 56,
-          payed: false
-        },
-        {
-          _id: '3',
-          products: [],
-          userRef: 'c',
-          orderRef: '1',
-          totalPrice: 0,
-          payed: true
-        }
-      ],
-      orderProducts: [
-        {
-          _id: '123',
-          product: 'qwerty1',
-          orderRef: '1',
-          totalQty: 2,
-          missing: 10,
-          price: 28,
-        },
-        {
-          _id: '456',
-          product: 'qwerty2',
-          orderRef: '1',
-          totalQty: 3,
-          missing: 9,
-          price: 18,
-        }
-      ]
+    'ZMTBBeoL4ja79HFVDVoTUHDtzJw1': {
+      name: 'e rimon',
+      location: 'TA',
+      role: 'rimon'
     }
-  ];
+  };
+
+  const productsData = {
+    'qwerty1': {
+      name: 'טחינה הר ברכה',
+      qtyUnit: 'unit',
+      minQty: 12,
+    },
+    'qwerty2': {
+      name: 'מוטי רסק עגבניות',
+      qtyUnit: 'unit',
+      minQty: 12,
+    },
+    'qwerty3': {
+      name: 'קשיו טבעי',
+      qtyUnit: 'Kg',
+      minQty: 5,
+    },
+    'qwerty4': {
+      name: 'חומוס',
+      qtyUnit: 'Kg',
+      minQty: 5,
+    },
+    'qwertt5': {
+      name: 'קינואה',
+      qtyUnit: 'Kg',
+      minQty: 5,
+    },
+    'qwertyy7': {
+      name: 'עדשים כתומות',
+      qtyUnit: 'Kg',
+      minQty: 5,
+    }
+  };
 
   const orderUsersData = [
     {
@@ -87,50 +79,51 @@ jest.mock('./services/Firebase', () => {
     }
   ];
 
-  const productsData = [
+  const ordersData = [
     {
-      _id: 'qwerty1',
-      name: 'טחינה הר ברכה',
-      price: 19.00,
-      qtyUnit: 'unit',
-      minQty: 12,
-    },
-    {
-      _id: 'qwerty2',
-      name: 'מוטי רסק עגבניות',
-      price: 6.00,
-      qtyUnit: 'unit',
-      minQty: 12,
-    },
-    {
-      _id: 'qwerty3',
-      name: 'קשיו טבעי',
-      price: 50.00,
-      qtyUnit: 'Kg',
-      minQty: 5,
-    },
-    {
-      _id: 'qwerty4',
-      name: 'חומוס',
-      price: 38.00,
-      qtyUnit: 'Kg',
-      minQty: 5,
-    },
-    {
-      _id: 'qwertt5',
-      name: 'קינואה',
-      price: 58.00,
-      qtyUnit: 'Kg',
-      minQty: 5,
-    },
-    {
-      _id: 'qwertyy7',
-      name: 'עדשים כתומות',
-      price: 29.00,
-      qtyUnit: 'Kg',
-      minQty: 5,
+      _id: '1',
+      status: 'open',
+      createdAt: new Date(1606513716688),
+      closingTime: new Date(1601241806937),
+      totalPrice: null,
+      orderUsers: [
+        {
+          _id: '1',
+          products: [{ productRef: 'qwerty1', qty: 2 }, { productRef: 'qwerty2', qty: 3 }],
+          userRef: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
+          orderRef: '1',
+          totalPrice: 56,
+          payed: false
+        },
+        {
+          _id: '3',
+          products: [],
+          userRef: 'c',
+          orderRef: '1',
+          totalPrice: 0,
+          payed: true
+        }
+      ],
+      orderProducts: [
+        {
+          _id: '123',
+          productRef: 'qwerty1',
+          orderRef: '1',
+          totalQty: 2,
+          missing: 10,
+          price: 28,
+        },
+        {
+          _id: '456',
+          productRef: 'qwerty2',
+          orderRef: '1',
+          totalQty: 3,
+          missing: 9,
+          price: 18,
+        }
+      ]
     }
-  ];
+  ]
 
   const orderProductsData = [
     {
@@ -172,7 +165,7 @@ jest.mock('./services/Firebase', () => {
   ];
 
   return {
-    authStateListener: (cb) => {cb(userData)},
+    authStateListener: (cb) => {cb(userData, null)},
     getUsers: async () => userData,
     getProducts: async () => productsData,
     ordersCollectionListener: (cb) => {cb(ordersData)},
