@@ -7,17 +7,14 @@
     },
     "123" : {
       "orderRef" : "1",
-      "price" : "",
       "productRef" : "qwerty1"
     },
     "234" : {
       "orderRef" : "1",
-      "price" : "",
       "productRef" : "qwerty3"
     },
     "456" : {
       "orderRef" : "1",
-      "price" : "",
       "productRef" : "qwerty2"
     },
     "789" : {
@@ -74,7 +71,7 @@
     "1" : {
       "closingTime" : 1619077944995,
       "createdAt" : 1607077944995,
-      "status" : "open"
+      "status" : "shopping"
     },
     "-MNArMQr-Jxt0gE8-Szk" : {
       "closingTime" : 1608616832000,

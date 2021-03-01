@@ -25,8 +25,14 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
     dispatch({ type: UserStateActionTypes.FETCH });
     Fire.getProducts().then(productsObj => {
       dispatch({ type: UserStateActionTypes.SET_PRODUCTS, payload: productsObj })
-    })
-  }, [dispatch]);
+      
+    });
+    if (openOrder) {
+      Fire.orderProductsListener(openOrder._id, (orderProducts) => {
+        dispatch({ type: UserStateActionTypes.SET_ORDER_PRODUCTS, payload: orderProducts })
+      })
+    }
+  }, [dispatch, openOrder]);
 
   const productsList = Object.keys(products).map(key => ({
     ...products[key],

@@ -1,5 +1,5 @@
 import React, { useReducer, createContext, useContext, useEffect } from 'react';
-import { User, Order, OrderUser, Product } from '../../../types/interfaces';
+import { User, Order, OrderUser, Product, OrderProduct } from '../../../types/interfaces';
 
 import Fire from '../../../services/Firebase';
 
@@ -11,6 +11,7 @@ interface UserState {
   userOrders: OrderUser[],
   currentOrder: OrderUser,
   products: { [key: string ]: Product },
+  orderProducts: OrderProduct[],
   error: string | null
 };
 
@@ -21,6 +22,7 @@ export enum UserStateActionTypes {
   SET_CURRENT_ORDER = 'SET_CURRENT_ORDER',
   SET_USER_ORDERS = 'SET_USER_ORDERS',
   SET_PRODUCTS = 'SET_PRODUCTS',
+  SET_ORDER_PRODUCTS = 'SET_ORDER_PRODUCTS',
   SET_ERROR = 'SET_ERROR'
 };
 
@@ -31,6 +33,7 @@ type UserAction =
   | { type: UserStateActionTypes.SET_USER_ORDERS, payload: OrderUser[] }
   | { type: UserStateActionTypes.SET_CURRENT_ORDER, payload: OrderUser }
   | { type: UserStateActionTypes.SET_PRODUCTS, payload: { [key: string ]: Product } }
+  | { type: UserStateActionTypes.SET_ORDER_PRODUCTS, payload: OrderProduct[] }
   | { type: UserStateActionTypes.SET_ERROR, payload: string };
 
 interface UserProviderType {
@@ -46,6 +49,7 @@ const initialState: UserState = {
   userOrders: [],
   currentOrder: {} as OrderUser,
   products: {},
+  orderProducts: [],
   error: null
 }
 
@@ -60,9 +64,11 @@ const reducer = (state: UserState, action: UserAction): UserState => {
     case UserStateActionTypes.SET_USER_ORDERS:
       return { ...state, loading: false, userOrders: action.payload };
       case UserStateActionTypes.SET_CURRENT_ORDER:
-        return { ...state, loading: false, currentOrder: action.payload }
+        return { ...state, loading: false, currentOrder: action.payload };
     case UserStateActionTypes.SET_PRODUCTS:
       return { ...state, loading: false, products: action.payload };
+    case UserStateActionTypes.SET_ORDER_PRODUCTS:
+      return { ...state, loading: false, orderProducts: action.payload };
     case UserStateActionTypes.SET_ERROR:
       return { ...state, loading: false, error: action.payload };
     default:

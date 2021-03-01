@@ -313,6 +313,21 @@ class FirebaseService {
     })
   }
 
+  public orderProductsListener = async (
+    orderId: string,
+    cb: (orderProducts: OrderProduct[]) => void
+  ) => {
+    const orderProductsRef = this.getColRef('orderProducts')
+      .orderByChild('orderRef')
+      .equalTo(orderId);
+
+    const orderProducts$ = object(orderProductsRef);
+
+    orderProducts$.subscribe(data => {
+      cb(this.parseSnapshot(data.snapshot))
+    })
+  }
+
   /**
    * Write
    */

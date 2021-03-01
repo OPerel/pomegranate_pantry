@@ -15,11 +15,14 @@ import { Product } from '../../../types/interfaces';
 
 const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
 
-  const { state: { currentOrder, user, openOrder } } = useUserStateContext();
+  const { state: { currentOrder, user, openOrder, orderProducts } } = useUserStateContext();
   const [productQty, setProductQty] = useState<number>();
 
   const currentOrderProduct = currentOrder.products?.find(p => p.productRef === product._id);
+  const cuurentProductOrderProduct = orderProducts.find(p => p.productRef === product._id);
   
+  // handling user adding a product
+  // requires updating / creating both an OrderUser and an OrderProduct (trx)
   const handleAddProductClick = () => {
     if (currentOrder) {
 
@@ -33,7 +36,6 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
         ], 
         userRef: user?._id, 
         orderRef: openOrder?._id, 
-        // totalPrice: 0,
         payed: false
       }
     }
