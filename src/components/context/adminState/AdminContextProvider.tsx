@@ -1,5 +1,5 @@
-import React, { useReducer, createContext, useContext, useEffect } from 'react';
-import Fire from '../../../services/Firebase';
+import React, { useReducer, createContext, useContext } from 'react';
+
 import { Order, Product, User } from '../../../types/interfaces';
 
 // Types
@@ -66,17 +66,7 @@ const AdminStateProvider = <P extends {}>(Component: React.ComponentType<P>): Re
   const WithState: React.ComponentType<P> = (props) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    useEffect(() => {
-      dispatch({ type: AdminStateActionTypes.FETCH })
-      Fire.getUsers().then(users => {
-        dispatch({ type: AdminStateActionTypes.SET_USERS, payload: users });
-      });
-
-      dispatch({ type: AdminStateActionTypes.FETCH })
-      Fire.getProducts().then(products => {
-        dispatch({ type: AdminStateActionTypes.SET_PRODUCTS, payload: products })
-      });
-    }, [])
+    
 
     return (
       <AdminStateContext.Provider value={{ state, dispatch }}>

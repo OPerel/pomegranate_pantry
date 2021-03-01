@@ -77,7 +77,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
                     <IonCol><p>{products[productRef].name}</p></IonCol>
                     <IonCol><p>{orderProduct?.price}</p></IonCol>
                     <IonCol><p>{qty}</p></IonCol>
-                    <IonCol><p>{qty * (orderProduct?.price as number)}</p></IonCol>
+                    <IonCol><p>{orderProduct?.price && (qty * (orderProduct.price as number))}</p></IonCol>
                   </IonRow>
                 </IonGrid>
               </IonItem>

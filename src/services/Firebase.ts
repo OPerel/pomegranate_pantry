@@ -13,7 +13,9 @@ import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { getOrderStatus } from '../utils/mapOrderStatus';
+import { calculateOrderUsers } from '../utils/calculateOrderPrices';
 import { User, Order, Product, OrderUser, OrderProduct, OrderUserProduct } from '../types/interfaces';
+import { ORDER_STATUS } from '../constants';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -146,11 +148,12 @@ class FirebaseService {
             closingTime: new Date(orderData.closingTime)
           }
         });
-        console.log('ordersList before: ', ordersList)
+        
+        /** TODO: sorting orders doesn't work! */
         ordersList.sort(function(a, b) {
           return a.createdAt.getTime() + b.createdAt.getTime()
         })
-        console.log('ordersList after: ', ordersList)
+        // console.log('ordersList: ', ordersList)
         return ordersList;
       })
     ).subscribe(orders => {
@@ -162,18 +165,6 @@ class FirebaseService {
   public ordersCollectionOff = () => {
     this.getColRef('/orders').off('value');
   }
-
-  // public productsCollectionListener = async (
-  //   cb: (products: Product[]) => void
-  // ) => {
-  //   this.getColRef('/products').on('value', (snapshot) => {
-  //     cb(this.parseSnapshot(snapshot));
-  //   });
-  // }
-
-  // public productsCollectionOff = () => {
-  //   this.getColRef('/products').off('value');
-  // }
 
   /** 
    * listen to order location in DB
@@ -241,7 +232,7 @@ class FirebaseService {
               return acc.concat(orderUser.products);
             }, [] as OrderUserProduct[])
               .filter(p => p?.productRef === orderProduct.productRef)
-              .reduce((acc, { qty }) => acc += qty, 0);
+              .reduce((acc, { qty }) => acc = acc + qty, 0);
 
             /**
              * calculate missing qty by total and product min
@@ -263,6 +254,12 @@ class FirebaseService {
       map(async order => {
         const orderObj = await order;
         const updateOrderStatus = getOrderStatus(orderObj);
+
+        if (updateOrderStatus === ORDER_STATUS.PAYING && !orderObj.totalPrice) {
+          // update all orderUser.totalPrice
+          calculateOrderUsers(orderObj);
+        }
+
         if (updateOrderStatus !== orderObj.status) {
           this.updateEntry('orders', orderObj._id, {
             status: updateOrderStatus
@@ -349,6 +346,15 @@ class FirebaseService {
       console.log(`item "${collection}/${id}" updated`);
     } catch (err) {
       console.log('error updating entry: ', err)
+    }
+  }
+
+  public updateOrderUsersPrice = async (bulkUpdateObj: { [key: string]: number }) => {
+    try {
+      await this.getColRef('orderUsers').update(bulkUpdateObj)
+      console.log('orderUsers price updated');
+    } catch (err) { 
+      console.warn('Error updating prices: ', err);
     }
   }
 
