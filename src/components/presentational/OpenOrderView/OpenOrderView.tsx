@@ -4,7 +4,7 @@ import {
   IonTitle,
   IonButton,
   IonList,
-  IonItem,
+  // IonItem,
   IonListHeader,
   IonLabel,
   // IonIcon
@@ -13,18 +13,17 @@ import { useUserStateContext, UserStateActionTypes } from '../../context/userSta
 import { mapOrderStatusToText } from '../../../utils/mapOrderStatus';
 import Fire from '../../../services/Firebase';
 import { Order } from '../../../types/interfaces';
+import { ORDER_STATUS } from '../../../constants';
 
 import OpenOrderProductItem from '../OpenOrderProductItem/OpenOrderProductItem';
 
 const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => {
 
-  const { state: { userOrders, products }, dispatch } = useUserStateContext();
-  const currentOrder = userOrders.find(order => order.orderRef === openOrder?._id);
+  const { state: { products, currentOrder }, dispatch } = useUserStateContext();
 
   useEffect(() => {
     dispatch({ type: UserStateActionTypes.FETCH });
     Fire.getProducts().then(productsObj => {
-      console.log('productsObj: ', productsObj)
       dispatch({ type: UserStateActionTypes.SET_PRODUCTS, payload: productsObj })
     })
   }, [dispatch]);
@@ -42,7 +41,8 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
     <div>
       <IonToolbar className="order-header">
         <IonTitle size="small">
-          {mapOrderStatusToText(openOrder.status)} | נסגרת ב - {new Date(openOrder.closingTime).toLocaleDateString('he')}
+          {mapOrderStatusToText(openOrder.status)}
+          {openOrder.status === ORDER_STATUS.OPEN && ` | נסגרת ב - ${openOrder.closingTime.toLocaleDateString('he')}`}
         </IonTitle>
         {currentOrder && <IonButton slot="end">ההזמנה שלי</IonButton>}
       </IonToolbar>

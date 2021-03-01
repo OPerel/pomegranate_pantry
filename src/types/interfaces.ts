@@ -51,5 +51,6 @@ export interface OrderUser {
 export interface Product {
   name: string,
   minQty: number,
-  qtyUnit: 'unit' | 'Kg'
+  qtyUnit: 'unit' | 'Kg',
+  _id?: string
 }

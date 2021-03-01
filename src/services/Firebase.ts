@@ -1,4 +1,9 @@
-// import firebase from 'firebase';
+/**
+ * TODO: 
+ * check where and how to implement total price calculations,
+ * both for OrderUser and Order
+ */
+
 import app from 'firebase/app';
 import "firebase/database";
 import 'firebase/auth';
@@ -141,7 +146,12 @@ class FirebaseService {
             closingTime: new Date(orderData.closingTime)
           }
         });
-        return ordersList
+        console.log('ordersList before: ', ordersList)
+        ordersList.sort(function(a, b) {
+          return a.createdAt.getTime() + b.createdAt.getTime()
+        })
+        console.log('ordersList after: ', ordersList)
+        return ordersList;
       })
     ).subscribe(orders => {
       cb(orders)
@@ -277,8 +287,11 @@ class FirebaseService {
     const openOrderRef = this.getColRef('orders').orderByChild('status').equalTo('open');
     const openOrder$ = stateChanges(openOrderRef);
     openOrder$.subscribe(orderData => {
+      const val = orderData.snapshot.val();
       cb({
-        ...orderData.snapshot.val(),
+        ...val,
+        createdAt: new Date(val.createdAt),
+        closingTime: new Date(val.closingTime),
         _id: orderData.snapshot.key
       });
     })

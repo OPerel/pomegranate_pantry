@@ -6,19 +6,42 @@ import {
   IonRow,
   IonIcon,
   IonInput,
-  IonLabel,
+  // IonLabel,
   IonButton
 } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
+import { useUserStateContext } from '../../context/userState/UserContextProvider';
 import { Product } from '../../../types/interfaces';
 
 const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
 
+  const { state: { currentOrder, user, openOrder } } = useUserStateContext();
   const [productQty, setProductQty] = useState<number>();
+
+  const currentOrderProduct = currentOrder.products?.find(p => p.productRef === product._id);
+  
+  const handleAddProductClick = () => {
+    if (currentOrder) {
+
+    } else {
+      const newOrderUser = {
+        products: [
+          {
+            productRef: product._id,
+            qty: productQty
+          }
+        ], 
+        userRef: user?._id, 
+        orderRef: openOrder?._id, 
+        // totalPrice: 0,
+        payed: false
+      }
+    }
+  }
 
   return (
     <>
-      <IonItem>
+      <IonItem color={currentOrderProduct ? 'medium' : ''}>
         <IonGrid>
           <IonRow>
             <IonCol>{product.name}</IonCol>
@@ -26,13 +49,16 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
               <IonItem>
                 <IonInput
                   type="number"
+                  placeholder={currentOrderProduct?.qty.toString()}
                   value={productQty}
                   onIonChange={e => setProductQty(Number(e.detail.value))}
                 />
               </IonItem>
             </IonCol>
             <IonCol className="ion-text-center">
-              <IonButton>
+              <IonButton
+                onClick={handleAddProductClick}
+              >
                 <IonIcon icon={addOutline} />
               </IonButton>
             </IonCol>

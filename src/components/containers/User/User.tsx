@@ -33,11 +33,16 @@ const UserPage: React.FC = () => {
       dispatch({ type: UserStateActionTypes.FETCH });
       Fire.userOrdersListener(user._id, userOrders => {
         dispatch({ type: UserStateActionTypes.SET_USER_ORDERS, payload: userOrders });
-      })
+      });
     }
   }, [dispatch, user]);
 
-
+  useEffect(() => {
+    const currentOrder = userOrders.find(order => order.orderRef === openOrder?._id);
+    if (currentOrder) {
+      dispatch({ type: UserStateActionTypes.SET_CURRENT_ORDER, payload: currentOrder });
+    }
+  }, [dispatch, openOrder, userOrders])
 
   return (
     <IonPage>

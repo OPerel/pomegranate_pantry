@@ -23,7 +23,7 @@ const OrderListItem: React.FC<OrderListItemProps> = ({ order }) => {
     <IonItem routerLink={`${ROUTES.ORDER}/${order._id}`} detail={true} data-testid="order-list-item">
       <IonGrid>
         <IonRow>
-          <IonCol>{`${order?.createdAt.getDate()}/${order?.createdAt.getMonth()}/${order?.createdAt.getFullYear()}`}</IonCol>
+          <IonCol>{`${order?.createdAt.toLocaleDateString('he')}`}</IonCol>
           <IonCol>{order.totalPrice}</IonCol>
           <IonCol>{mapOrderStatusToText(order.status)}</IonCol>
         </IonRow>
