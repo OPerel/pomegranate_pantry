@@ -13,7 +13,7 @@ import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { getOrderStatus } from '../utils/mapOrderStatus';
-import { calculateOrderUsers } from '../utils/calculateOrderPrices';
+import { calculateOrderTotals } from '../utils/calculateOrderPrices';
 import { User, Order, Product, OrderUser, OrderProduct, OrderUserProduct } from '../types/interfaces';
 import { ORDER_STATUS } from '../constants';
 
@@ -26,6 +26,13 @@ const firebaseConfig = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_APP_ID,
 };
+
+interface NewOrderProduct {
+  orderRef: string;
+  productRef: string;
+  currentOrder: string | null;
+  qty: number;
+}
 
 class FirebaseService {
   private db: app.database.Database;
@@ -183,9 +190,7 @@ class FirebaseService {
     const orderUsersRef = this.getColRef('orderUsers')
       .orderByChild('orderRef')
       .equalTo(orderId);
-    const orderProductsRef = this.getColRef('orderProducts')
-      .orderByChild('orderRef')
-      .equalTo(orderId);
+    const orderProductsRef = this.getColRef('orderProducts').child(orderId);
     
     // observables
     const orderState$ = object(orderRef);
@@ -203,13 +208,21 @@ class FirebaseService {
           createdAt: new Date(val.createdAt),
           closingTime: new Date(val.closingTime)
         };
-        const orderUsersObjList = orderUsers.map(orderUser => ({
-          ...orderUser.snapshot.val(),
-          _id: orderUser.snapshot.key
-        }));
+        const orderUsersObjList = orderUsers.map(orderUser => {
+          const val = orderUser.snapshot.val();
+          return {
+            ...val,
+            _id: orderUser.snapshot.key,
+            products: Object.keys(val.products).map(key => ({
+              productRef: key,
+              qty: val.products[key]
+            }))
+          }
+        });
         const orderProductsObjList = orderProducts.map(orderProduct => ({
           ...orderProduct.snapshot.val(),
-          _id: orderProduct.snapshot.key 
+          productRef: orderProduct.snapshot.key,
+          orderRef: order.snapshot.key
         }));
         return [orderObj, orderUsersObjList, orderProductsObjList];
       }),
@@ -224,9 +237,9 @@ class FirebaseService {
 
             /** 
              * total qty of orderProduct
-             * first reduce al product object from orderUsers to one array,
-             * then filter the relevant product,
-             * reduce the qty from the users' products objects
+             * first reduce all product objects from orderUsers to one array,
+             * then filter the relevant products,
+             * reduce the total qty from the users' product objects
              */
             const totalQty = orderUsers.reduce((acc, orderUser) => {
               return acc.concat(orderUser.products);
@@ -257,7 +270,7 @@ class FirebaseService {
 
         if (updateOrderStatus === ORDER_STATUS.PAYING && !orderObj.totalPrice) {
           // update all orderUser.totalPrice
-          calculateOrderUsers(orderObj);
+          calculateOrderTotals(orderObj);
         }
 
         if (updateOrderStatus !== orderObj.status) {
@@ -302,10 +315,17 @@ class FirebaseService {
     const userOrders$ = list(userOrdersRef);
     userOrders$.pipe(
       map(userOrders => {
-        return userOrders.map(order => ({
-          ...order.snapshot.val(),
-          _id: order.snapshot.key
-        }))
+        return userOrders.map(order => {
+          const val = order.snapshot.val();
+          return {
+            ...val,
+            _id: order.snapshot.key,
+            products: Object.keys(val.products).map(key => ({
+              productRef: key,
+              qty: val.products[key]
+            }))
+          }
+        })
       })
     )
     .subscribe(data => {
@@ -313,24 +333,36 @@ class FirebaseService {
     })
   }
 
-  public orderProductsListener = async (
-    orderId: string,
-    cb: (orderProducts: OrderProduct[]) => void
-  ) => {
-    const orderProductsRef = this.getColRef('orderProducts')
-      .orderByChild('orderRef')
-      .equalTo(orderId);
+  // public orderProductsListener = async (
+  //   orderId: string,
+  //   cb: (orderProducts: OrderProduct[]) => void
+  // ) => {
+  //   const orderProductsRef = this.getColRef('orderProducts')
+  //     .orderByChild('orderRef')
+  //     .equalTo(orderId);
 
-    const orderProducts$ = object(orderProductsRef);
+  //   const orderProducts$ = object(orderProductsRef);
 
-    orderProducts$.subscribe(data => {
-      cb(this.parseSnapshot(data.snapshot))
-    })
-  }
+  //   orderProducts$.subscribe(data => {
+  //     cb(this.parseSnapshot(data.snapshot))
+  //   })
+  // }
 
   /**
    * Write
    */
+
+  // General writes
+  public updateEntry = async (collection: string, id: string, updatedObj: any) => {
+    try {
+      await this.db.ref(`${collection}/${id}`).update(updatedObj);
+      console.log(`item "${collection}/${id}" updated`);
+    } catch (err) {
+      console.log('error updating entry: ', err)
+    }
+  }
+
+  // Admin writes
   public addNewOrder = async (closingTime: Date) => {
     const newOrder = {
       status: 'open',
@@ -355,15 +387,6 @@ class FirebaseService {
     }
   }
 
-  public updateEntry = async (collection: string, id: string, updatedObj: any) => {
-    try {
-      await this.db.ref(`${collection}/${id}`).update(updatedObj);
-      console.log(`item "${collection}/${id}" updated`);
-    } catch (err) {
-      console.log('error updating entry: ', err)
-    }
-  }
-
   public updateOrderUsersPrice = async (bulkUpdateObj: { [key: string]: number }) => {
     try {
       await this.getColRef('orderUsers').update(bulkUpdateObj)
@@ -371,6 +394,62 @@ class FirebaseService {
     } catch (err) { 
       console.warn('Error updating prices: ', err);
     }
+  }
+
+
+  // User writes
+  public createNewOrderUser = async (newOrderUser: OrderUser) => {
+    try {
+      const newOrderUserRes = await this.getColRef('orderUsers').push(newOrderUser);
+      console.log('New order user created: ', (await newOrderUserRes.get()).val())
+    } catch (err) {
+      console.warn('Error creating new order user: ', err);
+    }
+  }
+
+  public addProductToOrder = async ({
+    orderRef, productRef, qty, currentOrder
+  }: NewOrderProduct) => {
+    this.db.ref(`orderProducts/${orderRef}/${productRef}`)
+      .transaction(currentProduct => {
+        if (currentProduct === null) {
+          return { price: 0 };
+        } else {
+          console.log('product exists');
+          return;;
+        }
+      }, (error) => {
+        if (error) {
+          console.warn('Transaction failed: ', error)
+        } else {
+          // update orderUser.products
+          this.db.ref(`orderUsers/${currentOrder}`).transaction(currentOrder => {
+            console.log('currentOrder: ', currentOrder);
+            if (currentOrder === null) {
+              this.getColRef('orderUsers').push({
+                orderRef,
+                userRef: this.auth.currentUser?.uid,
+                payed: false,
+                products: {
+                  [productRef]: qty
+                }
+              })
+            } else {
+              return {
+                ...currentOrder,
+                products: {
+                  ...currentOrder.products,
+                  [productRef]: qty
+                }
+              }
+            }
+          }, (error) => {
+            if (error) {
+              console.warn('Error updating / creating orderUser')
+            }
+          })
+        }
+      })    
   }
 
 }

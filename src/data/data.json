@@ -1,77 +1,85 @@
 {
   "orderProducts" : {
-    "012" : {
-      "orderRef" : "-MNArMQr-Jxt0gE8-Szk",
-      "price" : 19,
-      "productRef" : "qwerty4"
+    "1" : {
+      "qwerty1" : {
+        "price" : 0
+      },
+      "qwerty2" : {
+        "price" : 0
+      },
+      "qwerty3" : {
+        "price" : 0
+      },
+      "qwerty4" : {
+        "price" : 0
+      },
+      "qwertyy7" : {
+        "price" : 0
+      }
     },
-    "123" : {
-      "orderRef" : "1",
-      "productRef" : "qwerty1"
-    },
-    "234" : {
-      "orderRef" : "1",
-      "productRef" : "qwerty3"
-    },
-    "456" : {
-      "orderRef" : "1",
-      "productRef" : "qwerty2"
-    },
-    "789" : {
-      "orderRef" : "-MNArMQr-Jxt0gE8-Szk",
-      "price" : 50,
-      "productRef" : "qwerty3"
+    "-MNArMQr-Jxt0gE8-Szk" : {
+      "qwerty3" : {
+        "price" : 50
+      },
+      "qwerty4" : {
+        "price" : 19
+      }
     }
   },
-  "orderUsers" : [ null, {
-    "orderRef" : "1",
-    "payed" : false,
-    "products" : [ {
-      "productRef" : "qwerty1",
-      "qty" : 2
-    }, {
-      "productRef" : "qwerty2",
-      "qty" : 3
-    } ],
-    "userRef" : "ZMTBBeoL4ja79HFVDVoTUHDtzJw1"
-  }, {
-    "_id" : "2",
-    "orderRef" : "-MNArMQr-Jxt0gE8-Szk",
-    "payed" : false,
-    "products" : [ {
-      "productRef" : "qwerty3",
-      "qty" : 2
-    }, {
-      "productRef" : "qwerty4",
-      "qty" : 1
-    } ],
-    "totalPrice" : 119,
-    "userRef" : "b"
-  }, {
-    "orderRef" : "1",
-    "payed" : false,
-    "products" : [ {
-      "productRef" : "qwerty3",
-      "qty" : 4
-    } ],
-    "totalPrice" : "",
-    "userRef" : "d2Vx9fjakoNxcqvP2nJAaIa55a72"
-  }, {
-    "_id" : "4",
-    "orderRef" : "-MNArMQr-Jxt0gE8-Szk",
-    "payed" : true,
-    "products" : [ {
-      "productRef" : "qwerty3",
-      "qty" : 2
-    } ],
-    "totalPrice" : 100,
-    "userRef" : "d2Vx9fjakoNxcqvP2nJAaIa55a72"
-  } ],
+  "orderUsers" : {
+    "1" : {
+      "orderRef" : "1",
+      "payed" : false,
+      "products" : {
+        "qwerty1" : 2,
+        "qwerty2" : 3,
+        "qwertyy7" : 1
+      },
+      "userRef" : "ZMTBBeoL4ja79HFVDVoTUHDtzJw1"
+    },
+    "2" : {
+      "orderRef" : "-MNArMQr-Jxt0gE8-Szk",
+      "payed" : false,
+      "products" : {
+        "qwerty3" : 2,
+        "qwerty4" : 1
+      },
+      "totalPrice" : 119,
+      "userRef" : "b"
+    },
+    "3" : {
+      "orderRef" : "1",
+      "payed" : false,
+      "products" : {
+        "qwerty3" : 4
+      },
+      "totalPrice" : "",
+      "userRef" : "d2Vx9fjakoNxcqvP2nJAaIa55a72"
+    },
+    "4" : {
+      "_id" : "4",
+      "orderRef" : "-MNArMQr-Jxt0gE8-Szk",
+      "payed" : true,
+      "products" : {
+        "qwerty3" : 2
+      },
+      "totalPrice" : 100,
+      "userRef" : "d2Vx9fjakoNxcqvP2nJAaIa55a72"
+    },
+    "-MUmomln2x913cUGrkRL" : {
+      "orderRef" : "1",
+      "payed" : false,
+      "products" : {
+        "qwerty4" : 2
+      },
+      "userRef" : "hGAwl8pxISMisy6GndQ68zunjtG2"
+    }
+  },
   "orders" : {
     "1" : {
       "closingTime" : 1619077944995,
       "createdAt" : 1607077944995,
-      "status" : "shopping"
+      "status" : "open"
     },
     "-MNArMQr-Jxt0gE8-Szk" : {
       "closingTime" : 1608616832000,
@@ -81,11 +89,6 @@
     }
   },
   "products" : {
-    "qwertt5" : {
-      "minQty" : 5,
-      "name" : "קינואה",
-      "qtyUnit" : "Kg"
-    },
     "qwerty1" : {
       "minQty" : 12,
       "name" : "טחינה הר ברכה",
@@ -104,6 +107,11 @@
     "qwerty4" : {
       "minQty" : 5,
       "name" : "חומוס",
+      "qtyUnit" : "Kg"
+    },
+    "qwerty5" : {
+      "minQty" : 5,
+      "name" : "קינואה",
       "qtyUnit" : "Kg"
     },
     "qwertyy7" : {
@@ -126,6 +134,11 @@
     "d2Vx9fjakoNxcqvP2nJAaIa55a72" : {
       "location" : "TA",
       "name" : "test user",
+      "role" : "user"
+    },
+    "hGAwl8pxISMisy6GndQ68zunjtG2" : {
+      "location" : "PH",
+      "name" : "משה",
       "role" : "user"
     }
   }

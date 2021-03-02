@@ -75,7 +75,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => 
           <IonTitle size="small">
             {`הזמנה ${order.createdAt.toLocaleDateString('he')}`} &nbsp; | &nbsp;
             <b>{mapOrderStatusToText(order.status)}</b> &nbsp; | &nbsp;
-            {`נסגר ב - ${order.closingTime.toLocaleDateString('he')}`}
+            {`נסגר להזמנות ב - ${order.closingTime.toLocaleDateString('he')}`}
           </IonTitle>
 
           {orderStatusBtnText && 

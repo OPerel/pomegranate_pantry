@@ -26,7 +26,8 @@ const UserPage: React.FC = () => {
   const [tab, setTab] = useState<string>('openOrder');
 
   const { state: { user } } = useAuthStateContext();
-  const { state: { openOrder, userOrders }, dispatch } = useUserStateContext();
+  const { state, dispatch } = useUserStateContext();
+  const { openOrder, userOrders } = state;
 
   useEffect(() => {
     if (user && user._id) {
@@ -38,11 +39,11 @@ const UserPage: React.FC = () => {
   }, [dispatch, user]);
 
   useEffect(() => {
-    const currentOrder = userOrders.find(order => order.orderRef === openOrder?._id);
-    if (currentOrder) {
-      dispatch({ type: UserStateActionTypes.SET_CURRENT_ORDER, payload: currentOrder });
-    }
-  }, [dispatch, openOrder, userOrders])
+      const currentOrder = userOrders.find(order => order.orderRef === openOrder?._id);
+      if (currentOrder) {
+        dispatch({ type: UserStateActionTypes.SET_CURRENT_ORDER, payload: currentOrder });
+      }
+  }, [dispatch, openOrder?._id, userOrders]);
 
   return (
     <IonPage>

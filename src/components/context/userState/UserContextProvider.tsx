@@ -1,5 +1,5 @@
 import React, { useReducer, createContext, useContext, useEffect } from 'react';
-import { User, Order, OrderUser, Product, OrderProduct } from '../../../types/interfaces';
+import { User, Order, OrderUser, Product } from '../../../types/interfaces';
 
 import Fire from '../../../services/Firebase';
 
@@ -9,9 +9,9 @@ interface UserState {
   user: User | null,
   openOrder: Order | null,
   userOrders: OrderUser[],
-  currentOrder: OrderUser,
+  currentOrder: OrderUser | null,
   products: { [key: string ]: Product },
-  orderProducts: OrderProduct[],
+  // orderProducts: OrderProduct[],
   error: string | null
 };
 
@@ -22,7 +22,7 @@ export enum UserStateActionTypes {
   SET_CURRENT_ORDER = 'SET_CURRENT_ORDER',
   SET_USER_ORDERS = 'SET_USER_ORDERS',
   SET_PRODUCTS = 'SET_PRODUCTS',
-  SET_ORDER_PRODUCTS = 'SET_ORDER_PRODUCTS',
+  // SET_ORDER_PRODUCTS = 'SET_ORDER_PRODUCTS',
   SET_ERROR = 'SET_ERROR'
 };
 
@@ -31,9 +31,9 @@ type UserAction =
   | { type: UserStateActionTypes.SET_USER, payload: User | null }
   | { type: UserStateActionTypes.SET_OPEN_ORDER, payload: Order | null }
   | { type: UserStateActionTypes.SET_USER_ORDERS, payload: OrderUser[] }
-  | { type: UserStateActionTypes.SET_CURRENT_ORDER, payload: OrderUser }
+  | { type: UserStateActionTypes.SET_CURRENT_ORDER, payload: OrderUser | null }
   | { type: UserStateActionTypes.SET_PRODUCTS, payload: { [key: string ]: Product } }
-  | { type: UserStateActionTypes.SET_ORDER_PRODUCTS, payload: OrderProduct[] }
+  // | { type: UserStateActionTypes.SET_ORDER_PRODUCTS, payload: OrderProduct[] }
   | { type: UserStateActionTypes.SET_ERROR, payload: string };
 
 interface UserProviderType {
@@ -47,9 +47,9 @@ const initialState: UserState = {
   user: null,
   openOrder: null,
   userOrders: [],
-  currentOrder: {} as OrderUser,
+  currentOrder: null,
   products: {},
-  orderProducts: [],
+  // orderProducts: [],
   error: null
 }
 
@@ -67,8 +67,8 @@ const reducer = (state: UserState, action: UserAction): UserState => {
         return { ...state, loading: false, currentOrder: action.payload };
     case UserStateActionTypes.SET_PRODUCTS:
       return { ...state, loading: false, products: action.payload };
-    case UserStateActionTypes.SET_ORDER_PRODUCTS:
-      return { ...state, loading: false, orderProducts: action.payload };
+    // case UserStateActionTypes.SET_ORDER_PRODUCTS:
+    //   return { ...state, loading: false, orderProducts: action.payload };
     case UserStateActionTypes.SET_ERROR:
       return { ...state, loading: false, error: action.payload };
     default:

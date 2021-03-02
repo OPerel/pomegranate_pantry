@@ -120,3 +120,8 @@ Every order view is divided to a list of the order's users, and a list of the or
 TODO: for every product with `Product.qytUnit === 'Kg'`, `OrderProduct.totalQty` has to satisfy the minimum quantity requirement for each location independently (or maybe just for PH?).
 
 ### 2 Users Views
+
+
+### Login
+- rimon@mail.com - testadmin
+- testuser1@mail.com - rimontesting1

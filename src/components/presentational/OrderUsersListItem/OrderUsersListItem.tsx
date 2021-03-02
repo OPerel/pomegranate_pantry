@@ -44,7 +44,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
                 disabled={order?.status !== ORDER_STATUS.PAYING}
                 color={order?.status === ORDER_STATUS.PAYING && !orderUser.payed ? 'danger' : 'primary'}
                 onClick={order ? () => {
-                  Fire.updateEntry('orderUsers', orderUser._id, {
+                  Fire.updateEntry('orderUsers', orderUser._id as string, {
                     payed: !orderUser.payed
                   });
                 } : () => {}}

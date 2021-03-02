@@ -1,14 +1,14 @@
 import Fire from '../services/Firebase';
 import { Order } from '../types/interfaces';
 
-const calculateOrderUsers = (order: Order): void => {
+const calculateOrderTotals = (order: Order): void => {
   const { orderUsers, orderProducts } = order;
   let updateObj: {[key: string]: number} = {};
   let orderTotal = 0;
 
   orderUsers.forEach(({ products, _id }) => {
     let orderUserTotal = 0;
-    products.forEach(({ productRef, qty }) => {
+    products?.forEach(({ productRef, qty }) => {
       const productPrice = orderProducts.find(p => p.productRef === productRef)?.price as number;
       const orderUserProductPrice = productPrice * qty;
       orderUserTotal += orderUserProductPrice;
@@ -21,5 +21,5 @@ const calculateOrderUsers = (order: Order): void => {
 }
 
 export {
-  calculateOrderUsers
+  calculateOrderTotals
 }

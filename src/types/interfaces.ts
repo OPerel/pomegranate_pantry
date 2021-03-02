@@ -40,11 +40,11 @@ export interface OrderUserProduct {
 }
 
 export interface OrderUser {
-  _id: string;
+  _id?: string;
   products: OrderUserProduct[]; // array of Products`
   userRef: string // a ref to the user
   orderRef: string // a ref to the order
-  totalPrice: number; // total price of products.qty
+  totalPrice: number | null; // total price of products.qty
   payed: boolean;
 }
 

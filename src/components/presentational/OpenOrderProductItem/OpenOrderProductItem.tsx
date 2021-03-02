@@ -11,34 +11,25 @@ import {
 } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
 import { useUserStateContext } from '../../context/userState/UserContextProvider';
+import Fire from '../../../services/Firebase';
 import { Product } from '../../../types/interfaces';
 
 const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
 
-  const { state: { currentOrder, user, openOrder, orderProducts } } = useUserStateContext();
+  const { state: { currentOrder, openOrder } } = useUserStateContext();
   const [productQty, setProductQty] = useState<number>();
 
-  const currentOrderProduct = currentOrder.products?.find(p => p.productRef === product._id);
-  const cuurentProductOrderProduct = orderProducts.find(p => p.productRef === product._id);
-  
-  // handling user adding a product
-  // requires updating / creating both an OrderUser and an OrderProduct (trx)
-  const handleAddProductClick = () => {
-    if (currentOrder) {
+  const currentOrderProduct = currentOrder?.products?.find(p => p.productRef === product._id);
 
-    } else {
-      const newOrderUser = {
-        products: [
-          {
-            productRef: product._id,
-            qty: productQty
-          }
-        ], 
-        userRef: user?._id, 
-        orderRef: openOrder?._id, 
-        payed: false
-      }
-    }
+  const handleAddProductClick = () => {
+    const newOrderProduct = {
+      orderRef: openOrder?._id as string,
+      productRef: product._id as string,
+      currentOrder: currentOrder ? currentOrder._id as string : null,
+      qty: productQty as number
+    };
+
+    Fire.addProductToOrder(newOrderProduct);
   }
 
   return (
@@ -59,6 +50,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
             </IonCol>
             <IonCol className="ion-text-center">
               <IonButton
+                disabled={!productQty}
                 onClick={handleAddProductClick}
               >
                 <IonIcon icon={addOutline} />
