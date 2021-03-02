@@ -37,7 +37,7 @@ const AuthGuard = (condition: (user: User) => boolean) => {
       }, [history, user, loading]);
 
       if (loading) {
-        return <IonLoading cssClass='auth-loader' isOpen={loading} message={'טוען משתמש...'} />;
+        return <IonLoading cssClass='auth-loader' isOpen={loading} message={'טוען נתונים...'} />;
       }
 
       return <Component { ...props } />;
