@@ -22,6 +22,7 @@ import './Orders.css';
 import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
 import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
 // import { Order } from '../../../types/interfaces';
+import { ORDER_STATUS } from '../../../constants';
 import Fire from '../../../services/Firebase';
 
 const Orders: React.FC = () => {
@@ -37,6 +38,8 @@ const Orders: React.FC = () => {
   //     e.detail.complete();
   //   }, 3000);
   // };
+
+  const allOrdersAreClosed = orders.every(order => order.status === ORDER_STATUS.CLOSED);
 
   const addOrder = async (): Promise<void> => {
     if (dateValue) {
@@ -71,7 +74,11 @@ const Orders: React.FC = () => {
           </IonTitle>
 
           <IonLabel slot="end">
-            <IonButton onClick={() => setShowDateModal(true)} data-testid="add-order-button">
+            <IonButton
+              disabled={!allOrdersAreClosed}
+              onClick={() => setShowDateModal(true)}
+              data-testid="add-order-button"
+            >
               <IonIcon slot="start" icon={addOutline} />הזמנה חדשה
             </IonButton>
           </IonLabel>
