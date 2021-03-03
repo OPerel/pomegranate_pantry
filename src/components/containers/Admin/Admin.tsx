@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Switch, RouteComponentProps, Link } from 'react-router-dom';
 
 import { RouteWithSubRoutes } from '../../../App';
@@ -17,7 +17,6 @@ import Orders from '../Orders/Orders';
 import Products from '../Products/Products';
 import AuthGuard from '../Auth/AuthGuard';
 import { useAuthStateContext } from '../../context/authState/AuthContextProvider';
-import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider'; 
 import Fire from '../../../services/Firebase';
 import { User } from '../../../types/interfaces';
 import { ROLES, ROUTES } from '../../../constants';
@@ -25,19 +24,6 @@ import { ROLES, ROUTES } from '../../../constants';
 const Admin: React.FC<{routes: RouteComponentProps<{ id: string }>[]}> = ({ routes }) => {
   const [tab, setTab] = React.useState<string>('orders');
   const { state: { user } } = useAuthStateContext();
-  const { dispatch } = useAdminStateContext();
-
-  useEffect(() => {
-    dispatch({ type: AdminStateActionTypes.FETCH })
-    Fire.getUsers().then(users => {
-      dispatch({ type: AdminStateActionTypes.SET_USERS, payload: users });
-    });
-
-    dispatch({ type: AdminStateActionTypes.FETCH })
-    Fire.getProducts().then(products => {
-      dispatch({ type: AdminStateActionTypes.SET_PRODUCTS, payload: products })
-    });
-  }, [dispatch])
 
   return (
     <>

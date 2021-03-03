@@ -1,5 +1,5 @@
 import React, { useReducer, createContext, useContext } from 'react';
-
+import Fire from '../../../services/Firebase';
 import { Order, Product, User } from '../../../types/interfaces';
 
 // Types
@@ -63,10 +63,27 @@ export const useAdminStateContext = () => useContext(AdminStateContext);
 
 // context provider HOC
 const AdminStateProvider = <P extends {}>(Component: React.ComponentType<P>): React.FC<P> => {
-  const WithState: React.ComponentType<P> = (props) => {
+  const WithAdminState: React.ComponentType<P> = (props) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    
+    React.useEffect(() => {
+      dispatch({ type: AdminStateActionTypes.FETCH })
+      Fire.ordersCollectionListener(orders => {
+        dispatch({ type: AdminStateActionTypes.SET_ORDERS, payload: orders });
+      });
+
+      dispatch({ type: AdminStateActionTypes.FETCH })
+      Fire.getUsers(users => {
+        dispatch({ type: AdminStateActionTypes.SET_USERS, payload: users });
+      });
+
+      dispatch({ type: AdminStateActionTypes.FETCH })
+      Fire.getProducts().then(products => {
+        dispatch({ type: AdminStateActionTypes.SET_PRODUCTS, payload: products })
+      });
+  
+      return () => Fire.ordersCollectionOff();
+    }, [dispatch])    
 
     return (
       <AdminStateContext.Provider value={{ state, dispatch }}>
@@ -75,7 +92,7 @@ const AdminStateProvider = <P extends {}>(Component: React.ComponentType<P>): Re
     )
   }
 
-  return WithState;
+  return WithAdminState;
 }
 
 export default AdminStateProvider;

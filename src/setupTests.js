@@ -16,6 +16,11 @@ jest.mock('./services/Firebase', () => {
       name: 'e rimon',
       location: 'TA',
       role: 'rimon'
+    },
+    'c': {
+      name: 'moshe',
+      location: 'TA',
+      role: 'user'
     }
   };
 
@@ -166,12 +171,12 @@ jest.mock('./services/Firebase', () => {
 
   return {
     authStateListener: (cb) => {cb(userData, null)},
-    getUsers: async () => userData,
+    getUsers: (cb) => {cb(userData)},
     getProducts: async () => productsData,
     ordersCollectionListener: (cb) => {cb(ordersData)},
     productsCollectionListener: (cb) => {cb(productsData)},
-    orderUsersCollectionListener: (id, cb) => {cb(orderUsersData)},
-    orderProductsCollectionListener: (id, cb) => {cb(orderProductsData)},
+    // orderUsersCollectionListener: (id, cb) => {cb(orderUsersData)},
+    // orderProductsCollectionListener: (id, cb) => {cb(orderProductsData)},
     orderListener: (id, cb) => {cb(ordersData[0])},
     ordersCollectionOff: () => {},
     addNewOrder: () => {

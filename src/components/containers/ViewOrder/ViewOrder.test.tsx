@@ -26,7 +26,7 @@ test('should display order users list', async () => {
     <ViewOrder {...routeComponentPropsMock} />,
     { route: 'admin/order/1' }
   );
-  expect(await findAllByTestId('order-user-list-item')).toHaveLength(3);
+  expect(await findAllByTestId('order-user-list-item')).toHaveLength(2);
 });
 
 test('should click on products button and display list', async () => {
@@ -35,5 +35,5 @@ test('should click on products button and display list', async () => {
     { route: 'admin/order/1' }
   );
   fireEvent.click(await findByText('מוצרים'));
-  expect(await findAllByTestId('product-order-list-item')).toHaveLength(4);
+  expect(await findAllByTestId('product-order-list-item')).toHaveLength(2);
 })

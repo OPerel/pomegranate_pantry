@@ -68,7 +68,11 @@ class FirebaseService {
    * Get collection
    */
 
-  public getUsers = async () => (await this.getColRef('users').get()).val();
+  public getUsers = async (cb: (users: { [key: string]: User }) => void) => {
+    this.getColRef('users').once('value', snapshot => {
+      cb(snapshot.val());
+    })
+  };
   public getProducts = async () => (await this.getColRef('products').get()).val();
 
   /**

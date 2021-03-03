@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   IonContent,
   IonHeader,
@@ -19,16 +19,14 @@ import {
 import { addOutline } from 'ionicons/icons';
 import './Orders.css';
 
-import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
+import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
-// import { Order } from '../../../types/interfaces';
 import { ORDER_STATUS } from '../../../constants';
 import Fire from '../../../services/Firebase';
 
 const Orders: React.FC = () => {
 
-  const { state: { orders, loading }, dispatch } = useAdminStateContext();
-  // console.log('Order state: ', state)
+  const { state: { orders, loading } } = useAdminStateContext();
 
   const [showDateModal, setShowDateModal] = React.useState<boolean>(false);
   const [dateValue, setDateValue] = React.useState<string | null | undefined>(null);
@@ -51,15 +49,6 @@ const Orders: React.FC = () => {
       }
     }
   }
-
-  useEffect(() => {
-    dispatch({ type: AdminStateActionTypes.FETCH })
-    Fire.ordersCollectionListener(orders => {
-      dispatch({ type: AdminStateActionTypes.SET_ORDERS, payload: orders });
-    });
-
-    return () => Fire.ordersCollectionOff();
-  }, [dispatch])
 
   return (
     <IonContent fullscreen data-testid="admin-orders-list">
