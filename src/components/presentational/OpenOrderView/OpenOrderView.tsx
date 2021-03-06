@@ -23,7 +23,7 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
 
   useEffect(() => {
     dispatch({ type: UserStateActionTypes.FETCH });
-    Fire.getProducts().then(productsObj => {
+    Fire.getProducts(productsObj => {
       dispatch({ type: UserStateActionTypes.SET_PRODUCTS, payload: productsObj })
       
     });

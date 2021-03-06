@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, act } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { Router, Route } from 'react-router-dom';
 import { createMemoryHistory, History, MemoryHistory } from 'history';
 
@@ -19,7 +19,8 @@ const customRender = (
     route = '/',
     history = createMemoryHistory({ initialEntries: [route] }),
     ...options
-  }: CustomRenderPropsTypes = {} as CustomRenderPropsTypes
+  }: CustomRenderPropsTypes = {} as CustomRenderPropsTypes,
+  auth: boolean = true
 ) => {
 
   const StateWrapper: React.FC = ({ children }) => <>{children}</>;
@@ -29,12 +30,12 @@ const customRender = (
     <AuthStateContext.Provider value={{
       state: {
         loading: false,
-        user: {
+        user: auth ? {
           _id: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
           name: 'e rimon',
           location: 'TA',
           role: 'rimon'
-        },
+        } : null,
         error: null
       },
       dispatch: () => {}

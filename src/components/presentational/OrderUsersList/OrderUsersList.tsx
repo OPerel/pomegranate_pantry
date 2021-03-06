@@ -17,13 +17,14 @@ import './OrderUsersList.css';
 
 const OrderUsersList: React.FC<{orderUsers: OrderUser[]}> = ({ orderUsers }) => {
 
-  const [userFilter, setUserFilter] = useState<string | null>(null);
+  const [userFilter, setUserFilter] = React.useState<string | null>(null);
   const { state: { users } } = useAdminStateContext();
   
   const filteredOrderUsers = userFilter ?
     orderUsers.filter(({ userRef }) => users[userRef].location === userFilter) :
     orderUsers;
 
+    // console.log('filteredOrderUsers: ', filteredOrderUsers)
   return (
     <IonList>
       <div className="ion-justify-content-between">
@@ -33,11 +34,12 @@ const OrderUsersList: React.FC<{orderUsers: OrderUser[]}> = ({ orderUsers }) => 
           <IonSelect
             interface="popover"
             value={userFilter}
-            onIonChange={e => setUserFilter(e.detail.value)}
+            onIonChange={e => {console.log('e.detail.value: ', e.detail.value); setUserFilter(e.detail.value)}}
+            data-testid="filter-user-location"
           >
-            <IonSelectOption value={null}>הכל</IonSelectOption>
-            <IonSelectOption value="TA">תל אביב</IonSelectOption>
-            <IonSelectOption value="PH">פרדס חנה</IonSelectOption>
+            <IonSelectOption value={null} data-testid="filter-by-all">הכל</IonSelectOption>
+            <IonSelectOption value="TA" data-testid="filter-by-ta">תל אביב</IonSelectOption>
+            <IonSelectOption value="PH" data-testid="filter-by-ph">פרדס חנה</IonSelectOption>
           </IonSelect>
         </IonItem>
       </div>

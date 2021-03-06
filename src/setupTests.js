@@ -19,7 +19,7 @@ jest.mock('./services/Firebase', () => {
     },
     'c': {
       name: 'moshe',
-      location: 'TA',
+      location: 'PH',
       role: 'user'
     }
   };
@@ -97,7 +97,7 @@ jest.mock('./services/Firebase', () => {
           products: [{ productRef: 'qwerty1', qty: 2 }, { productRef: 'qwerty2', qty: 3 }],
           userRef: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
           orderRef: '1',
-          totalPrice: 56,
+          totalPrice: 110,
           payed: false
         },
         {
@@ -172,7 +172,7 @@ jest.mock('./services/Firebase', () => {
   return {
     authStateListener: (cb) => {cb(userData, null)},
     getUsers: (cb) => {cb(userData)},
-    getProducts: async () => productsData,
+    getProducts: (cb) => {cb(productsData)},
     ordersCollectionListener: (cb) => {cb(ordersData)},
     productsCollectionListener: (cb) => {cb(productsData)},
     // orderUsersCollectionListener: (id, cb) => {cb(orderUsersData)},

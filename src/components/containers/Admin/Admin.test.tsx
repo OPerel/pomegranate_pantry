@@ -25,3 +25,9 @@ test('should change to products view on click button', async () => {
   fireEvent.click(await findByTestId('admin-products-button'));
   await findByTestId('admin-products-list');
 });
+
+test('should change to users view on click button', async () => {
+  const { findByTestId } = render(<Admin routes={[]} />, { route: '/admin' });
+  fireEvent.click(await findByTestId('admin-users-button'));
+  await findByTestId('admin-users-list');
+});

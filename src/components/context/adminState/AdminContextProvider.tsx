@@ -78,18 +78,18 @@ const AdminStateProvider = <P extends {}>(Component: React.ComponentType<P>): Re
       });
 
       dispatch({ type: AdminStateActionTypes.FETCH })
-      Fire.getProducts().then(products => {
+      Fire.getProducts(products => {
         dispatch({ type: AdminStateActionTypes.SET_PRODUCTS, payload: products })
       });
   
       return () => Fire.ordersCollectionOff();
     }, [dispatch])    
 
-    return (
+    return Component ? (     // ternary return is fixing `Element type is invalid error on hot reloading`
       <AdminStateContext.Provider value={{ state, dispatch }}>
         <Component {...props} />
       </AdminStateContext.Provider>
-    )
+    ) : null;
   }
 
   return WithAdminState;

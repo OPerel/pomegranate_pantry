@@ -87,7 +87,7 @@ const Orders: React.FC = () => {
         ) : <IonSpinner color="primary" style={{ display: 'block', margin: '50px auto' }}/>}
       </IonList>
 
-      <IonModal isOpen={showDateModal} backdropDismiss={false} data-testid="date-modal">
+      <IonModal isOpen={showDateModal} data-testid="date-modal">
         <h3>בחר תאריך סיום</h3>
         <IonLabel>
           בחר תאריך

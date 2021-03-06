@@ -19,8 +19,8 @@ import Fire from '../../../services/Firebase';
 
 const Login: React.FC = () => {
 
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = React.useState<string>('');
+  const [password, setPassword] = React.useState<string>('');
   const [error, setError] = useState<string | null>(null);
   
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -39,7 +39,7 @@ const Login: React.FC = () => {
 
       <IonHeader>
         <IonToolbar>
-          <IonTitle>כניסה</IonTitle>
+          <IonTitle>עמוד כניסה</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -49,17 +49,31 @@ const Login: React.FC = () => {
             <IonLabel position="floating">
               אי-מייל
             </IonLabel>
-            <IonInput type="email" name="email" value={email} required onIonChange={e => setEmail(e.detail.value as string)} />
+            <IonInput
+              type="email"
+              name="email"
+              value={email}
+              required
+              onIonChange={e => setEmail(e.detail.value as string)}
+              data-testid="email-input"
+            />
           </IonItem>
 
           <IonItem>
             <IonLabel position="floating">
               סיסמה
             </IonLabel>
-            <IonInput type="password" name="password" value={password} required onIonChange={e => setPassword(e.detail.value as string)} />
+            <IonInput
+              type="password"
+              name="password"
+              value={password}
+              required
+              onIonChange={e => setPassword(e.detail.value as string)}
+              data-testid="password-input"
+            />
           </IonItem>
 
-          <IonButton type="submit">כניסה</IonButton>
+          <IonButton type="submit" data-testid="login-button">כניסה</IonButton>
         </form>
 
         {error && <IonTitle dir="ltr" color="danger" style={{ textAlign: 'center', margin: '2%' }}>{error}</IonTitle>}

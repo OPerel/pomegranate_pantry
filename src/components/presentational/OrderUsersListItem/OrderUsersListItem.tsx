@@ -65,7 +65,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
         </IonGrid>
       </IonItem>
       {itemOpen ? (
-        <IonList>
+        <IonList data-testid="order-user-item-details">
           <IonListHeader className="nested-list">
             <IonLabel>מוצר</IonLabel>
             <IonLabel>מחיר</IonLabel>
@@ -75,7 +75,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
           {orderUser.products?.map(({ productRef, qty }) => {
             const orderProduct = order?.orderProducts.find(p => p.productRef === productRef);
             return (
-              <IonItem key={productRef}>
+              <IonItem key={productRef} data-testid="order-user-product-list-item">
                 <IonGrid>
                   <IonRow onClick={() => setItemOpen(!itemOpen)}>
                     <IonCol><p>{products[productRef].name}</p></IonCol>
