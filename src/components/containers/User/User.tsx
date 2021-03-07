@@ -49,7 +49,7 @@ const UserPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle slot="start">
+          <IonTitle slot="start" role="greet-user-by-name">
             שלום {user?.name}
           </IonTitle>
           {user?.role === ROLES.ADMIN && 
@@ -66,8 +66,16 @@ const UserPage: React.FC = () => {
       <IonContent>
         <IonToolbar color="dark">
           <IonButtons>
-            <IonButton onClick={() => setTab('openOrder')} disabled={tab === 'openOrder'}>הזמנה נוכחית</IonButton>
-            <IonButton onClick={() => setTab('oldOrders')} disabled={tab === 'oldOrders'}>הזמנות ישנות</IonButton>
+            <IonButton
+              onClick={() => setTab('openOrder')}
+              disabled={tab === 'openOrder'}
+              role="open-order-tab"
+            >הזמנה נוכחית</IonButton>
+            <IonButton
+              onClick={() => setTab('oldOrders')}
+              disabled={tab === 'oldOrders'}
+              role="old-orders-tab"
+            >הזמנות ישנות</IonButton>
           </IonButtons>
         </IonToolbar>
         

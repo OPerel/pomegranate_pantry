@@ -50,35 +50,17 @@ const order = {
 }
 
 test('should display no open order msg when prop is null', async () => {
-  render(<OpenOrderView openOrder={null} />, { route: 'admin/' }, true, 'user');
+  render(<OpenOrderView openOrder={null} />, { route: '/user' }, true, 'user');
   expect(await screen.findByTestId('no-open-order-msg')).toBeInTheDocument();
   expect(await screen.findByTestId('no-open-order-msg')).toHaveTextContent('אין הזמנה פתוחה כרגע');
 });
 
 test('should display correct order closing date and status in title', async () => {
-  render(<OpenOrderView openOrder={order} />, { route: 'admin/' }, true, 'user');
-  expect(await screen.findByTestId('open-order-title')).toHaveTextContent('פתוח להזמנות | נסגרת ב - 9/28/2020');
+  render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
+  expect(await screen.findByTestId('open-order-titles')).toHaveTextContent('פתוח להזמנות | נסגרת ב - 9/28/2020');
 });
 
 test('should display correct number of products', async () => {
-  render(<OpenOrderView openOrder={order} />, { route: 'admin/' }, true, 'user');
+  render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
   expect(await screen.findAllByTestId('open-order-product-item')).toHaveLength(6);
 });
-
-// test('should display correct status text for order in completion', async () => {
-//   let newOrder = order;
-//   newOrder.status = 'completion';
-
-//   render(<OpenOrderView openOrder={order} />, { route: 'admin/' });
-//   expect(await screen.findByTestId('order-item-status')).toHaveTextContent('פתוח להשלמות');
-// });
-
-// test('should display correct status text and totalPrice for closed order', async () => {
-//   let newOrder = order;
-//   newOrder.status = 'closed';
-//   newOrder.totalPrice = 100;
-
-//   render(<OpenOrderView openOrder={order} />, { route: 'admin/' });
-//   expect(await screen.findByTestId('order-item-status')).toHaveTextContent('ההזמנה סגורה');
-//   expect(await screen.findByTestId('order-item-totalPrice')).toHaveTextContent('100');
-// });

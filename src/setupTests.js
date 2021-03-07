@@ -59,7 +59,7 @@ jest.mock('./services/Firebase', () => {
 
   const orderUsersData = [
     {
-      _id: '1',
+      _id: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
       products: [{ product: 'qwerty1', qty: 2 }, { product: 'qwerty2', qty: 3 }],
       userRef: 'a',
       orderRef: '1',
@@ -179,6 +179,7 @@ jest.mock('./services/Firebase', () => {
     // orderProductsCollectionListener: (id, cb) => {cb(orderProductsData)},
     orderListener: (id, cb) => {cb(ordersData[0])},
     openOrderListener: (cb) => {cb(ordersData[0])},
+    userOrdersListener: (id, cb) => {cb([orderUsersData[0]])},
     ordersCollectionOff: () => {},
     addNewOrder: () => {
       // const orderWithId = { ...orderDetails, _id: (ordersData.length + 1).toString() }
