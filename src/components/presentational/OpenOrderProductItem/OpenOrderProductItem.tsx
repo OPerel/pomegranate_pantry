@@ -44,6 +44,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
                 placeholder={currentOrderProduct?.qty.toString()}
                 value={productQty}
                 onIonChange={e => setProductQty(Number(e.detail.value))}
+                role="order-product-qty-input"
               />
             </IonItem>
           </IonCol>
@@ -51,6 +52,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
             <IonButton
               disabled={!productQty}
               onClick={handleAddProductClick}
+              role="add-product-to-order-button"
             >
               <IonIcon icon={addOutline} />
             </IonButton>

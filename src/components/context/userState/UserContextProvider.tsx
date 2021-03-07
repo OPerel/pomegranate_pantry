@@ -1,6 +1,7 @@
 import React, { useReducer, createContext, useContext, useEffect } from 'react';
 import { User, Order, OrderUser, Product } from '../../../types/interfaces';
 
+import { useAuthStateContext } from '../authState/AuthContextProvider';
 import Fire from '../../../services/Firebase';
 
 // types
@@ -84,14 +85,34 @@ export const useUserStateContext = () => useContext(UserStateContext);
 const UserStateProvider = <P extends {}>(Component: React.ComponentType<P>): React.FC<P> => {
   const WithUserState: React.ComponentType<P> = (props) => {
 
+    const { state: { user } } = useAuthStateContext();
+    const [state, dispatch] = useReducer(reducer, initialState);
+
     useEffect(() => {
+
       dispatch({ type: UserStateActionTypes.FETCH });
       Fire.openOrderListener((order) => {
         dispatch({ type: UserStateActionTypes.SET_OPEN_ORDER, payload: order });
-      })
+      });
+    
     }, []);
 
-    const [state, dispatch] = useReducer(reducer, initialState);
+    useEffect(() => {
+      if (user && user._id) {
+        dispatch({ type: UserStateActionTypes.FETCH });
+        Fire.userOrdersListener(user._id, userOrders => {
+          dispatch({ type: UserStateActionTypes.SET_USER_ORDERS, payload: userOrders });
+        });
+      }
+    }, [user]);
+
+    useEffect(() => {
+      const currentOrder = state.userOrders.find(order => order.orderRef === state.openOrder?._id);
+      if (currentOrder) {
+        dispatch({ type: UserStateActionTypes.SET_CURRENT_ORDER, payload: currentOrder });
+      }
+    }, [state.userOrders, state.openOrder?._id])
+
     return (
       <UserStateContext.Provider value={{ state, dispatch }}>
         <Component {...props} />

@@ -59,16 +59,16 @@ jest.mock('./services/Firebase', () => {
 
   const orderUsersData = [
     {
-      _id: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
-      products: [{ product: 'qwerty1', qty: 2 }, { product: 'qwerty2', qty: 3 }],
-      userRef: 'a',
+      _id: 'abc',
+      products: [{ productRef: 'qwerty1', qty: 2 }, { product: 'qwerty2', qty: 3 }],
+      userRef: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
       orderRef: '1',
       totalPrice: 56,
       payed: false
     },
     {
       _id: '2',
-      products: [{ product: 'qwerty3', qty: 2 }, { product: 'qwerty4', qty: 1 }],
+      products: [{ productRef: 'qwerty3', qty: 2 }, { product: 'qwerty4', qty: 1 }],
       userRef: 'b',
       orderRef: '2',
       totalPrice: 0,
@@ -197,6 +197,7 @@ jest.mock('./services/Firebase', () => {
       // console.log('orders after push :', ordersData)
       // return orderWithId
     },
-    addNewProduct: (product) => product
+    addNewProduct: (product) => product,
+    addProductToOrder: () => {}
   };
 });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   IonPage,
   IonHeader,
@@ -14,7 +14,7 @@ import { ROLES, ROUTES } from '../../../constants';
 
 import  { useAuthStateContext } from '../../context/authState/AuthContextProvider';
 import AuthGuard from '../Auth/AuthGuard';
-import { useUserStateContext, UserStateActionTypes } from '../../context/userState/UserContextProvider';
+import { useUserStateContext } from '../../context/userState/UserContextProvider';
 import { User } from '../../../types/interfaces';
 
 import Fire from '../../../services/Firebase';
@@ -26,24 +26,7 @@ const UserPage: React.FC = () => {
   const [tab, setTab] = useState<string>('openOrder');
 
   const { state: { user } } = useAuthStateContext();
-  const { state, dispatch } = useUserStateContext();
-  const { openOrder, userOrders } = state;
-
-  useEffect(() => {
-    if (user && user._id) {
-      dispatch({ type: UserStateActionTypes.FETCH });
-      Fire.userOrdersListener(user._id, userOrders => {
-        dispatch({ type: UserStateActionTypes.SET_USER_ORDERS, payload: userOrders });
-      });
-    }
-  }, [dispatch, user]);
-
-  useEffect(() => {
-      const currentOrder = userOrders.find(order => order.orderRef === openOrder?._id);
-      if (currentOrder) {
-        dispatch({ type: UserStateActionTypes.SET_CURRENT_ORDER, payload: currentOrder });
-      }
-  }, [dispatch, openOrder?._id, userOrders]);
+  const { state: { openOrder, userOrders } } = useUserStateContext();
 
   return (
     <IonPage>
