@@ -11,7 +11,7 @@ import { Product } from '../../../types/interfaces';
 
 const ProductsListItem: React.FC<{product: Product}> = ({ product }) => {
   return (
-    <IonItem>
+    <IonItem data-testid="products-list-item">
       <IonGrid>
         <IonRow>
           <IonCol><h3>{product.name}</h3></IonCol>

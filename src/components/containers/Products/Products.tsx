@@ -24,21 +24,18 @@ import Fire from '../../../services/Firebase';
 
 interface ProductFormState {
   name: string,
-  price: number,
   minQty: number,
   qtyUnit: 'unit' | 'Kg'
 }
 
 type ProductFormAction =
 | { type: 'name', payload: string }
-| { type: 'price', payload: number }
 | { type: 'minQty', payload: number }
 | { type: 'qtyUnit', payload: 'unit' | 'Kg' };
 
 // State
 const initialState: ProductFormState = {
   name: '',
-  price: 0,
   minQty: 0,
   qtyUnit: 'unit'
 }
@@ -47,8 +44,6 @@ const reducer = (state: ProductFormState, action: ProductFormAction): ProductFor
   switch (action.type) {
     case 'name':
       return { ...state, name: action.payload };
-    case 'price':
-      return { ...state, price:  action.payload };
     case 'minQty':
       return { ...state, minQty: action.payload };
     case 'qtyUnit':
@@ -63,21 +58,24 @@ const Products: React.FC = () => {
   const { state: { products } } = useAdminStateContext();
 
   const [showProductForm, setShowProductForm] = React.useState<boolean>(false);
-  const [{ name, price, minQty, qtyUnit }, dispatch] = React.useReducer(reducer, initialState);
+  const [{ name, minQty, qtyUnit }, dispatch] = React.useReducer(reducer, initialState);
 
   const addProduct = async (): Promise<void> => {
-    const product = {
-      _id: '', name, price, minQty, qtyUnit
-    }
-    try {
-      const res = await Fire.addNewProduct(product);
-      console.log('product res: ', res);
-      setShowProductForm(false);
-    } catch (err) {
-      console.log('Error adding product: ', err)
+    if (newProductFormIsValid) {
+      const product = {
+        name, minQty, qtyUnit
+      }
+      try {
+        const res = await Fire.addNewProduct(product);
+        console.log('product res: ', res);
+        setShowProductForm(false);
+      } catch (err) {
+        console.log('Error adding product: ', err)
+      }
     }
   }
 
+  const newProductFormIsValid = name && minQty && qtyUnit;
 
   return (
     <IonContent fullscreen data-testid="admin-products-list">
@@ -93,7 +91,7 @@ const Products: React.FC = () => {
 
           <IonLabel slot="end">
             <IonButton onClick={() => setShowProductForm(true)} data-testid="add-product-button">
-              <IonIcon slot="start" icon={addOutline} />הוסף מוצר
+              <IonIcon slot="start" icon={addOutline} />הוסף מוצר חדש
             </IonButton>
           </IonLabel>
         </IonToolbar>
@@ -108,7 +106,8 @@ const Products: React.FC = () => {
         {Object.keys(products).map(productKey => <ProductListItem key={productKey} product={products[productKey]} />)}
       </IonList>
       
-      <IonModal isOpen={showProductForm} backdropDismiss={false}>product details
+      <IonModal isOpen={showProductForm}>
+        <IonTitle>הכנס פרטי מוצר</IonTitle>
         <form>
           <IonLabel>
             שם
@@ -117,18 +116,7 @@ const Products: React.FC = () => {
                 type="text"
                 value={name}
                 onIonChange={e => dispatch({ type: 'name', payload: e.detail.value as string })}
-              ></IonInput>
-            </IonItem>
-          </IonLabel>
-          {/* <IonItemDivider /> */}
-
-          <IonLabel>
-            מחיר
-            <IonItem>
-              <IonInput
-                type="number"
-                value={price}
-                onIonChange={e => dispatch({ type: 'price', payload: Number(e.detail.value) })}
+                role="product-name-input"
               ></IonInput>
             </IonItem>
           </IonLabel>
@@ -142,6 +130,7 @@ const Products: React.FC = () => {
                 type="number"
                 value={minQty}
                 onIonChange={e => dispatch({ type: 'minQty', payload: Number(e.detail.value) })}
+                role="product-minQty-input"
               ></IonInput>
             </IonItem>
           </IonLabel>
@@ -154,6 +143,7 @@ const Products: React.FC = () => {
                 interface="popover"
                 value={qtyUnit}
                 onIonChange={e => dispatch({ type: 'qtyUnit', payload: e.detail.value as "unit" | "Kg" })}
+                role="product-qtyUnit-input"
               >
                 <IonSelectOption value="unit">יחידה</IonSelectOption>
                 <IonSelectOption value="Kg">ק"ג</IonSelectOption>
@@ -161,7 +151,7 @@ const Products: React.FC = () => {
             </IonItem>
           </IonLabel>
 
-          <IonButton onClick={addProduct}>הוסף מוצר</IonButton>
+          <IonButton onClick={addProduct} disabled={!newProductFormIsValid}>הוסף מוצר</IonButton>
           <IonButton onClick={() => setShowProductForm(false)}>ביטול</IonButton>
           {/* <IonItemDivider /> */}
         </form>

@@ -195,6 +195,7 @@ jest.mock('./services/Firebase', () => {
       ordersData.push(newOrder);
       // console.log('orders after push :', ordersData)
       // return orderWithId
-    }
+    },
+    addNewProduct: (product) => product
   };
 });
