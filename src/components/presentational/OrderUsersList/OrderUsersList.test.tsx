@@ -1,6 +1,7 @@
 import React from 'react';
-import { render, fireEvent, screen, waitForElementToBeRemoved } from '../../../tests/testUtils';
+import { render, screen } from '../../../tests/testUtils';
 import '@testing-library/jest-dom/extend-expect';
+import { ionFireEvent as fireEvent } from '@ionic/react-test-utils';
 
 import OrderUsersList from './OrderUsersList';
 import ViewOrder from '../../containers/ViewOrder/ViewOrder';
@@ -32,25 +33,50 @@ const routeComponentPropsMock = {
 }
 
 
-test('should filter users by location', async () => {
-  // const mockSetState = jest.spyOn(React, "useState");
-  // render(
-  //   <ViewOrder {...routeComponentPropsMock}>
-  //     <OrderUsersList orderUsers={orderUsers} />,
-  //   </ViewOrder>,
-  //   { route: 'admin/order/1' }
-  // )
+test('should filter users by TA location', async () => {
+  render(
+    <ViewOrder {...routeComponentPropsMock}>
+      <OrderUsersList orderUsers={orderUsers} />,
+    </ViewOrder>,
+    { route: 'admin/order/1' }
+  )
 
-  // expect(mockSetState).toHaveBeenCalledTimes(1);
-  // expect(mockSetState).toHaveBeenCalledWith(null);
-  // expect(await screen.findAllByTestId('order-user-list-item')).toHaveLength(2);
+  expect(await screen.findAllByTestId('order-user-list-item')).toHaveLength(2);
 
-  // fireEvent.click(await screen.findByTestId('filter-user-location'));
-  // fireEvent.click(await screen.findByTestId('filter-by-ta'));
+  fireEvent.ionChange(await screen.findByTestId('filter-user-location'), 'TA');
+  expect(await screen.findAllByTestId('order-user-name')).toHaveLength(1);
+  expect(await screen.findByTestId('order-user-name')).toHaveTextContent('e rimon');
+});
 
-  // // expect(mockSetState).toHaveBeenCalledTimes(2);
-  // // expect(mockSetState).toHaveBeenCalledWith('TA');
+test('should filter users by PH location', async () => {
+  render(
+    <ViewOrder {...routeComponentPropsMock}>
+      <OrderUsersList orderUsers={orderUsers} />,
+    </ViewOrder>,
+    { route: 'admin/order/1' }
+  )
 
-  // await waitForElementToBeRemoved(() => (screen.getAllByTestId('order-user-list-item'))[1])
-  // expect(await screen.findAllByTestId('order-user-list-item')).toHaveLength(1);
-})
+  expect(await screen.findAllByTestId('order-user-list-item')).toHaveLength(2);
+
+  fireEvent.ionChange(await screen.findByTestId('filter-user-location'), 'PH');
+  expect(await screen.findAllByTestId('order-user-name')).toHaveLength(1);
+  expect(await screen.findByTestId('order-user-name')).toHaveTextContent('moshe');
+});
+
+test('should display all order\'s users when location set to null', async () => {
+  render(
+    <ViewOrder {...routeComponentPropsMock}>
+      <OrderUsersList orderUsers={orderUsers} />,
+    </ViewOrder>,
+    { route: 'admin/order/1' }
+  )
+
+  expect(await screen.findAllByTestId('order-user-list-item')).toHaveLength(2);
+
+  fireEvent.ionChange(await screen.findByTestId('filter-user-location'), 'PH');
+  expect(await screen.findAllByTestId('order-user-name')).toHaveLength(1);
+  expect(await screen.findByTestId('order-user-name')).toHaveTextContent('moshe');
+
+  fireEvent.ionChange(await screen.findByTestId('filter-user-location'), '');
+  expect(await screen.findAllByTestId('order-user-name')).toHaveLength(2);
+});

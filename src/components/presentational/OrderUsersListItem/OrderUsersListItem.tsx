@@ -35,7 +35,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
       <IonItem>
         <IonGrid>
           <IonRow>
-            <IonCol><p>{userInfo.name}</p></IonCol>
+            <IonCol data-testid="order-user-name"><p>{userInfo.name}</p></IonCol>
             <IonCol><p>{userInfo.location === 'TA' ? 'תל אביב' : 'פרדס חנה'}</p></IonCol>
             <IonCol><p>{orderUser.totalPrice}</p></IonCol>
             <IonCol>

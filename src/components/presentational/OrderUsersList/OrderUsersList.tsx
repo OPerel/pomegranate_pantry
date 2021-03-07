@@ -34,7 +34,7 @@ const OrderUsersList: React.FC<{orderUsers: OrderUser[]}> = ({ orderUsers }) => 
           <IonSelect
             interface="popover"
             value={userFilter}
-            onIonChange={e => {console.log('e.detail.value: ', e.detail.value); setUserFilter(e.detail.value)}}
+            onIonChange={e => setUserFilter(e.detail.value)}
             data-testid="filter-user-location"
           >
             <IonSelectOption value={null} data-testid="filter-by-all">הכל</IonSelectOption>
