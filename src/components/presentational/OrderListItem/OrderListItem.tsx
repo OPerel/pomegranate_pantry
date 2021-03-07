@@ -20,12 +20,16 @@ interface OrderListItemProps {
 
 const OrderListItem: React.FC<OrderListItemProps> = ({ order }) => {
   return (
-    <IonItem routerLink={`${ROUTES.ORDER}/${order._id}`} detail={true} data-testid="order-list-item">
+    <IonItem
+      routerLink={`${ROUTES.ORDER}/${order._id}`}
+      detail={true}
+      data-testid="order-list-item"
+    >
       <IonGrid>
         <IonRow>
-          <IonCol>{`${order?.createdAt.toLocaleDateString('he')}`}</IonCol>
-          <IonCol>{order.totalPrice}</IonCol>
-          <IonCol>{mapOrderStatusToText(order.status)}</IonCol>
+          <IonCol data-testid="order-item-createdAt">{`${order?.createdAt.toLocaleDateString('he')}`}</IonCol>
+          <IonCol data-testid="order-item-totalPrice">{order.totalPrice}</IonCol>
+          <IonCol data-testid="order-item-status">{mapOrderStatusToText(order.status)}</IonCol>
         </IonRow>
       </IonGrid>
     </IonItem>

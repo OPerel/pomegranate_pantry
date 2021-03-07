@@ -24,8 +24,7 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
   useEffect(() => {
     dispatch({ type: UserStateActionTypes.FETCH });
     Fire.getProducts(productsObj => {
-      dispatch({ type: UserStateActionTypes.SET_PRODUCTS, payload: productsObj })
-      
+      dispatch({ type: UserStateActionTypes.SET_PRODUCTS, payload: productsObj });
     });
   }, [dispatch]);
 
@@ -35,13 +34,13 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
   }));
 
   if (!openOrder) {
-    return <h3>אין הזמנה פתוחה כרגע</h3>
+    return <h3 data-testid="no-open-order-msg">אין הזמנה פתוחה כרגע</h3>
   }
 
   return (
     <div>
       <IonToolbar className="order-header">
-        <IonTitle size="small">
+        <IonTitle size="small" data-testid="open-order-title">
           {mapOrderStatusToText(openOrder.status)}
           {openOrder.status === ORDER_STATUS.OPEN && ` | נסגרת ב - ${openOrder.closingTime.toLocaleDateString('he')}`}
         </IonTitle>
@@ -56,7 +55,6 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
         </IonListHeader>
         {productsList.map(product => <OpenOrderProductItem key={product._id} product={product} />)}
       </IonList>
-
     </div>
   )
 }

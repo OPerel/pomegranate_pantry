@@ -178,6 +178,7 @@ jest.mock('./services/Firebase', () => {
     // orderUsersCollectionListener: (id, cb) => {cb(orderUsersData)},
     // orderProductsCollectionListener: (id, cb) => {cb(orderProductsData)},
     orderListener: (id, cb) => {cb(ordersData[0])},
+    openOrderListener: (cb) => {cb(ordersData[0])},
     ordersCollectionOff: () => {},
     addNewOrder: () => {
       // const orderWithId = { ...orderDetails, _id: (ordersData.length + 1).toString() }

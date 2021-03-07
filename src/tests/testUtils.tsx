@@ -5,8 +5,7 @@ import { createMemoryHistory, History, MemoryHistory } from 'history';
 
 import { AuthStateContext } from '../components/context/authState/AuthContextProvider';
 import AdminStateProvider from '../components/context/adminState/AdminContextProvider';
-// import { User, Product, Order } from '../types/interfaces';
-// import { userData ,productsData, ordersData } from '../setupTests';
+import UserStateProvider from '../components/context/userState/UserContextProvider';
 
 type CustomRenderPropsTypes = {
   route?: string,
@@ -20,11 +19,15 @@ const customRender = (
     history = createMemoryHistory({ initialEntries: [route] }),
     ...options
   }: CustomRenderPropsTypes = {} as CustomRenderPropsTypes,
-  auth: boolean = true
+  auth: boolean = true,
+  state: 'user' | 'rimon' = 'rimon'
 ) => {
 
-  const StateWrapper: React.FC = ({ children }) => <>{children}</>;
-  const RenderWithAdminState = AdminStateProvider(StateWrapper);
+  const AdminStateWrapper: React.FC = ({ children }) => <>{children}</>;
+  const RenderWithAdminState = AdminStateProvider(AdminStateWrapper);
+
+  const UserStateWrapper: React.FC = ({ children }) => <>{children}</>;
+  const RenderWithUserState = UserStateProvider(UserStateWrapper);
 
   const RenderWithRouter: React.FC = ({ children }) => (
     <AuthStateContext.Provider value={{
@@ -42,9 +45,15 @@ const customRender = (
     }}>
       <Router history={history}>
         <Route path={route}>
-          <RenderWithAdminState>
-            {children}
-          </RenderWithAdminState>
+          {state === 'rimon' ? (
+            <RenderWithAdminState>
+              {children}
+            </RenderWithAdminState>
+          ) : (
+            <RenderWithUserState>
+              {children}
+            </RenderWithUserState>
+          )}
         </Route>
       </Router>
     </AuthStateContext.Provider>

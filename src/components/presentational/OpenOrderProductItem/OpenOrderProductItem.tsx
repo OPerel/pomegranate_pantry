@@ -33,33 +33,31 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
   }
 
   return (
-    <>
-      <IonItem color={currentOrderProduct ? 'medium' : ''}>
-        <IonGrid>
-          <IonRow>
-            <IonCol>{product.name}</IonCol>
-            <IonCol className="ion-text-center">
-              <IonItem>
-                <IonInput
-                  type="number"
-                  placeholder={currentOrderProduct?.qty.toString()}
-                  value={productQty}
-                  onIonChange={e => setProductQty(Number(e.detail.value))}
-                />
-              </IonItem>
-            </IonCol>
-            <IonCol className="ion-text-center">
-              <IonButton
-                disabled={!productQty}
-                onClick={handleAddProductClick}
-              >
-                <IonIcon icon={addOutline} />
-              </IonButton>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-      </IonItem>
-    </>
+    <IonItem color={currentOrderProduct ? 'medium' : ''} data-testid="open-order-product-item">
+      <IonGrid>
+        <IonRow>
+          <IonCol>{product.name}</IonCol>
+          <IonCol className="ion-text-center">
+            <IonItem>
+              <IonInput
+                type="number"
+                placeholder={currentOrderProduct?.qty.toString()}
+                value={productQty}
+                onIonChange={e => setProductQty(Number(e.detail.value))}
+              />
+            </IonItem>
+          </IonCol>
+          <IonCol className="ion-text-center">
+            <IonButton
+              disabled={!productQty}
+              onClick={handleAddProductClick}
+            >
+              <IonIcon icon={addOutline} />
+            </IonButton>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
+    </IonItem>
   )
 }
 
