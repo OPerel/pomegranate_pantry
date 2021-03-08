@@ -56,9 +56,9 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
           </nav>
 
           <IonTitle size="small" role="order-details-title">
-            {`הזמנה ${order.createdAt.toLocaleDateString('he')}`} &nbsp; | &nbsp;
+            {`הזמנה ${order.createdAt.toLocaleDateString('he', { timeZone: 'Israel' })}`} &nbsp; | &nbsp;
             <b>{mapOrderStatusToText(order.status)}</b> &nbsp; | &nbsp;
-            {`נסגר להזמנות ב - ${order.closingTime.toLocaleDateString('he')}`}
+            {`נסגר להזמנות ב - ${order.closingTime.toLocaleDateString('he', { timeZone: 'Israel' })}`}
           </IonTitle>
 
           {orderStatusBtnText && 

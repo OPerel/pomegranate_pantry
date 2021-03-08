@@ -27,7 +27,7 @@ const OrderListItem: React.FC<OrderListItemProps> = ({ order }) => {
     >
       <IonGrid>
         <IonRow>
-          <IonCol data-testid="order-item-createdAt">{`${order?.createdAt.toLocaleDateString('he')}`}</IonCol>
+          <IonCol data-testid="order-item-createdAt">{`${order?.createdAt.toLocaleDateString('he', { timeZone: 'Israel' })}`}</IonCol>
           <IonCol data-testid="order-item-totalPrice">{order.totalPrice}</IonCol>
           <IonCol data-testid="order-item-status">{mapOrderStatusToText(order.status)}</IonCol>
         </IonRow>

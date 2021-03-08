@@ -42,7 +42,7 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
       <IonToolbar className="order-header">
         <IonTitle size="small" data-testid="open-order-title">
           {mapOrderStatusToText(openOrder.status)}
-          {openOrder.status === ORDER_STATUS.OPEN && ` | נסגרת ב - ${openOrder.closingTime.toLocaleDateString('he')}`}
+          {openOrder.status === ORDER_STATUS.OPEN && ` | נסגרת ב - ${openOrder.closingTime.toLocaleDateString('he', { timeZone: 'Israel' })}`}
         </IonTitle>
         {currentOrder && <IonButton slot="end">ההזמנה שלי</IonButton>}
       </IonToolbar>
