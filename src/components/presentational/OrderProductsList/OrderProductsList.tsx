@@ -8,7 +8,7 @@ import {
 
 import { OrderProduct } from '../../../types/interfaces';
 
-import OrderProductListItem from '../OrderProductListItem/OrderProductListItem';
+import OrderProductsListItem from '../OrderProductsListItem/OrderProductsListItem';
 
 const OrderProductsList: React.FC<{ orderProducts: OrderProduct[] }> = ({ orderProducts }) => {
 
@@ -24,7 +24,7 @@ const OrderProductsList: React.FC<{ orderProducts: OrderProduct[] }> = ({ orderP
         <IonLabel></IonLabel>
       </IonListHeader>
       {orderProducts.length > 0 ? (
-        orderProducts.map(o => <OrderProductListItem key={o.productRef} orderProduct={o} />)
+        orderProducts.map(o => <OrderProductsListItem key={o.productRef} orderProduct={o} />)
       ) : (
         <h3 style={{ margin: '50px 0', textAlign: 'center' }}>לא נמצאו מוצרים להזמנה</h3>
       )}

@@ -197,6 +197,7 @@ jest.mock('./services/Firebase', () => {
       // console.log('orders after push :', ordersData)
       // return orderWithId
     },
+    updateEntry: () => {},
     addNewProduct: (product) => product,
     addProductToOrder: () => {}
   };

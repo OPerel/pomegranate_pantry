@@ -21,7 +21,7 @@ interface OrderProductListItemProps {
   orderProduct: OrderProduct;
 }
 
-const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduct }) => {
+const OrderProductsListItem: React.FC<OrderProductListItemProps> = ({ orderProduct }) => {
 
   const { state: { order, users, products } } = useAdminStateContext();
 
@@ -65,9 +65,9 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
       <IonItem role="order-product-list-item">
         <IonGrid>
           <IonRow>
-            <IonCol><p>{products[productRef].name}</p></IonCol>
-            <IonCol><p>{orderProduct.totalQty}</p></IonCol>
-            <IonCol><p>{orderProduct.missing}</p></IonCol>
+            <IonCol role="order-product-name"><p>{products[productRef].name}</p></IonCol>
+            <IonCol role="order-product-totalQty"><p>{orderProduct.totalQty}</p></IonCol>
+            <IonCol role="order-product-missing"><p>{orderProduct.missing}</p></IonCol>
             <IonCol>
               <IonItem  className="final-price">
                 <IonInput
@@ -75,11 +75,13 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
                   value={priceInput || orderProduct.price}
                   disabled={!(order?.status === ORDER_STATUS.SHOPPING)}
                   onIonChange={e => setPriceInput(Number(e.detail.value))}
+                  role="order-product-price-input"
                 />
               </IonItem>
             </IonCol>
             <IonCol>
               <IonButton
+                role="update-order-product-price"
                 disabled={!priceInput}
                 onClick={() => Fire.updateEntry('orderProducts', orderProduct._id, {
                   price: priceInput
@@ -88,10 +90,13 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
                 <IonLabel>קבע מחיר</IonLabel>
               </IonButton>
             </IonCol>
-            <IonCol><p>{orderProduct.price * orderProduct.totalQty}</p></IonCol>
+            <IonCol role="order-product-total-price">
+              <p>{orderProduct.price * orderProduct.totalQty}</p>
+            </IonCol>
             <IonCol>
               <IonButton
                 fill="clear"
+                role="open-order-product-details"
                 onClick={() => setItemOpen(!itemOpen)}
               >
                 <IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} />
@@ -103,7 +108,10 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
       {itemOpen && orderProductLocations ? (
         <div style={{ padding: '2%', backgroundColor: 'lightgray' }}>
           <h4 style={{ marginTop: '0' }}>כמות לפי מיקום</h4>
-          <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+          <div
+            style={{ display: 'flex', justifyContent: 'space-evenly' }}
+            data-testid="order-product-locations-details"
+          >
             <h3>תל אביב - <b>{orderProductLocations.ta}</b></h3>
             <h3>פרדס חנה - <b>{orderProductLocations.ph}</b></h3>
           </div>
@@ -113,4 +121,4 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
   ) : null;
 };
 
-export default ProductOrderListItem;
+export default OrderProductsListItem;
