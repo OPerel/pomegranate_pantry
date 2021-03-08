@@ -26,11 +26,11 @@ interface OrderUserListItemProps {
 const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => {
 
   const [itemOpen, setItemOpen] = useState<boolean>(false);
-  const { state: { order, users, products } } = useAdminStateContext();
+  const { state: { order, users, products, loading } } = useAdminStateContext();
 
   const userInfo = users[orderUser.userRef];
-
-  return (
+  console.log('users, userInfo: ', users, '\n', userInfo)
+  return userInfo ? (
     <>
       <IonItem>
         <IonGrid>
@@ -81,7 +81,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
                     <IonCol><p>{products[productRef].name}</p></IonCol>
                     <IonCol><p>{orderProduct?.price}</p></IonCol>
                     <IonCol><p>{qty}</p></IonCol>
-                    <IonCol>
+                    <IonCol role="product-total-price">
                       <p>
                         {orderProduct?.price && (qty * (orderProduct.price as number))}
                       </p>
@@ -94,7 +94,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
         </IonList>
       ) : null}
     </>
-  );
+  ) : null;
 };
 
 export default OrderUsersListItem;

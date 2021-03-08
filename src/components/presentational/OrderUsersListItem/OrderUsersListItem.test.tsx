@@ -3,7 +3,6 @@ import { render, fireEvent, screen } from '../../../tests/testUtils';
 import '@testing-library/jest-dom/extend-expect';
 
 import OrderUsersListItem from './OrderUsersListItem';
-import ViewOrder from '../../containers/ViewOrder/ViewOrder';
 
 const orderUser = {
   _id: '1',
@@ -14,43 +13,32 @@ const orderUser = {
   payed: false
 }
 
-const routeComponentPropsMock = {
-  // add jest.fn() as needed to any of the objects
-  history: {} as any,
-  location: { pathname: 'admin/order/1' } as any,
-  match: { params: { id: '1' } } as any,
-}
+// should also test for the data in the orderUser item itself
 
 test('should click details button and render user\'s products list', async () => {
   render(
-    <ViewOrder {...routeComponentPropsMock}>
-      <OrderUsersListItem orderUser={orderUser} />
-    </ViewOrder>,
+    <OrderUsersListItem orderUser={orderUser} />,
     { route: 'admin/order/1' }
   );
-  fireEvent.click((await screen.findAllByTestId('order-user-list-item'))[0]);
+  fireEvent.click(await screen.findByTestId('order-user-list-item'));
   await screen.findByTestId('order-user-item-details');
   expect(await screen.findAllByTestId('order-user-product-list-item')).toHaveLength(2);
 });
 
 test('should display product name', async () => {
   render(
-    <ViewOrder {...routeComponentPropsMock}>
-      <OrderUsersListItem orderUser={orderUser} />
-    </ViewOrder>,
+    <OrderUsersListItem orderUser={orderUser} />,
     { route: 'admin/order/1' }
   );
-  fireEvent.click((await screen.findAllByTestId('order-user-list-item'))[0]);
+  fireEvent.click(await screen.findByTestId('order-user-list-item'));
   expect((await screen.findAllByTestId('order-user-product-list-item'))[0]).toHaveTextContent('טחינה הר ברכה');
 });
 
-test('should render correct user products total', async () => {
+test('should render correct product total', async () => {
   render(
-    <ViewOrder {...routeComponentPropsMock}>
-      <OrderUsersListItem orderUser={orderUser} />
-    </ViewOrder>,
+    <OrderUsersListItem orderUser={orderUser} />,
     { route: 'admin/order/1' }
   );
-  fireEvent.click((await screen.findAllByTestId('order-user-list-item'))[0]);
-  expect((await screen.findAllByTestId('order-user-product-list-item'))[0]).toHaveTextContent('56');
+  fireEvent.click(await screen.findByTestId('order-user-list-item'));
+  expect((await screen.findAllByRole('product-total-price'))[0]).toHaveTextContent('56');
 });

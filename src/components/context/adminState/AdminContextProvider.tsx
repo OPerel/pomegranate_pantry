@@ -1,4 +1,5 @@
 import React, { useReducer, createContext, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import Fire from '../../../services/Firebase';
 import { Order, Product, User } from '../../../types/interfaces';
 
@@ -65,6 +66,7 @@ export const useAdminStateContext = () => useContext(AdminStateContext);
 const AdminStateProvider = <P extends {}>(Component: React.ComponentType<P>): React.FC<P> => {
   const WithAdminState: React.ComponentType<P> = (props) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+    const { location: { pathname } } = useHistory()
 
     React.useEffect(() => {
       dispatch({ type: AdminStateActionTypes.FETCH })
@@ -83,7 +85,19 @@ const AdminStateProvider = <P extends {}>(Component: React.ComponentType<P>): Re
       });
   
       return () => Fire.ordersCollectionOff();
-    }, [dispatch])    
+    }, [dispatch]);
+
+    React.useEffect(() => {
+      if (pathname.includes('order')) {
+        const orderId = pathname.split('/')[3];
+        dispatch({ type: AdminStateActionTypes.FETCH });
+        Fire.orderListener(orderId, order => {
+          dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: order })
+        });
+      } else {
+        dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: null });
+      }
+    }, [pathname])
 
     return Component ? (     // ternary return is fixing `Element type is invalid error on hot reloading`
       <AdminStateContext.Provider value={{ state, dispatch }}>

@@ -4,7 +4,6 @@ import '@testing-library/jest-dom/extend-expect';
 import { ionFireEvent as fireEvent } from '@ionic/react-test-utils';
 
 import OrderUsersList from './OrderUsersList';
-import ViewOrder from '../../containers/ViewOrder/ViewOrder';
 
 const orderUsers = [
   {
@@ -25,19 +24,9 @@ const orderUsers = [
   }
 ];
 
-const routeComponentPropsMock = {
-  // add jest.fn() as needed to any of the objects
-  history: {} as any,
-  location: { pathname: 'admin/order/1' } as any,
-  match: { params: { id: '1' } } as any,
-}
-
-
 test('should filter users by TA location', async () => {
   render(
-    <ViewOrder {...routeComponentPropsMock}>
-      <OrderUsersList orderUsers={orderUsers} />,
-    </ViewOrder>,
+    <OrderUsersList orderUsers={orderUsers} />,
     { route: 'admin/order/1' }
   )
 
@@ -50,9 +39,7 @@ test('should filter users by TA location', async () => {
 
 test('should filter users by PH location', async () => {
   render(
-    <ViewOrder {...routeComponentPropsMock}>
-      <OrderUsersList orderUsers={orderUsers} />,
-    </ViewOrder>,
+    <OrderUsersList orderUsers={orderUsers} />,
     { route: 'admin/order/1' }
   )
 
@@ -65,9 +52,7 @@ test('should filter users by PH location', async () => {
 
 test('should display all order\'s users when location set to null', async () => {
   render(
-    <ViewOrder {...routeComponentPropsMock}>
-      <OrderUsersList orderUsers={orderUsers} />,
-    </ViewOrder>,
+    <OrderUsersList orderUsers={orderUsers} />,
     { route: 'admin/order/1' }
   )
 

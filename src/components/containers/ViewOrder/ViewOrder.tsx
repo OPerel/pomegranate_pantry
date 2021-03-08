@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   IonButtons,
@@ -17,39 +17,38 @@ import OrderProductsList from '../../presentational/OrderProductsList/OrderProdu
 import OrderUsersList from '../../presentational/OrderUsersList/OrderUsersList';
 import './ViewOrder.css';
 
-import { useAdminStateContext, AdminStateActionTypes } from '../../context/adminState/AdminContextProvider';
+import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 import Fire from '../../../services/Firebase';
 import { ROUTES } from '../../../constants';
 import { OrderStatus } from '../../../types/interfaces';
 import { mapOrderStatusToText, orderSeq, getOrderStatusBtn } from '../../../utils/mapOrderStatus';
 
-const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
+const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
 
-  const { id: orderId } = match.params;
+  // const { id: orderId } = match.params;
 
   const [tab, setTab] = useState<string>('users');
 
-  const { state, dispatch } = useAdminStateContext();
-  const { order } = state;
+  const { state: { order } } = useAdminStateContext();
 
   const {
     orderStatusBtnText,
     orderStatusBtnFunction
   } = getOrderStatusBtn(order?._id as string, order?.status as OrderStatus);
 
-  useEffect(() => {
-    if (orderId) {
-      dispatch({ type: AdminStateActionTypes.FETCH });
-      Fire.orderListener(orderId, order => {
-        dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: order })
-      });
+  // useEffect(() => {
+  //   if (orderId) {
+  //     dispatch({ type: AdminStateActionTypes.FETCH });
+  //     Fire.orderListener(orderId, order => {
+  //       dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: order })
+  //     });
 
-      return () => {
-        dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: null });
-        // Fire.orderOff(orderId);
-      }
-    };
-  }, [orderId, dispatch]);
+  //     return () => {
+  //       dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: null });
+  //       // Fire.orderOff(orderId);
+  //     }
+  //   };
+  // }, [orderId, dispatch]);
 
   return (
     <IonPage>
