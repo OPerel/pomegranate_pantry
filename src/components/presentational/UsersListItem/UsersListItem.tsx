@@ -12,11 +12,15 @@ import {
 
 const UsersListItem: React.FC<{user: User}> = ({ user }) => {
   return (
-    <IonItem>
+    <IonItem role="users-list-item">
       <IonGrid>
         <IonRow>
-          <IonCol><span>{user.name}</span></IonCol>
-          <IonCol><span>{user.location === LOCATIONS.TA ? 'תל-אביב' : 'פרדס-חנה'}</span></IonCol>
+          <IonCol role="user-item-name"><span>{user.name}</span></IonCol>
+          <IonCol role="user-item-location">
+            <span>
+              {user.location === LOCATIONS.TA ? 'תל-אביב' : 'פרדס-חנה'}
+            </span>
+          </IonCol>
           {/* <IonCol><span>{user._id}</span></IonCol> */}
         </IonRow>
       </IonGrid>
