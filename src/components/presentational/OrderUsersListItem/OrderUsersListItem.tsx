@@ -26,10 +26,10 @@ interface OrderUserListItemProps {
 const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => {
 
   const [itemOpen, setItemOpen] = useState<boolean>(false);
-  const { state: { order, users, products, loading } } = useAdminStateContext();
+  const { state: { order, users, products } } = useAdminStateContext();
 
   const userInfo = users[orderUser.userRef];
-  console.log('users, userInfo: ', users, '\n', userInfo)
+
   return userInfo ? (
     <>
       <IonItem>
@@ -43,11 +43,12 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
                 fill="outline"
                 disabled={order?.status !== ORDER_STATUS.PAYING}
                 color={order?.status === ORDER_STATUS.PAYING && !orderUser.payed ? 'danger' : 'primary'}
-                onClick={order ? () => {
+                role="update-order-user-payed"
+                onClick={() => {
                   Fire.updateEntry('orderUsers', orderUser._id as string, {
                     payed: !orderUser.payed
                   });
-                } : () => {}}
+                }}
               >
                 <IonIcon icon={orderUser.payed ? checkmarkOutline : closeOutline} />
               </IonButton>

@@ -66,7 +66,7 @@ export const useAdminStateContext = () => useContext(AdminStateContext);
 const AdminStateProvider = <P extends {}>(Component: React.ComponentType<P>): React.FC<P> => {
   const WithAdminState: React.ComponentType<P> = (props) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const { location: { pathname } } = useHistory()
+    const { location: { pathname } } = useHistory();
 
     React.useEffect(() => {
       dispatch({ type: AdminStateActionTypes.FETCH })
