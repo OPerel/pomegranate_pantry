@@ -13,7 +13,7 @@ import {
 import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons';
 
 import Fire from '../../../services/Firebase';
-import { OrderProduct, Order } from '../../../types/interfaces';
+import { OrderProduct } from '../../../types/interfaces';
 import { ORDER_STATUS } from '../../../constants';
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 
@@ -24,7 +24,11 @@ interface OrderProductListItemProps {
 const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduct }) => {
 
   const { state: { order, users, products } } = useAdminStateContext();
-  const { orderUsers } = order as Order;
+
+  let orderUsers;
+  if (order) {
+    orderUsers = order.orderUsers;
+  }
   const { productRef } = orderProduct;
 
   const [itemOpen, setItemOpen] = useState<boolean>(false);
@@ -36,23 +40,29 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
    * 2. the OrderUsers containing the Product, and the user's location, for the row's details dropdown
    */
 
-  const orderUsersWithProduct = orderUsers.filter(orderUser => {
+  const orderUsersWithProduct = orderUsers?.filter(orderUser => {
     const orderUserProductsRefs = orderUser.products?.map(p => p.productRef);
     return orderUserProductsRefs?.includes(orderProduct.productRef);
   });
 
-  const orderProductLocations: { ta: number, ph: number } = orderUsersWithProduct.reduce((acc, orderUser) => {
+  const orderProductLocations: {
+    ta: number, ph: number
+  } | undefined = orderUsersWithProduct?.reduce((acc, orderUser) => {
     const { location } = users[orderUser.userRef];
     if (location === 'TA') {
-      return { ...acc, ta: acc.ta += orderUser.products.find(p => p.productRef === orderProduct.productRef)?.qty as number}
+      return { ...acc, ta: acc.ta += orderUser.products.find(p => {
+        return p.productRef === orderProduct.productRef
+      })?.qty as number }
     } else {
-      return { ...acc, ph: acc.ph += orderUser.products.find(p => p.productRef === orderProduct.productRef)?.qty as number}      
+      return { ...acc, ph: acc.ph += orderUser.products.find(p => {
+        return p.productRef === orderProduct.productRef
+      })?.qty as number }
     }
   }, { ta: 0, ph: 0 });
 
-  return (
+  return Object.keys(products).length > 0 ? (
     <>
-      <IonItem>
+      <IonItem role="order-product-list-item">
         <IonGrid>
           <IonRow>
             <IonCol><p>{products[productRef].name}</p></IonCol>
@@ -83,7 +93,6 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
               <IonButton
                 fill="clear"
                 onClick={() => setItemOpen(!itemOpen)}
-                data-testid="product-order-list-item"
               >
                 <IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} />
               </IonButton>
@@ -91,7 +100,7 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
           </IonRow>
         </IonGrid>
       </IonItem>
-      {itemOpen ? (
+      {itemOpen && orderProductLocations ? (
         <div style={{ padding: '2%', backgroundColor: 'lightgray' }}>
           <h4 style={{ marginTop: '0' }}>כמות לפי מיקום</h4>
           <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
@@ -101,7 +110,7 @@ const ProductOrderListItem: React.FC<OrderProductListItemProps> = ({ orderProduc
         </div>
       ) : null}
     </>
-  );
+  ) : null;
 };
 
 export default ProductOrderListItem;

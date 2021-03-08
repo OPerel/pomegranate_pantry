@@ -24,6 +24,14 @@ const orderUsers = [
   }
 ];
 
+test('should display correct number of order users', async () => {
+  render(
+    <OrderUsersList orderUsers={orderUsers} />,
+    { route: 'admin/order/1' }
+  );
+  expect(await screen.findAllByTestId('order-user-list-item')).toHaveLength(2);
+});
+
 test('should filter users by TA location', async () => {
   render(
     <OrderUsersList orderUsers={orderUsers} />,

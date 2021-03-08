@@ -13,7 +13,7 @@ import OrderProductListItem from '../OrderProductListItem/OrderProductListItem';
 const OrderProductsList: React.FC<{ orderProducts: OrderProduct[] }> = ({ orderProducts }) => {
 
   return (
-    <IonList>
+    <IonList role="order-products-list">
       <h2>רשימת מוצרים</h2>
       <IonListHeader>
         <IonLabel>מוצר</IonLabel>

@@ -25,8 +25,6 @@ import { mapOrderStatusToText, orderSeq, getOrderStatusBtn } from '../../../util
 
 const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
 
-  // const { id: orderId } = match.params;
-
   const [tab, setTab] = useState<string>('users');
 
   const { state: { order } } = useAdminStateContext();
@@ -35,20 +33,6 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
     orderStatusBtnText,
     orderStatusBtnFunction
   } = getOrderStatusBtn(order?._id as string, order?.status as OrderStatus);
-
-  // useEffect(() => {
-  //   if (orderId) {
-  //     dispatch({ type: AdminStateActionTypes.FETCH });
-  //     Fire.orderListener(orderId, order => {
-  //       dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: order })
-  //     });
-
-  //     return () => {
-  //       dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: null });
-  //       // Fire.orderOff(orderId);
-  //     }
-  //   };
-  // }, [orderId, dispatch]);
 
   return (
     <IonPage>
@@ -71,7 +55,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
             </IonButtons>
           </nav>
 
-          <IonTitle size="small">
+          <IonTitle size="small" role="order-details-title">
             {`הזמנה ${order.createdAt.toLocaleDateString('he')}`} &nbsp; | &nbsp;
             <b>{mapOrderStatusToText(order.status)}</b> &nbsp; | &nbsp;
             {`נסגר להזמנות ב - ${order.closingTime.toLocaleDateString('he')}`}

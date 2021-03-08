@@ -10,21 +10,23 @@ const routeComponentPropsMock = {
   match: { params: { id: '1' } } as any,
 }
 
-test('should render order user list header', async () => {
+test('should display correct order title', async () => {
   render(
     <ViewOrder {...routeComponentPropsMock} />,
     { route: 'admin/order/1' }
   );
-  await screen.findByText('רשימת משתמשים');
+  const title = await screen.findByRole('order-details-title');
+  expect(title).toHaveTextContent('הזמנה 11/27/2020 | פתוח להזמנות | נסגר להזמנות ב - 9/28/2020');
 });
 
-test('should display order users list', async () => {
+test('should render order user list by default', async () => {
   render(
     <ViewOrder {...routeComponentPropsMock} />,
     { route: 'admin/order/1' }
   );
-  expect(await screen.findAllByTestId('order-user-list-item')).toHaveLength(2);
+  expect(await screen.findByText('רשימת משתמשים')).toBeInTheDocument();
 });
+
 
 test('should click on products button and display list', async () => {
   render(
@@ -32,5 +34,6 @@ test('should click on products button and display list', async () => {
     { route: 'admin/order/1' }
   );
   fireEvent.click(await screen.findByText('מוצרים'));
-  expect(await screen.findAllByTestId('product-order-list-item')).toHaveLength(2);
+  expect(await screen.findByRole('order-products-list')).toBeInTheDocument();
+  expect(await screen.findByText('רשימת מוצרים')).toBeInTheDocument();
 })
