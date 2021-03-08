@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent } from '../../../tests/testUtils';
+import { render, screen } from '../../../tests/testUtils';
 import '@testing-library/jest-dom/extend-expect';
 import Fire from '../../../services/Firebase';
-// import { ionFireEvent as fireEvent } from '@ionic/react-test-utils';
+import { ionFireEvent as fireEvent } from '@ionic/react-test-utils';
 
 import Login from './Login';
 
@@ -27,17 +27,18 @@ test('should type in password input', async () => {
   expect((passwordInput as any).detail.value).toBe('testpassword');
 });
 
-// test('should submit login form', async () => {
-//   const handleLogin = jest.fn();
-//   render(<Login />, { route: '/login' }, false);
+test('should call Fire.doSignIn on login btn click', async () => {
+  const mockDoSignIn = jest.spyOn(Fire, 'doSignIn');
+  render(<Login />, { route: '/login' }, false);
 
-//   const emailInput = await screen.findByTestId('email-input');
-//   fireEvent.change(emailInput, { target: { detail: { value: 'rimon@mail.com' } } });
+  const emailInput = await screen.findByTestId('email-input');
+  fireEvent.ionChange(emailInput, 'rimon@mail.com');
 
-//   const passwordInput = await screen.findByTestId('password-input');
-//   fireEvent.change(passwordInput, { target: { detail: { value: 'testpassword' } } });
+  const passwordInput = await screen.findByTestId('password-input');
+  fireEvent.ionChange(passwordInput, 'testpassword');
 
-//   fireEvent.click(await screen.findByTestId('login-button'));
+  fireEvent.click(await screen.findByTestId('login-button'));
 
-//   expect(handleLogin).toHaveBeenCalledTimes(1)
-// });
+  expect(mockDoSignIn).toHaveBeenCalledTimes(1);
+  expect(mockDoSignIn).toHaveBeenCalledWith('rimon@mail.com', 'testpassword');
+});

@@ -23,9 +23,8 @@ const Login: React.FC = () => {
   const [password, setPassword] = React.useState<string>('');
   const [error, setError] = useState<string | null>(null);
   
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async () => {
     setError(null);
-    e.preventDefault();
     try {
       await Fire.doSignIn(email, password);
     } catch (err) {
@@ -44,7 +43,7 @@ const Login: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-        <form onSubmit={handleLogin} style={{ width: '40vw', margin: '0 auto' }}>
+        <form style={{ width: '40vw', margin: '0 auto' }}>
           <IonItem>
             <IonLabel position="floating">
               אי-מייל
@@ -73,7 +72,7 @@ const Login: React.FC = () => {
             />
           </IonItem>
 
-          <IonButton type="submit" data-testid="login-button">כניסה</IonButton>
+          <IonButton onClick={() => handleLogin()} data-testid="login-button">כניסה</IonButton>
         </form>
 
         {error && <IonTitle dir="ltr" color="danger" style={{ textAlign: 'center', margin: '2%' }}>{error}</IonTitle>}
