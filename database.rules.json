@@ -1,0 +1,16 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "orderUsers": {
+      ".indexOn": [
+        "orderRef"
+      ]
+    },
+    "orderProducts": {
+      ".indexOn": [
+        "orderRef"
+      ]
+    }
+  }
+}

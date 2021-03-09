@@ -18,6 +18,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+cypress.env.json
 .vscode
 
 npm-debug.log*
@@ -26,3 +27,4 @@ yarn-error.log*
 
 .eslintcache
 debug.log
+*-debug.log

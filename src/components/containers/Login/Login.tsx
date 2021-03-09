@@ -30,6 +30,8 @@ const Login: React.FC = () => {
     } catch (err) {
       console.warn('Error logging in: ', err);
       setError(err);
+      setEmail('');
+      setPassword('');
     }
   }
 
@@ -75,7 +77,16 @@ const Login: React.FC = () => {
           <IonButton onClick={() => handleLogin()} data-testid="login-button">כניסה</IonButton>
         </form>
 
-        {error && <IonTitle dir="ltr" color="danger" style={{ textAlign: 'center', margin: '2%' }}>{error}</IonTitle>}
+        {error && (
+          <IonTitle
+            dir="ltr"
+            color="danger"
+            style={{ textAlign: 'center', margin: '2%' }}
+            data-testid="login-error-msg"
+          >
+            {error}
+          </IonTitle>
+        )}
       </IonContent>
 
     </IonPage>

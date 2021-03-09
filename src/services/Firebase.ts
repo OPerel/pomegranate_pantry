@@ -45,6 +45,12 @@ class FirebaseService {
 
     this.db = app.database();
     this.auth = app.auth();
+
+    if ((window as any).Cypress) {
+      console.log('running in cypress browser!!');
+      // this.auth.useEmulator('http://localhost:9099');
+      this.db.useEmulator('localhost', 9000);
+    }
   }
 
   // utils and refs
