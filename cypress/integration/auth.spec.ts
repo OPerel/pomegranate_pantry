@@ -8,7 +8,7 @@ describe('Login and auth flows', () => {
 
   after(() => {
     console.log('clean up')
-    cy.logout();
+    // cy.logout();
   });
 
   it('should display error message on incorrect login', () => {
@@ -32,5 +32,10 @@ describe('Login and auth flows', () => {
     cy.testId('login-button').click();
     cy.contains('אדמין');
   });
+
+  it('should logout', () => {
+    cy.contains('יציאה').click();
+    cy.contains('עמוד כניסה');
+  })
 
 });

@@ -43,10 +43,13 @@ const Orders: React.FC = () => {
     if (dateValue) {
       try {
         const res = await Fire.addNewOrder(new Date(dateValue));
+        setShowDateModal(false);
         console.log('New order added: ', res);
       } catch (err) {
         console.log('Error adding new order: ', err);
       }
+    } else {
+      alert('בחר תאריך סיום על מנת ליצור הזמנה חדשה')
     }
   }
 
@@ -92,10 +95,14 @@ const Orders: React.FC = () => {
         <IonLabel>
           בחר תאריך
           <IonDatetime
-            displayFormat="DD MM YYYY"
+            displayFormat="D.M.YYYY"
+            pickerFormat="DD MMM"
+            // doneText="בחר תאריך"
+            // cancelText="ביטול"
             placeholder="Select Date"
             value={dateValue}
             onIonChange={e => setDateValue(e.detail.value)}
+            data-testid="end-order-date-selector"
           ></IonDatetime>
         </IonLabel>
         <IonButtons>

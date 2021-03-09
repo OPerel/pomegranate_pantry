@@ -32,7 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false --verbose=true",
     "test:watch": "react-scripts test",
-    "emulators:start": "firebase emulators:start --only database --import=./src/data",
+    "emulators:start": "firebase emulators:start --only database --import=./src/data/emulator",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "eject": "react-scripts eject"

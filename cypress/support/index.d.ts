@@ -5,8 +5,10 @@ declare namespace Cypress {
      * @example cy.dataCy('greeting')
     */
     testId(value: string): Chainable<Element>,
+    getRole(value: string): Chainable<Element>,
     logout: () => void,
     login: (email: string, password: string) => void,
-    createUser: (email: string, password: string) => void
+    createUser: (email: string, password: string) => void,
+    resetDb: () => void
   }
 }

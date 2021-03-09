@@ -181,23 +181,24 @@ jest.mock('./services/Firebase', () => {
     openOrderListener: (cb) => {cb(ordersData[0])},
     userOrdersListener: (id, cb) => {cb([orderUsersData[0]])},
     ordersCollectionOff: () => {},
-    addNewOrder: () => {
-      // const orderWithId = { ...orderDetails, _id: (ordersData.length + 1).toString() }
-      // console.log('orders before push :', ordersData)
-      const newOrder = {
-        _id: '-MNArMQr-Jxt0gE8-Szk',
-        open: true, 
-        openToUsers: true,
-        createdAt: new Date(),
-        closingTime: new Date().setDate(new Date().getTime) + 30,
-        totalPrice: 0,
-        payed: false
-      }
-      ordersData.push(newOrder);
-      // console.log('orders after push :', ordersData)
-      // return orderWithId
-    },
+    // addNewOrder: () => {
+    //   // const orderWithId = { ...orderDetails, _id: (ordersData.length + 1).toString() }
+    //   // console.log('orders before push :', ordersData)
+    //   const newOrder = {
+    //     _id: '-MNArMQr-Jxt0gE8-Szk',
+    //     open: true, 
+    //     openToUsers: true,
+    //     createdAt: new Date(),
+    //     closingTime: new Date().setDate(new Date().getTime) + 30,
+    //     totalPrice: 0,
+    //     payed: false
+    //   }
+    //   ordersData.push(newOrder);
+    //   // console.log('orders after push :', ordersData)
+    //   // return orderWithId
+    // },
     updateEntry: () => {},
+    addNewOrder: () => {},
     addNewProduct: (product) => product,
     addProductToOrder: () => {},
     doSignIn: () => {}

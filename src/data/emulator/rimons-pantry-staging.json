@@ -1,0 +1,96 @@
+{
+  "orderProducts" : {
+    "-MNArMQr-Jxt0gE8-Szk" : {
+      "qwerty3" : {
+        "price" : 50
+      },
+      "qwerty4" : {
+        "price" : 19
+      }
+    }
+  },
+  "orderUsers" : {
+    "2" : {
+      "orderRef" : "-MNArMQr-Jxt0gE8-Szk",
+      "payed" : true,
+      "products" : {
+        "qwerty3" : 2,
+        "qwerty4" : 1
+      },
+      "totalPrice" : 119,
+      "userRef" : "b"
+    },
+    "4" : {
+      "_id" : "4",
+      "orderRef" : "-MNArMQr-Jxt0gE8-Szk",
+      "payed" : true,
+      "products" : {
+        "qwerty3" : 2
+      },
+      "totalPrice" : 100,
+      "userRef" : "d2Vx9fjakoNxcqvP2nJAaIa55a72"
+    }
+  },
+  "orders" : {
+    "-MNArMQr-Jxt0gE8-Szk" : {
+      "closingTime" : 1608616832000,
+      "createdAt" : 1606516832167,
+      "status" : "closed",
+      "totalPrice" : 219
+    }
+  },
+  "products" : {
+    "qwerty1" : {
+      "minQty" : 12,
+      "name" : "טחינה הר ברכה",
+      "qtyUnit" : "unit"
+    },
+    "qwerty2" : {
+      "minQty" : 12,
+      "name" : "מוטי רסק עגבניות",
+      "qtyUnit" : "unit"
+    },
+    "qwerty3" : {
+      "minQty" : 5,
+      "name" : "קשיו טבעי",
+      "qtyUnit" : "Kg"
+    },
+    "qwerty4" : {
+      "minQty" : 5,
+      "name" : "חומוס",
+      "qtyUnit" : "Kg"
+    },
+    "qwerty5" : {
+      "minQty" : 5,
+      "name" : "קינואה",
+      "qtyUnit" : "Kg"
+    },
+    "qwertyy7" : {
+      "minQty" : 5,
+      "name" : "עדשים כתומות",
+      "qtyUnit" : "Kg"
+    }
+  },
+  "users" : {
+    "ZMTBBeoL4ja79HFVDVoTUHDtzJw1" : {
+      "location" : "TA",
+      "name" : "rimon",
+      "role" : "rimon"
+    },
+    "b" : {
+      "location" : "PH",
+      "name" : "Gal",
+      "role" : "user"
+    },
+    "d2Vx9fjakoNxcqvP2nJAaIa55a72" : {
+      "location" : "TA",
+      "name" : "test user",
+      "role" : "user"
+    },
+    "hGAwl8pxISMisy6GndQ68zunjtG2" : {
+      "location" : "PH",
+      "name" : "משה",
+      "role" : "user"
+    }
+  }
+}

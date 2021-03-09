@@ -27,6 +27,7 @@
 
 /** Firebase support */
 import firebase from 'firebase';
+import * as data from '../../src/data/emulator/rimons-pantry-staging.json';
 
 firebase.initializeApp({
   apiKey: Cypress.env('REACT_APP_API_KEY'),
@@ -40,17 +41,33 @@ firebase.initializeApp({
 
 Cypress.Commands.add('createUser', (email='rimon@mail.com', password='testadmin') => {
   return firebase.auth().createUserWithEmailAndPassword(email, password);
-})
+});
 
 Cypress.Commands.add('login', (email='rimon@mail.com', password='testadmin') => {
   return firebase.auth().signInWithEmailAndPassword(email, password);
-})
+});
 
 Cypress.Commands.add('logout', () => {
   return firebase.auth().signOut();
+});
+
+Cypress.Commands.add('resetDb', () => {
+  const db = firebase.database();
+  db.useEmulator('localhost', 9000);
+  db.ref().set(data, err => {
+    if (err) {
+      console.log('reset err: ', err)
+    } else {
+      console.log('db was reset')
+    }
+  });
 })
 
 /** DOM query support */
 Cypress.Commands.add('testId', (value) => {
   return cy.get(`[data-testid=${value}]`);
+});
+
+Cypress.Commands.add('getRole', (value) => {
+  return cy.get(`[role=${value}]`);
 });
