@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import {
   IonButtons,
   IonButton,
   IonBackButton,
   IonContent,
-  IonHeader,
   IonPage,
   IonToolbar,
   IonTitle,
 } from '@ionic/react';
+import AdminHeader from '../../common/AdminHeader/AdminHeader';
 
 import { chevronForwardOutline } from 'ionicons/icons';
 
@@ -18,7 +18,6 @@ import OrderUsersList from '../../presentational/OrderUsersList/OrderUsersList';
 import './ViewOrder.css';
 
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
-import Fire from '../../../services/Firebase';
 import { ROUTES } from '../../../constants';
 import { OrderStatus } from '../../../types/interfaces';
 import { mapOrderStatusToText, orderSeq, getOrderStatusBtn } from '../../../utils/mapOrderStatus';
@@ -36,29 +35,39 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
 
   return (
     <IonPage>
-      <IonHeader translucent>
-        <IonToolbar>
-          <IonTitle slot="start">אדמין</IonTitle>
-          <Link to={`${ROUTES.USER}/admin`} style={{ color: 'white', marginLeft: '2%' }} slot="end">משתמש</Link>
-          <IonButton slot="end" color="secondary" onClick={() => Fire.doSignOut()}>יציאה</IonButton>
-        </IonToolbar>
-      </IonHeader>
+      <AdminHeader />
 
       {order && (<IonContent>
         <IonToolbar className="order-header">
 
           <nav slot="start">
             <IonButtons>
-              <IonBackButton defaultHref={ROUTES.ADMIN} icon={chevronForwardOutline} text="הזמנות" />
-              <IonButton onClick={() => setTab('users')} disabled={tab === 'users'}>משתמשים</IonButton>
-              <IonButton onClick={() => setTab('products')} disabled={tab === 'products'}>מוצרים</IonButton>
+              <IonBackButton
+                defaultHref={ROUTES.ADMIN}
+                icon={chevronForwardOutline}
+                text="הזמנות"
+              />
+              <IonButton
+                onClick={() => setTab('users')}
+                disabled={tab === 'users'}
+                data-testid="order-users-tab-button"
+              >
+                משתמשים
+              </IonButton>
+              <IonButton
+                onClick={() => setTab('products')}
+                disabled={tab === 'products'}
+                data-testid="order-products-tab-button"
+              >
+                מוצרים
+              </IonButton>
             </IonButtons>
           </nav>
 
           <IonTitle size="small" role="order-details-title">
-            {`הזמנה ${order.createdAt.toLocaleDateString('he', { timeZone: 'Israel' })}`} &nbsp; | &nbsp;
-            <b>{mapOrderStatusToText(order.status)}</b> &nbsp; | &nbsp;
-            {`נסגר להזמנות ב - ${order.closingTime.toLocaleDateString('he', { timeZone: 'Israel' })}`}
+            <span>{`הזמנה ${order.createdAt.toLocaleDateString('he', { timeZone: 'Israel' })}`}</span>
+            <span><b>{mapOrderStatusToText(order.status)}</b></span>
+            <span>{`נסגר להזמנות ב - ${order.closingTime.toLocaleDateString('he', { timeZone: 'Israel' })}`}</span>
           </IonTitle>
 
           {orderStatusBtnText && 
@@ -66,6 +75,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
               slot="primary"
               color={orderSeq(order.status) > 1 ? 'danger' : 'primary'}
               onClick={orderStatusBtnFunction}
+              data-testid="next-order-status-button"
             >
               {orderStatusBtnText}
             </IonButton>}

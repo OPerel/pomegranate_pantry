@@ -1,4 +1,9 @@
-describe('Admin main views', () => {
+const currentDate = new Date();
+const currentDateStr = currentDate.toLocaleDateString('he');
+const nextMonthDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+const nextMonthDateStr = nextMonthDate.toLocaleDateString('he');
+
+describe('Add new order', () => {
 
   before(() => {
     cy.login('rimon@mail.com', 'testadmin');
@@ -59,20 +64,47 @@ describe('Admin main views', () => {
     })
 
     it('should select a date', () => {
-      const date = new Date();
-      date.setMonth(date.getMonth() + 1);
-      const dateString = date.toLocaleDateString('he');
       cy.testId('end-order-date-selector').click();
-      cy.get('ion-picker-column.picker-opts-left').children('div').children('button.picker-opt-selected').next().click();
+      cy.get('ion-picker-column.picker-opts-left').find('button.picker-opt-selected').next().click();
       cy.contains('Done').click();
-      cy.get('ion-datetime').shadow().find('[part="text"]').should('have.text', dateString);
+      cy.get('ion-datetime').shadow().find('[part="text"]').should('have.text', nextMonthDateStr);
     });
 
     it('should add the order', () => {
-      const orderDate = new Date().toLocaleDateString('he');
       cy.contains('הוסף הזמנה').click();
       cy.testId('order-list-item').should('have.lengthOf', 2);
-      cy.testId('order-item-createdAt').last().should('have.text', orderDate);
+      cy.testId('order-item-createdAt').first().should('have.text', currentDateStr);
+      cy.testId('order-item-status').first().should('have.text', 'פתוח להזמנות');
     });
-  })
+
+    it('should now have new order button disabled', () => {
+      cy.testId('add-order-button').shadow().find('button').should('be.disabled');
+    });
+  });
+
+  describe('New order init with no users nor products', () => {
+    it('should click new order row and display order', () => {
+      const orderTitle = `הזמנה ${currentDateStr }פתוח להזמנותנסגר להזמנות ב - ${nextMonthDateStr}`;
+      cy.testId('order-list-item').contains('פתוח להזמנות').click();
+      cy.getRole('order-details-title').should('have.text', orderTitle)
+    });
+
+    it('should have correct next order status button', () => {
+      cy.testId('next-order-status-button').should('have.text', 'עבור להשלמות');
+    });
+
+    it('should display empty order users list', () => {
+      cy.testId('order-users-tab-button').shadow().find('button').should('be.disabled');
+      cy.contains('רשימת משתמשים');
+      cy.contains('לא נמצאו משתמשים להזמנה');
+    });
+
+    it('should click the products tab button and display empty list', () => {
+      const productsBtn = cy.testId('order-products-tab-button');
+      productsBtn.click();
+      productsBtn.shadow().find('button').should('be.disabled');
+      cy.contains('רשימת מוצרים');
+      cy.contains('לא נמצאו מוצרים להזמנה');
+    });
+  });
 })

@@ -170,11 +170,9 @@ class FirebaseService {
           }
         });
         
-        /** TODO: sorting orders doesn't work! */
         ordersList.sort(function(a, b) {
-          return a.createdAt.getTime() + b.createdAt.getTime()
+          return b.createdAt.getTime() - a.createdAt.getTime()
         })
-        // console.log('ordersList: ', ordersList)
         return ordersList;
       })
     ).subscribe(orders => {
