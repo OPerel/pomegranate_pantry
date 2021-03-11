@@ -22,10 +22,17 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
   const { state: { products, currentOrder }, dispatch } = useUserStateContext();
 
   useEffect(() => {
+    let isMounted = true;
     dispatch({ type: UserStateActionTypes.FETCH });
-    Fire.getProducts(productsObj => {
-      dispatch({ type: UserStateActionTypes.SET_PRODUCTS, payload: productsObj });
+    Fire.getProducts().then(productsObj => {
+      if (isMounted) {
+        dispatch({ type: UserStateActionTypes.SET_PRODUCTS, payload: productsObj });
+      }
     });
+
+    return () => {
+      isMounted = false;
+    }
   }, [dispatch]);
 
   const productsList = Object.keys(products).map(key => ({

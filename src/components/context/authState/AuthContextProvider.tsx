@@ -55,16 +55,23 @@ const AuthStateProvider = <P extends {}>(Component: React.ComponentType<P>): Rea
   const WithAuth: React.ComponentType<P> = (props) => {
 
     useEffect(() => {
+      let isMounted = true;
       dispatch({ type: AuthStateActionTypes.FETCH });
+      
       const unsubscribe = Fire.authStateListener((user, error) => {
-        if (error) {
-          dispatch({ type: AuthStateActionTypes.SET_ERROR, payload: error });
-        } else {
-          dispatch({ type: AuthStateActionTypes.SET_USER, payload: user });
+        if (isMounted) {
+          if (error) {
+            dispatch({ type: AuthStateActionTypes.SET_ERROR, payload: error });
+          } else {
+            dispatch({ type: AuthStateActionTypes.SET_USER, payload: user });
+          }
         }
       });
 
-      return unsubscribe;
+      return () => {
+        isMounted = false;
+        return unsubscribe;
+      }
     }, []);
 
     const [state, dispatch] = useReducer(reducer, initialState);

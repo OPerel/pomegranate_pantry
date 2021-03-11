@@ -70,7 +70,7 @@ const AdminStateProvider = <P extends {}>(Component: React.ComponentType<P>): Re
 
     React.useEffect(() => {
       dispatch({ type: AdminStateActionTypes.FETCH })
-      Fire.ordersCollectionListener(orders => {
+      const subscription = Fire.ordersCollectionListener(orders => {
         dispatch({ type: AdminStateActionTypes.SET_ORDERS, payload: orders });
       });
 
@@ -80,22 +80,29 @@ const AdminStateProvider = <P extends {}>(Component: React.ComponentType<P>): Re
       });
 
       dispatch({ type: AdminStateActionTypes.FETCH })
-      Fire.getProducts(products => {
+      Fire.getProducts().then(products => {
         dispatch({ type: AdminStateActionTypes.SET_PRODUCTS, payload: products })
       });
   
-      return () => Fire.ordersCollectionOff();
+      return () => {
+        subscription.unsubscribe();
+      }
     }, [dispatch]);
 
     React.useEffect(() => {
+      let subscription: any;
       if (pathname.includes('order')) {
         const orderId = pathname.split('/')[3];
         dispatch({ type: AdminStateActionTypes.FETCH });
-        Fire.orderListener(orderId, order => {
+        subscription = Fire.orderListener(orderId, order => {
           dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: order })
         });
       } else {
         dispatch({ type: AdminStateActionTypes.SET_ORDER, payload: null });
+      }
+
+      return () => {
+        subscription?.unsubscribe();
       }
     }, [pathname])
 

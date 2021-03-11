@@ -91,25 +91,43 @@ const UserStateProvider = <P extends {}>(Component: React.ComponentType<P>): Rea
     useEffect(() => {
 
       dispatch({ type: UserStateActionTypes.FETCH });
-      Fire.openOrderListener((order) => {
+      const subscription = Fire.openOrderListener((order) => {
         dispatch({ type: UserStateActionTypes.SET_OPEN_ORDER, payload: order });
       });
+
+      return () => {
+        subscription.unsubscribe()
+      }
     
     }, []);
 
     useEffect(() => {
-      if (user && user._id) {
+      let subscription: any;
+      let isMounted = true;
+      if (user && user._id && isMounted) {
         dispatch({ type: UserStateActionTypes.FETCH });
-        Fire.userOrdersListener(user._id, userOrders => {
+        subscription = Fire.userOrdersListener(user._id, userOrders => {
           dispatch({ type: UserStateActionTypes.SET_USER_ORDERS, payload: userOrders });
         });
+      }
+
+      return () => {
+        if (subscription) {
+          subscription.unsubscribe();
+          isMounted = false;
+        }
       }
     }, [user]);
 
     useEffect(() => {
+      let isMounted = true;
       const currentOrder = state.userOrders.find(order => order.orderRef === state.openOrder?._id);
-      if (currentOrder) {
+      if (currentOrder && isMounted) {
         dispatch({ type: UserStateActionTypes.SET_CURRENT_ORDER, payload: currentOrder });
+      }
+
+      return () => {
+        isMounted = false;
       }
     }, [state.userOrders, state.openOrder?._id])
 

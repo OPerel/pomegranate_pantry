@@ -75,14 +75,12 @@ class FirebaseService {
    */
 
   public getUsers = async (cb: (users: { [key: string]: User }) => void) => {
-    this.getColRef('users').once('value', snapshot => {
-      cb(snapshot.val());
-    })
+    const snapshot = await this.getColRef('users').get();
+    cb(snapshot.val());
   };
-  public getProducts = async (cb: (products: { [key: string]: Product }) => void) => {
-    this.getColRef('products').once('value', snapshot => {
-      cb(snapshot.val());
-    })
+  public getProducts = async (): Promise<{ [key: string]: Product }> => {
+    const snapshot = await this.getColRef('products').get();
+    return snapshot.val();
   };
 
   /**
@@ -153,12 +151,12 @@ class FirebaseService {
   }
 
   // Admin data
-  public ordersCollectionListener = async (
+  public ordersCollectionListener = (
     cb: (orders: Order[]) => void
   ) => {
     const ordersRef = this.getColRef('/orders');
     const orders$ = list(ordersRef)
-    orders$.pipe(
+    const subscription = orders$.pipe(
       map(orders => {
         const ordersList = orders.map(order => {
           const orderData = order.snapshot.val()
@@ -177,12 +175,9 @@ class FirebaseService {
       })
     ).subscribe(orders => {
       cb(orders)
-    })
-  }
+    });
 
-  // check if needed
-  public ordersCollectionOff = () => {
-    this.getColRef('/orders').off('value');
+    return subscription;
   }
 
   /** 
@@ -192,10 +187,10 @@ class FirebaseService {
    * @param {string} orderId - the id of the order to listen to
    * @param {function} cb - a callback that fires on every value change with the full obj
    */
-  public orderListener = async (
+  public orderListener = (
     orderId: string,
     cb: (order: Order) => void
-  ): Promise<void> => {
+  ) => {
 
     // collections refs
     const orderRef = this.getColRef('orders').child(orderId);
@@ -209,7 +204,7 @@ class FirebaseService {
     const orderUsersList$ = list(orderUsersRef);
     const orderProductsList$ = list(orderProductsRef);
 
-    combineLatest(orderState$, orderUsersList$, orderProductsList$)
+    const subscription = combineLatest(orderState$, orderUsersList$, orderProductsList$)
     .pipe(
       // turns each observable into the desired object
       map(([order, orderUsers, orderProducts]): [Order, OrderUser[], OrderProduct[]] => {
@@ -295,20 +290,17 @@ class FirebaseService {
     )
     .subscribe(async data => {
       cb(await data);
-    })
-  }
+    });
 
-  // check if needed
-  public orderOff = (id: string) => {
-    this.getColRef('orders').child(id).off('value');
+    return subscription;
   }
 
   // User data
 
-  public openOrderListener = async (cb: (orderId: Order | null) => void) => {
+  public openOrderListener = (cb: (orderId: Order | null) => void) => {
     const openOrderRef = this.getColRef('orders').orderByChild('status').equalTo('open');
     const openOrder$ = stateChanges(openOrderRef);
-    openOrder$.subscribe(orderData => {
+    const subscription = openOrder$.subscribe(orderData => {
       const val = orderData.snapshot.val();
       cb({
         ...val,
@@ -316,16 +308,18 @@ class FirebaseService {
         closingTime: new Date(val.closingTime),
         _id: orderData.snapshot.key
       });
-    })
+    });
+
+    return subscription;
   }
 
-  public userOrdersListener = async (
+  public userOrdersListener = (
     userId: string,
     cb: (userOrders: OrderUser[]) => void
   ) => {
     const userOrdersRef = this.getColRef('orderUsers').orderByChild('userRef').equalTo(userId);
     const userOrders$ = list(userOrdersRef);
-    userOrders$.pipe(
+    const subscription = userOrders$.pipe(
       map(userOrders => {
         return userOrders.map(order => {
           const val = order.snapshot.val();
@@ -342,7 +336,9 @@ class FirebaseService {
     )
     .subscribe(data => {
       cb(data)
-    })
+    });
+
+    return subscription;
   }
 
   // public orderProductsListener = async (

@@ -46,6 +46,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
                 defaultHref={ROUTES.ADMIN}
                 icon={chevronForwardOutline}
                 text="הזמנות"
+                data-testid="back-to-orders"
               />
               <IonButton
                 onClick={() => setTab('users')}
@@ -72,7 +73,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
 
           {orderStatusBtnText && 
             <IonButton
-              slot="primary"
+              slot="end"
               color={orderSeq(order.status) > 1 ? 'danger' : 'primary'}
               onClick={orderStatusBtnFunction}
               data-testid="next-order-status-button"
