@@ -60,7 +60,7 @@ jest.mock('./services/Firebase', () => {
   const orderUsersData = [
     {
       _id: 'abc',
-      products: [{ productRef: 'qwerty1', qty: 2 }, { product: 'qwerty2', qty: 3 }],
+      products: [{ productRef: 'qwerty1', qty: 2 }, { productRef: 'qwerty2', qty: 3 }],
       userRef: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
       orderRef: '1',
       totalPrice: 56,
@@ -68,7 +68,7 @@ jest.mock('./services/Firebase', () => {
     },
     {
       _id: '2',
-      products: [{ productRef: 'qwerty3', qty: 2 }, { product: 'qwerty4', qty: 1 }],
+      products: [{ productRef: 'qwerty3', qty: 2 }, { productRef: 'qwerty4', qty: 1 }],
       userRef: 'b',
       orderRef: '2',
       totalPrice: 0,
@@ -172,14 +172,23 @@ jest.mock('./services/Firebase', () => {
   return {
     authStateListener: (cb) => {cb(userData, null)},
     getUsers: (cb) => {cb(userData)},
-    getProducts: (cb) => {cb(productsData)},
-    ordersCollectionListener: (cb) => {cb(ordersData)},
-    productsCollectionListener: (cb) => {cb(productsData)},
-    // orderUsersCollectionListener: (id, cb) => {cb(orderUsersData)},
-    // orderProductsCollectionListener: (id, cb) => {cb(orderProductsData)},
+    productsCollectionListener: (cb) => {
+      cb(productsData);
+      return { unsubscribe: () => {} };
+    },
+    ordersCollectionListener: (cb) => {
+      cb(ordersData);
+      return { unsubscribe: () => {} };
+    },
     orderListener: (id, cb) => {cb(ordersData[0])},
-    openOrderListener: (cb) => {cb(ordersData[0])},
-    userOrdersListener: (id, cb) => {cb([orderUsersData[0]])},
+    openOrderListener: (cb) => {
+      cb(ordersData[0]);
+      return { unsubscribe: () => {} };
+    },
+    userOrdersListener: (id, cb) => {
+      cb([orderUsersData[0]]);
+      return { unsubscribe: () => {} };
+    },
     ordersCollectionOff: () => {},
     // addNewOrder: () => {
     //   // const orderWithId = { ...orderDetails, _id: (ordersData.length + 1).toString() }

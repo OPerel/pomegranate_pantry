@@ -114,8 +114,8 @@ const UserStateProvider = <P extends {}>(Component: React.ComponentType<P>): Rea
       return () => {
         if (subscription) {
           subscription.unsubscribe();
-          isMounted = false;
         }
+        isMounted = false;
       }
     }, [user]);
 

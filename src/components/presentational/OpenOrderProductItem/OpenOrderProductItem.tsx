@@ -17,7 +17,7 @@ import { Product } from '../../../types/interfaces';
 const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
 
   const { state: { currentOrder, openOrder } } = useUserStateContext();
-  const [productQty, setProductQty] = useState<number>();
+  const [productQty, setProductQty] = useState<any>();
 
   const currentOrderProduct = currentOrder?.products?.find(p => p.productRef === product._id);
 
@@ -26,7 +26,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
       orderRef: openOrder?._id as string,
       productRef: product._id as string,
       currentOrder: currentOrder ? currentOrder._id as string : null,
-      qty: productQty as number
+      qty: Number(productQty)
     };
 
     Fire.addProductToOrder(newOrderProduct);
@@ -43,7 +43,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
                 type="number"
                 placeholder={currentOrderProduct?.qty.toString()}
                 value={productQty}
-                onIonChange={e => setProductQty(Number(e.detail.value))}
+                onIonChange={e => setProductQty(e.detail.value)}
                 role="order-product-qty-input"
               />
             </IonItem>

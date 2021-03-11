@@ -133,9 +133,79 @@ describe('Complete app flow', () => {
         cy.testId('open-order-product-item').each(item => {
           expect(item.find('[role="add-product-to-order-button"]')).to.have.attr('aria-disabled')
         })
-      })
+      });
+
+      it('should enter qty for the first product item', () => {
+        const firstProductInput = cy.getRole('order-product-qty-input')
+        firstProductInput.first().type('2');
+        firstProductInput.should('have.value', Number(2));
+      });
+
+      it('should add the product to the user\'s order', () => {
+        cy.getRole('add-product-to-order-button').first().click();
+        cy.testId('open-order-product-item').first().should('have.attr', 'color', 'medium')
+          .getRole('order-product-qty-input').should('have.attr', 'placeholder', '2');
+      });
+
+      it('should click my order button and display current order modal', () => {
+        cy.getRole('my-order-button').click();
+        cy.testId('my-order-modal').should('be.visible');
+      });
+
+      it('should display the product added in the modal', () => {
+        cy.testId('my-order-product-item').should('have.lengthOf', 1)
+          .and('have.text', 'טחינה הר ברכה - 2');
+      });
+
+      it('should close modal', () => {
+        cy.getRole('close-my-order-modal').click();
+        cy.testId('my-order-modal').should('not.be.visible');
+      });
+
+      it('should go back to admin view', () => {
+        cy.contains('אדמין').click();
+        cy.testId('admin-orders-list').should('be.visible');
+      });
     });
+
+    describe('Add new product', () => {
+      it('should go to products list and click add product button', () => {
+        cy.testId('admin-products-button').click();
+        cy.testId('add-product-button').click();
+        cy.testId('add-product-modal').should('be.visible');
+      });
+
+      it('should fill in product name', () => {
+        const nameInput = cy.getRole('product-name-input');
+        nameInput.type('אגוז');
+        nameInput.should('have.value', 'אגוז');
+      });
+
+      it('should fill in product minQty', () => {
+        const nimQtyInput = cy.getRole('product-minQty-input');
+        nimQtyInput.type('1');
+        nimQtyInput.should('have.value', '1');
+      });
+
+      // it('should fill in product qtyUnit', () => {
+      //   const qtyUnitInput = cy.getRole('product-qtyUnit-input');
+      //   qtyUnitInput.click()
+      //   cy.get('.select-interface-option > ion-label').last().invoke('show').click({ force: true });
+      //   qtyUnitInput.should('have.value', 'Kg');
+      // });
+    })
   }); // end of admin actions
 
+  describe('Regular user adding to order', () => {
 
+    before(() => {
+      cy.login('testuser1@mail.com', 'rimontesting1');
+    });
+
+    after(() => {
+      cy.logout();
+    });
+
+
+  });
 })

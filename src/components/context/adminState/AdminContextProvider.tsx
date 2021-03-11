@@ -70,7 +70,7 @@ const AdminStateProvider = <P extends {}>(Component: React.ComponentType<P>): Re
 
     React.useEffect(() => {
       dispatch({ type: AdminStateActionTypes.FETCH })
-      const subscription = Fire.ordersCollectionListener(orders => {
+      const ordersSubscription = Fire.ordersCollectionListener(orders => {
         dispatch({ type: AdminStateActionTypes.SET_ORDERS, payload: orders });
       });
 
@@ -80,12 +80,13 @@ const AdminStateProvider = <P extends {}>(Component: React.ComponentType<P>): Re
       });
 
       dispatch({ type: AdminStateActionTypes.FETCH })
-      Fire.getProducts().then(products => {
+      const productsSubscription = Fire.productsCollectionListener(products => {
         dispatch({ type: AdminStateActionTypes.SET_PRODUCTS, payload: products })
       });
   
       return () => {
-        subscription.unsubscribe();
+        ordersSubscription.unsubscribe();
+        productsSubscription.unsubscribe();
       }
     }, [dispatch]);
 

@@ -24,19 +24,19 @@ import Fire from '../../../services/Firebase';
 
 interface ProductFormState {
   name: string,
-  minQty: number,
+  minQty: any,
   qtyUnit: 'unit' | 'Kg'
 }
 
 type ProductFormAction =
 | { type: 'name', payload: string }
-| { type: 'minQty', payload: number }
+| { type: 'minQty', payload: any }
 | { type: 'qtyUnit', payload: 'unit' | 'Kg' };
 
 // State
 const initialState: ProductFormState = {
   name: '',
-  minQty: 0,
+  minQty: undefined,
   qtyUnit: 'unit'
 }
 
@@ -63,12 +63,14 @@ const Products: React.FC = () => {
   const addProduct = async (): Promise<void> => {
     if (newProductFormIsValid) {
       const product = {
-        name, minQty, qtyUnit
+        name,
+        minQty: Number(minQty),
+        qtyUnit
       }
       try {
+        setShowProductForm(false);
         const res = await Fire.addNewProduct(product);
         console.log('product res: ', res);
-        setShowProductForm(false);
       } catch (err) {
         console.log('Error adding product: ', err)
       }
@@ -106,55 +108,63 @@ const Products: React.FC = () => {
         {Object.keys(products).map(productKey => <ProductListItem key={productKey} product={products[productKey]} />)}
       </IonList>
       
-      <IonModal isOpen={showProductForm}>
-        <IonTitle>הכנס פרטי מוצר</IonTitle>
-        <form>
-          <IonLabel>
-            שם
-            <IonItem>
-              <IonInput
-                type="text"
-                value={name}
-                onIonChange={e => dispatch({ type: 'name', payload: e.detail.value as string })}
-                role="product-name-input"
-              ></IonInput>
-            </IonItem>
-          </IonLabel>
-          
-          {/* <IonItemDivider /> */}
+      <IonModal
+        isOpen={showProductForm}
+        onDidDismiss={() => setShowProductForm(false)}
+        data-testid="add-product-modal"
+      >
+        <IonToolbar>
+          <IonTitle>הכנס פרטי מוצר</IonTitle>
+        </IonToolbar>
+        <IonContent>
+          <form>
+            <IonLabel>
+              שם
+              <IonItem>
+                <IonInput
+                  type="text"
+                  value={name}
+                  onIonChange={e => dispatch({ type: 'name', payload: e.detail.value as string })}
+                  role="product-name-input"
+                />
+              </IonItem>
+            </IonLabel>
+            
+            {/* <IonItemDivider /> */}
 
-          <IonLabel>
-            כמות מינימום
-            <IonItem>
-              <IonInput
-                type="number"
-                value={minQty}
-                onIonChange={e => dispatch({ type: 'minQty', payload: Number(e.detail.value) })}
-                role="product-minQty-input"
-              ></IonInput>
-            </IonItem>
-          </IonLabel>
-          {/* <IonItemDivider /> */}
+            <IonLabel>
+              כמות מינימום
+              <IonItem>
+                <IonInput
+                  type="number"
+                  value={minQty}
+                  onIonChange={e => dispatch({ type: 'minQty', payload: e.detail.value })}
+                  role="product-minQty-input"
+                />
+              </IonItem>
+            </IonLabel>
+            {/* <IonItemDivider /> */}
 
-          <IonLabel>
-            סוג יחידה
-            <IonItem>
-              <IonSelect
-                interface="popover"
-                value={qtyUnit}
-                onIonChange={e => dispatch({ type: 'qtyUnit', payload: e.detail.value as "unit" | "Kg" })}
-                role="product-qtyUnit-input"
-              >
-                <IonSelectOption value="unit">יחידה</IonSelectOption>
-                <IonSelectOption value="Kg">ק"ג</IonSelectOption>
-              </IonSelect>
-            </IonItem>
-          </IonLabel>
+            <IonLabel>
+              סוג יחידה
+              <IonItem>
+                <IonSelect
+                  interface="popover"
+                  value={qtyUnit}
+                  onIonChange={e => dispatch({ type: 'qtyUnit', payload: e.detail.value as "unit" | "Kg" })}
+                  role="product-qtyUnit-input"
+                >
+                  <IonSelectOption value="unit">יחידה</IonSelectOption>
+                  <IonSelectOption value="Kg">ק"ג</IonSelectOption>
+                </IonSelect>
+              </IonItem>
+            </IonLabel>
+          </form>
 
-          <IonButton onClick={addProduct} disabled={!newProductFormIsValid}>הוסף מוצר</IonButton>
-          <IonButton onClick={() => setShowProductForm(false)}>ביטול</IonButton>
-          {/* <IonItemDivider /> */}
-        </form>
+            <IonButton onClick={addProduct} disabled={!newProductFormIsValid}>הוסף מוצר</IonButton>
+            <IonButton onClick={() => setShowProductForm(false)}>ביטול</IonButton>
+            {/* <IonItemDivider /> */}
+        </IonContent>
       </IonModal>
     </IonContent>
   );

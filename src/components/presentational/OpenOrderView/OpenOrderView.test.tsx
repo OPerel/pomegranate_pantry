@@ -64,3 +64,5 @@ test('should display correct number of products', async () => {
   render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
   expect(await screen.findAllByTestId('open-order-product-item')).toHaveLength(6);
 });
+
+// TODO: add tests for my order modal

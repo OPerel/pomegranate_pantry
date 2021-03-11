@@ -78,10 +78,6 @@ class FirebaseService {
     const snapshot = await this.getColRef('users').get();
     cb(snapshot.val());
   };
-  public getProducts = async (): Promise<{ [key: string]: Product }> => {
-    const snapshot = await this.getColRef('products').get();
-    return snapshot.val();
-  };
 
   /**
    * Get by id
@@ -120,8 +116,21 @@ class FirebaseService {
   }
   
   /**
-   * Listeners  
+   * Listeners
    */
+
+  // General
+  public productsCollectionListener = (cb: (products: { [key: string]: Product }) => void) => {
+    const productsRef = this.getColRef('products');
+    const products$ = object(productsRef);
+    const subscription = products$
+      .subscribe(products => {
+        cb(products.snapshot.val());
+      });
+
+    return subscription;
+  };
+  
   // Auth
   public authStateListener = (
     cb: (user: User | null, error: string | null) => void
@@ -340,21 +349,6 @@ class FirebaseService {
 
     return subscription;
   }
-
-  // public orderProductsListener = async (
-  //   orderId: string,
-  //   cb: (orderProducts: OrderProduct[]) => void
-  // ) => {
-  //   const orderProductsRef = this.getColRef('orderProducts')
-  //     .orderByChild('orderRef')
-  //     .equalTo(orderId);
-
-  //   const orderProducts$ = object(orderProductsRef);
-
-  //   orderProducts$.subscribe(data => {
-  //     cb(this.parseSnapshot(data.snapshot))
-  //   })
-  // }
 
   /**
    * Write
