@@ -135,9 +135,14 @@ describe('Complete app flow', () => {
         })
       });
 
+      it('should display correct missing qty for first product', () => {
+        const firstProductMissingQty = cy.getRole('missing-product-qty').first();
+        firstProductMissingQty.should('have.text', '12');
+      });
+
       it('should enter qty for the first product item', () => {
-        const firstProductInput = cy.getRole('order-product-qty-input')
-        firstProductInput.first().type('2');
+        const firstProductInput = cy.getRole('order-product-qty-input').first();
+        firstProductInput.type('2');
         firstProductInput.should('have.value', Number(2));
       });
 
@@ -145,6 +150,11 @@ describe('Complete app flow', () => {
         cy.getRole('add-product-to-order-button').first().click();
         cy.testId('open-order-product-item').first().should('have.attr', 'color', 'medium')
           .getRole('order-product-qty-input').should('have.attr', 'placeholder', '2');
+      });
+
+      it('should display correct updated missing qty for first product', () => {
+        const firstProductMissingQty = cy.getRole('missing-product-qty').first();
+        firstProductMissingQty.should('have.text', '10');
       });
 
       it('should click my order button and display current order modal', () => {

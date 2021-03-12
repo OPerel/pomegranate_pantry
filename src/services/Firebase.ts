@@ -70,6 +70,37 @@ class FirebaseService {
     return objectsArray;
   }
 
+  private getOrderProductCalcs = async (
+    productId: string,
+    orderUsers: OrderUser[]
+  ) => {
+    const { minQty } = await this.getProduct(productId);
+
+    /** 
+     * total qty of orderProduct
+     * first reduce all product objects from orderUsers to one array,
+     * then filter the relevant products,
+     * reduce the total qty from the users' product objects
+     */
+    const totalQty = orderUsers.reduce((acc, orderUser) => {
+      return acc.concat(orderUser.products);
+    }, [] as OrderUserProduct[])
+      .filter(p => p?.productRef === productId)
+      .reduce((acc, { qty }) => acc = acc + qty, 0);
+
+    /**
+     * calculate missing qty by total and product min
+     */
+    const missing = (totalQty % minQty) !== 0
+    ? ((Math.floor(totalQty / minQty) + 1) * minQty) - totalQty
+    : null;
+
+    return {
+      totalQty,
+      missing
+    }
+  }
+
   /**
    * Get collection
    */
@@ -249,27 +280,8 @@ class FirebaseService {
           orderUsers,
           // the order products have to be further transformed for totalQty and missing
           orderProducts: await Promise.all(orderProducts.map(async orderProduct => {
-            const { minQty } = await this.getProduct(orderProduct.productRef);
-
-            /** 
-             * total qty of orderProduct
-             * first reduce all product objects from orderUsers to one array,
-             * then filter the relevant products,
-             * reduce the total qty from the users' product objects
-             */
-            const totalQty = orderUsers.reduce((acc, orderUser) => {
-              return acc.concat(orderUser.products);
-            }, [] as OrderUserProduct[])
-              .filter(p => p?.productRef === orderProduct.productRef)
-              .reduce((acc, { qty }) => acc = acc + qty, 0);
-
-            /**
-             * calculate missing qty by total and product min
-             */
-            const missing = (totalQty % minQty) !== 0
-            ? ((Math.floor(totalQty / minQty) + 1) * minQty) - totalQty
-            : null;
             
+            const { totalQty, missing } = await this.getOrderProductCalcs(orderProduct.productRef, orderUsers);
             return {
               ...orderProduct,
               totalQty,
@@ -317,6 +329,53 @@ class FirebaseService {
         closingTime: new Date(val.closingTime),
         _id: orderData.snapshot.key
       });
+    });
+
+    return subscription;
+  }
+
+  public openOrderProductsListener = (
+    orderId: string,
+    cb: (products: OrderProduct[]) => void
+  ) => {
+    const orderProductsRef = this.getColRef('orderProducts').child(orderId);
+    const orderUsersRef = this.getColRef('orderUsers')
+      .orderByChild('orderRef').equalTo(orderId);
+    
+    const orderProducts$ = list(orderProductsRef);
+    const orderUsers$ = list(orderUsersRef);
+
+    const subscription = combineLatest(orderProducts$, orderUsers$)
+    .pipe(
+      map(async ([orderProducts, orderUsers]): Promise<OrderProduct[]> => {
+        const res = await Promise.all(orderProducts.map(async orderProduct => {
+          const { key } = orderProduct.snapshot;
+          const orderUsersObjList = orderUsers.map(orderUser => {
+            const val = orderUser.snapshot.val();
+            return {
+              ...val,
+              _id: orderUser.snapshot.key,
+              products: Object.keys(val.products).map(key => ({
+                productRef: key,
+                qty: val.products[key]
+              }))
+            }
+          });
+          const { totalQty, missing } = await this.getOrderProductCalcs(key as string, orderUsersObjList)
+          return {
+            ...orderProduct.snapshot.val(),
+            productRef: key,
+            totalQty,
+            missing,
+            orderRef: orderId
+          }
+        }));
+
+        return res;        
+      })
+    )
+    .subscribe(async openOrderProducts => {
+      cb(await openOrderProducts);
     });
 
     return subscription;
@@ -400,15 +459,7 @@ class FirebaseService {
 
 
   // User writes
-  public createNewOrderUser = async (newOrderUser: OrderUser) => {
-    try {
-      const newOrderUserRes = await this.getColRef('orderUsers').push(newOrderUser);
-      console.log('New order user created: ', (await newOrderUserRes.get()).val())
-    } catch (err) {
-      console.warn('Error creating new order user: ', err);
-    }
-  }
-
+  
   public addProductToOrder = async ({
     orderRef, productRef, qty, currentOrder
   }: NewOrderProduct) => {
@@ -418,7 +469,7 @@ class FirebaseService {
           return { price: 0 };
         } else {
           console.log('product exists');
-          return;;
+          return;
         }
       }, (error) => {
         if (error) {

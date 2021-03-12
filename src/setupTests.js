@@ -189,7 +189,11 @@ jest.mock('./services/Firebase', () => {
       cb([orderUsersData[0]]);
       return { unsubscribe: () => {} };
     },
-    ordersCollectionOff: () => {},
+    openOrderProductsListener: (id, cb) => {
+      cb(ordersData[0].orderProducts);
+      return { unsubscribe: () => {} };
+    },
+    // ordersCollectionOff: () => {},
     // addNewOrder: () => {
     //   // const orderWithId = { ...orderDetails, _id: (ordersData.length + 1).toString() }
     //   // console.log('orders before push :', ordersData)

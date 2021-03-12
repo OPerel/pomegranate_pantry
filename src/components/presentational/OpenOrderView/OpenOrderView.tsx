@@ -72,6 +72,7 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
           <IonLabel>שם</IonLabel>
           <IonLabel>כמות</IonLabel>
           <IonLabel>הוסף</IonLabel>
+          <IonLabel>חסר</IonLabel>
         </IonListHeader>
         {productsList.map(product => <OpenOrderProductItem key={product._id} product={product} />)}
       </IonList>

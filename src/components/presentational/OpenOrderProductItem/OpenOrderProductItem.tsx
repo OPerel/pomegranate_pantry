@@ -16,10 +16,11 @@ import { Product } from '../../../types/interfaces';
 
 const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
 
-  const { state: { currentOrder, openOrder } } = useUserStateContext();
+  const { state: { currentOrder, openOrder, orderProducts } } = useUserStateContext();
   const [productQty, setProductQty] = useState<any>();
 
   const currentOrderProduct = currentOrder?.products?.find(p => p.productRef === product._id);
+  const missing = orderProducts.find(p => p.productRef === product._id)?.missing;
 
   const handleAddProductClick = () => {
     const newOrderProduct = {
@@ -35,9 +36,9 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
   return (
     <IonItem color={currentOrderProduct ? 'medium' : ''} data-testid="open-order-product-item">
       <IonGrid>
-        <IonRow>
+        <IonRow className="ion-text-center">
           <IonCol>{product.name}</IonCol>
-          <IonCol className="ion-text-center">
+          <IonCol>
             <IonItem>
               <IonInput
                 type="number"
@@ -57,6 +58,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
               <IonIcon icon={addOutline} />
             </IonButton>
           </IonCol>
+          <IonCol role="missing-product-qty">{missing || product.minQty}</IonCol>
         </IonRow>
       </IonGrid>
     </IonItem>

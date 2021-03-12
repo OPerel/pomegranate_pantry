@@ -69,6 +69,15 @@ test('should have a "medium" color attr for ordered product', async () => {
   expect(await screen.findByTestId('open-order-product-item')).toHaveAttribute('color', 'medium');
 });
 
+test('should have correct missing qty' ,async () => {
+  render(
+    <OpenOrderProductItem product={orderedProduct} />,
+    { route: '/user' }, true, 'user'
+  );
+
+  expect(await screen.findByRole('missing-product-qty')).toHaveTextContent('10');
+});
+
 test('should type in product qty and add to order', async () => {
   const mockHandleAddProductClick = jest.spyOn(Fire, 'addProductToOrder');
 
