@@ -14,7 +14,6 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           start: npm run emulators && npm start
-          working-directory: application
           browser: chrome
           # spec: 'cypress/integration/landingPage_spec.ts,cypress/integration/auth/**/*'
         env:
