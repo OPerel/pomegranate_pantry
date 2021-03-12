@@ -11,7 +11,7 @@ import {
   IonIcon,
   IonContent
 } from '@ionic/react';
-import { trash } from 'ionicons/icons'
+import { trash, chevronForwardOutline } from 'ionicons/icons'
 import { useUserStateContext, UserStateActionTypes } from '../../context/userState/UserContextProvider';
 import { mapOrderStatusToText } from '../../../utils/mapOrderStatus';
 import Fire from '../../../services/Firebase';
@@ -83,6 +83,15 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
         onDidDismiss={() => setMyOrderModalIsOpen(false)}
       >
         <IonToolbar>
+          <IonButton
+            onClick={() => setMyOrderModalIsOpen(false)}
+            slot="start"
+            fill="clear"
+            color="light"
+            role="close-my-order-modal"
+          >
+            <IonIcon slot="icon-only" icon={chevronForwardOutline} />
+          </IonButton>
           <IonTitle>המוצרים שלי</IonTitle>
         </IonToolbar>
         <IonContent>
@@ -95,7 +104,7 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
                   color="danger"
                   fill="outline"
                   className="delete-product-btn"
-                  >
+                >
                   <IonIcon icon={trash} slot="icon-only"/>
                 </IonButton>
               </IonItem>
@@ -103,12 +112,7 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
           </IonList>
         </IonContent>
 
-        <IonButton
-          onClick={() => setMyOrderModalIsOpen(false)}
-          role="close-my-order-modal"
-        >
-          סגור
-        </IonButton>
+        
       </IonModal>
     </div>
   )

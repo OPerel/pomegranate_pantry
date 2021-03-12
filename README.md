@@ -28,16 +28,13 @@ Order.totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
 
 ### OrderProduct
 ```ts
-{
-  product: string, // ref to Product
-  order: string, // ref to Order
-  price: number
+{ 
+  [orderRef: string]: {
+    [productRef: string]: {
+      price: number
+    }
+  }, 
 }
-
-priceWarn = fixedTotalPrice < finalTotalPrice
-missing = (totalQty % Product.minQty) !== 0
-  ? ((Math.floor(totalQty / Product.minQty) + 1) * Product.minQty) - totalQty
-  : null
 ```
 
 ### User
@@ -45,7 +42,8 @@ missing = (totalQty % Product.minQty) !== 0
 {
   name: string,
   role: 'user' | 'rimon', // user is either a shopper or the one we now call Elad
-  location: 'TA' | 'PH'
+  location: 'TA' | 'PH',
+  email: string
 }
 ```
 
@@ -65,8 +63,7 @@ totalPrice = products.reduce((acc, { product, qty }) => acc += product.price, 0)
 #### OrderUserProducts
 ```ts
 {
-  productRef: string, // ref to OrderProduct
-  qty: number
+  [productRef: string]: qty // ref to OrderProduct
 }
 ```
 
@@ -81,10 +78,19 @@ totalPrice = products.reduce((acc, { product, qty }) => acc += product.price, 0)
 ```
 
 
-## State Interface
-### Auth
-### Admin
-#### Order
+## Client Interface
+
+### User
+```ts
+{
+  name: string,
+  role: 'user' | 'rimon',
+  location: 'TA' | 'PH',
+  email: string,
+  _id?: string;
+}
+```
+### Order
 ```ts
 type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed';
 
@@ -94,6 +100,84 @@ type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed';
   createdAt: Date,
   closingTime: Date,
   totalPrice: number, // total price of UsersOrders
+  orderUsers: OrderUser[], // array of OrderUsers
+  orderProducts: OrderProduct[], // array of OrderProducts
+}
+```
+
+### OrderProduct 
+```ts
+{
+  _id: string,
+  productRef: string, // ref to Product
+  orderRef: string, // ref to Order
+  totalQty: number,
+  missing: number | null,
+  price: number,
+}
+```
+### OrderUserProduct 
+```ts
+{
+  productRef: string, // ref to Product
+  qty: number
+}
+```
+
+### OrderUser 
+```ts
+{
+  _id?: string,
+  products: OrderUserProduct[], // array of Products`
+  userRef: string, // a ref to the user
+  orderRef: string, // a ref to the order
+  totalPrice: number | null, // total price of products.qty
+  payed: boolean
+}
+```
+
+### Product 
+```ts
+{
+  name: string,
+  minQty: number,
+  qtyUnit: 'unit' | 'Kg',
+  _id?: string
+}
+```
+
+## State interface
+### AuthState 
+```ts
+{
+  loading: boolean,
+  user: User | null,
+  error: string | null
+}
+```
+
+### AdminState
+```ts
+{
+  loading: boolean,
+  users: { [key: string]: User },
+  orders: Order[],
+  products: { [key: string]: Product },
+  order: Order | null
+}
+```
+
+### UserState
+```ts
+{
+  loading: boolean,
+  user: User | null,
+  openOrder: Order | null,
+  userOrders: OrderUser[],
+  currentOrder: OrderUser | null,
+  products: { [key: string ]: Product },
+  orderProducts: OrderProduct[],
+  error: string | null
 }
 ```
 ## Views

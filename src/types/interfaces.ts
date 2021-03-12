@@ -1,8 +1,8 @@
 export interface User {
-  name: string;
+  name: string,
   role: 'user' | 'rimon',
-  location: 'TA' | 'PH';
-  _id?: string;
+  location: 'TA' | 'PH',
+  _id?: string
 }
 
 export type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed';
@@ -40,12 +40,12 @@ export interface OrderUserProduct {
 }
 
 export interface OrderUser {
-  _id?: string;
-  products: OrderUserProduct[]; // array of Products`
-  userRef: string // a ref to the user
-  orderRef: string // a ref to the order
-  totalPrice: number | null; // total price of products.qty
-  payed: boolean;
+  _id?: string,
+  products: OrderUserProduct[], // array of Products`
+  userRef: string, // a ref to the user
+  orderRef: string, // a ref to the order
+  totalPrice: number | null, // total price of products.qty
+  payed: boolean
 }
 
 export interface Product {
