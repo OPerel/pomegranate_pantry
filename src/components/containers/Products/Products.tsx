@@ -92,7 +92,7 @@ const Products: React.FC = () => {
           </IonTitle>
 
           <IonLabel slot="end">
-            <IonButton onClick={() => setShowProductForm(true)} data-testid="add-product-button">
+            <IonButton onClick={() => setShowProductForm(true)} data-testid="open-new-product-modal">
               <IonIcon slot="start" icon={addOutline} />הוסף מוצר חדש
             </IonButton>
           </IonLabel>
@@ -161,7 +161,11 @@ const Products: React.FC = () => {
             </IonLabel>
           </form>
 
-            <IonButton onClick={addProduct} disabled={!newProductFormIsValid}>הוסף מוצר</IonButton>
+            <IonButton
+              onClick={addProduct}
+              disabled={!newProductFormIsValid}
+              role="add-product-to-db"
+            >הוסף מוצר</IonButton>
             <IonButton onClick={() => setShowProductForm(false)}>ביטול</IonButton>
             {/* <IonItemDivider /> */}
         </IonContent>

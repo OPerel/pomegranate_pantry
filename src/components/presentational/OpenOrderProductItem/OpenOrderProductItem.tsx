@@ -34,7 +34,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
   }
 
   return (
-    <IonItem color={currentOrderProduct ? 'medium' : ''} data-testid="open-order-product-item">
+    <IonItem color={currentOrderProduct ? 'favorite' : ''} data-testid="open-order-product-item">
       <IonGrid>
         <IonRow className="ion-text-center">
           <IonCol>{product.name}</IonCol>

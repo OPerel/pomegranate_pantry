@@ -27,6 +27,14 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-tertiary-shade: #82bbc6;
   --ion-color-tertiary-tint: #9fd9e4;
 
+  /** myColor **/
+  --ion-color-favorite: #9ac5c0;
+  --ion-color-favorite-rgb: 154,197,192;
+  --ion-color-favorite-contrast: #000000;
+  --ion-color-favorite-contrast-rgb: 0,0,0;
+  --ion-color-favorite-shade: #88ada9;
+  --ion-color-favorite-tint: #a4cbc6;
+
   /** success **/
   --ion-color-success: #2dd36f;
   --ion-color-success-rgb: 45, 211, 111;
@@ -74,6 +82,16 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+}
+
+/* Apply new favorite color */
+.ion-color-favorite {
+  --ion-color-base: var(--ion-color-favorite);
+  --ion-color-base-rgb: var(--ion-color-favorite-rgb);
+  --ion-color-contrast: var(--ion-color-favorite-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-favorite-contrast-rgb);
+  --ion-color-shade: var(--ion-color-favorite-shade);
+  --ion-color-tint: var(--ion-color-favorite-tint);
 }
 
 @media (prefers-color-scheme: dark) {

@@ -17,13 +17,13 @@ test('should render correct number of product items', async () => {
 
 test('should open new product modal on clicking the new product btn', async () => {
   render(<Products />, { route: './admin' });
-  fireEvent.click(await screen.findByTestId('add-product-button'));
+  fireEvent.click(await screen.findByTestId('open-new-product-modal'));
   expect(await screen.findByText('הכנס פרטי מוצר')).toBeInTheDocument();
 });
 
 // test('should have modal new product button disabled initially', async () => {
 //   render(<Products />, { route: './admin' });
-//   fireEvent.click(await screen.findByTestId('add-product-button'));
+//   fireEvent.click(await screen.findByTestId('open-new-product-modal'));
 //   expect(screen.getByText('הוסף מוצר')).toHaveProperty('aria-disabled', 'true')
 // });
 
@@ -31,7 +31,7 @@ test('should fill in new product form and add product', async () => {
   const addNewProduct = jest.spyOn(Fire, 'addNewProduct');
   const addProduct = jest.fn(() => Promise.resolve());
   render(<Products />, { route: './admin' });
-  fireEvent.click(await screen.findByTestId('add-product-button'));
+  fireEvent.click(await screen.findByTestId('open-new-product-modal'));
   
   fireEvent.ionChange(await screen.findByRole('product-name-input'), 'rice');
   fireEvent.ionChange(await screen.findByRole('product-minQty-input'), '5');

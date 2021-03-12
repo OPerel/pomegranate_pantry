@@ -46,7 +46,7 @@ describe('Complete app flow', () => {
       it('should list 4 users', () => {
         cy.getRole('users-list-item').should('have.lengthOf', 4);
       });
-    })
+    });
   
     describe('New order flow', () => {
       it('should go back to orders list', () => {
@@ -148,7 +148,7 @@ describe('Complete app flow', () => {
 
       it('should add the product to the user\'s order', () => {
         cy.getRole('add-product-to-order-button').first().click();
-        cy.testId('open-order-product-item').first().should('have.attr', 'color', 'medium')
+        cy.testId('open-order-product-item').first().should('have.attr', 'color', 'favorite')
           .getRole('order-product-qty-input').should('have.attr', 'placeholder', '2');
       });
 
@@ -178,10 +178,41 @@ describe('Complete app flow', () => {
       });
     });
 
+    describe('Check new order user and product are visible', () => {
+      it('should click on open order', () => {
+        cy.testId('order-list-item').contains('פתוח להזמנות').click();
+        cy.contains('רשימת משתמשים');
+        cy.testId('order-user-name').should('have.lengthOf', 1)
+          .and('have.text', 'rimon');
+      });
+
+      it('should click on order user details button and see product name and qty', () => {
+        cy.testId('order-user-list-item').click();
+        cy.testId('order-user-product-list-item').should('have.lengthOf', 1)
+          .and('have.text', 'טחינה הר ברכה020');
+      });
+
+      it('should go to order products and see the product', () => {
+        cy.testId('order-products-tab-button').click();
+        cy.getRole('order-product-list-item').should('have.lengthOf', 1)
+          .and('have.text', 'טחינה הר ברכה210קבע מחיר0');
+      });
+
+      it('should click product item details button and qty by location', () => {
+        cy.getRole('open-order-product-details').click();
+        cy.testId('order-product-locations-details').should('have.text', 'תל אביב - 2פרדס חנה - 0');
+      });
+
+      it('should go back to main admin view', () => {
+        cy.testId('back-to-orders').click();
+        cy.testId('admin-orders-list').contains('הזמנות');
+      });
+    });
+
     describe('Add new product', () => {
       it('should go to products list and click add product button', () => {
         cy.testId('admin-products-button').click();
-        cy.testId('add-product-button').click();
+        cy.testId('open-new-product-modal').click();
         cy.testId('add-product-modal').should('be.visible');
       });
 
@@ -203,19 +234,33 @@ describe('Complete app flow', () => {
       //   cy.get('.select-interface-option > ion-label').last().invoke('show').click({ force: true });
       //   qtyUnitInput.should('have.value', 'Kg');
       // });
-    })
+
+      it('should click add product button and display new product', () => {
+        cy.getRole('add-product-to-db').click();
+        cy.testId('products-list-item').should('have.lengthOf', 7);
+        cy.getRole('product-item-name').first().should('have.text', 'אגוז');
+      })
+    });
   }); // end of admin actions
 
   describe('Regular user adding to order', () => {
 
     before(() => {
       cy.login('testuser1@mail.com', 'rimontesting1');
+      cy.visit('/')
     });
 
     after(() => {
       cy.logout();
     });
 
+    it('should display open order view with 7 products', () => {
+      cy.testId('open-order-product-item').should('have.lengthOf', 7)
+        .each(item => {
+          expect(item).to.not.have.attr('color', 'favorite');
+        });
+    });
 
-  });
+
+  }); // end of regular user adding to order
 })

@@ -60,13 +60,13 @@ test('should have a placeholder with qty value for ordered product', async () =>
   expect(await screen.findByPlaceholderText('2')).toBeInTheDocument();
 });
 
-test('should have a "medium" color attr for ordered product', async () => {
+test('should have a "favorite" color attr for ordered product', async () => {
   render(
     <OpenOrderProductItem product={orderedProduct} />,
     { route: '/user' }, true, 'user'
   );
 
-  expect(await screen.findByTestId('open-order-product-item')).toHaveAttribute('color', 'medium');
+  expect(await screen.findByTestId('open-order-product-item')).toHaveAttribute('color', 'favorite');
 });
 
 test('should have correct missing qty' ,async () => {
