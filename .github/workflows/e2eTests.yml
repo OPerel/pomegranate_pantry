@@ -1,0 +1,29 @@
+name: run cypress e2e
+
+on: [push, pull_request]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install ionic cli
+        run: npm i -g @ionic/cli
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm run emulators && ionic serve
+          working-directory: application
+          browser: chrome
+          # spec: 'cypress/integration/landingPage_spec.ts,cypress/integration/auth/**/*'
+        env:
+          REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
+          REACT_APP_AUTH_DOMAIN: ${{ secrets.REACT_APP_AUTH_DOMAIN }}
+          REACT_APP_DATABASE_URL: ${{ secrets.REACT_APP_DATABASE_URL }}
+          REACT_APP_PROJECT_ID: ${{ secrets.REACT_APP_PROJECT_ID }}
+          REACT_APP_STORAGE_BUCKET: ${{ secrets.REACT_APP_STORAGE_BUCKET }}
+          REACT_APP_MESSAGING_SENDER_ID: ${{ secrets.REACT_APP_MESSAGING_SENDER_ID }}
+          REACT_APP_APP_ID: ${{ secrets.REACT_APP_APP_ID }}
