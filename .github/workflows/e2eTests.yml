@@ -8,6 +8,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Use node v. 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
       - name: Install firebase-tools
         run: npm i -g firebase-tools
       # Install NPM dependencies, cache them correctly
