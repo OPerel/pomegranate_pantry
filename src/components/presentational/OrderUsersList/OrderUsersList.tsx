@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   IonList,
@@ -9,7 +9,6 @@ import {
   IonListHeader,
 } from '@ionic/react';
 
-// import Fire from '../../../services/Firebase';
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 import { OrderUser } from '../../../types/interfaces';
 import OrderUsersListItem from '../OrderUsersListItem/OrderUsersListItem';
