@@ -8,12 +8,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Install firebase-tools
+        run: npm i -g firebase-tools
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          start: npm run emulators && npm start
+          start: npm start && npm run emulators
           browser: chrome
           # spec: 'cypress/integration/landingPage_spec.ts,cypress/integration/auth/**/*'
         env:
