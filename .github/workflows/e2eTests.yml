@@ -1,6 +1,6 @@
 name: run cypress e2e
 
-on: [push, pull_request]
+# on: [push, pull_request]
 
 jobs:
   cypress-run:
