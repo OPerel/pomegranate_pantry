@@ -90,13 +90,20 @@ const UserStateProvider = <P extends {}>(Component: React.ComponentType<P>): Rea
 
     useEffect(() => {
 
+      let subscription: any;
       dispatch({ type: UserStateActionTypes.FETCH });
-      const subscription = Fire.openOrderListener((order) => {
-        dispatch({ type: UserStateActionTypes.SET_OPEN_ORDER, payload: order });
-      });
+      Fire.getOpenOrderId().then(orderId => {
+        if (orderId) {
+          subscription = Fire.orderListener(orderId, (order) => {
+            dispatch({ type: UserStateActionTypes.SET_OPEN_ORDER, payload: order });
+          });
+        } 
+      })
 
       return () => {
-        subscription.unsubscribe()
+        if (subscription) {
+          subscription.unsubscribe()
+        }
       }
     
     }, []);

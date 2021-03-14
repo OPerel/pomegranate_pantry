@@ -111,7 +111,6 @@ jest.mock('./services/Firebase', () => {
       ],
       orderProducts: [
         {
-          _id: '123',
           productRef: 'qwerty1',
           orderRef: '1',
           totalQty: 2,
@@ -119,7 +118,6 @@ jest.mock('./services/Firebase', () => {
           price: 28,
         },
         {
-          _id: '456',
           productRef: 'qwerty2',
           orderRef: '1',
           totalQty: 3,
@@ -181,10 +179,7 @@ jest.mock('./services/Firebase', () => {
       return { unsubscribe: () => {} };
     },
     orderListener: (id, cb) => {cb(ordersData[0])},
-    openOrderListener: (cb) => {
-      cb(ordersData[0]);
-      return { unsubscribe: () => {} };
-    },
+    getOpenOrderId: async () => '1',
     userOrdersListener: (id, cb) => {
       cb([orderUsersData[0]]);
       return { unsubscribe: () => {} };

@@ -10,7 +10,7 @@ const orderSeq = (status: OrderStatus) => ({
   [ORDER_STATUS.CLOSED]: 4
 }[status]);
 
-const getOrderStatus = (order: Order): string => {
+const getOrderStatus = (order: Order): OrderStatus => {
   if (order.status === ORDER_STATUS.OPEN) {
     if (order.closingTime.getTime() < new Date().getTime()) {
       return ORDER_STATUS.COMPLETION;
@@ -76,6 +76,7 @@ const getOrderStatusBtn = (orderId: string, status: OrderStatus) => {
     orderStatusBtnFunction: () => {
       Fire.updateEntry('orders', orderId, {
         status: ORDER_STATUS.CLOSED,
+        active: false,
         closingTime: new Date().getTime()
       });
     }

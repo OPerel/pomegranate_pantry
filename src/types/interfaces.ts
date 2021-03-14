@@ -10,6 +10,7 @@ export type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'close
 export interface Order {
   _id: string,
   status: OrderStatus,
+  active: boolean,
   createdAt: Date,
   closingTime: Date,
   totalPrice: number | null, // total price of UsersOrders 
@@ -20,7 +21,6 @@ export interface Order {
 // Order.totalPrice = userOrdres.reduce((acc, order) => acc += order.totalPrice, 0)
 
 export interface OrderProduct {
-  _id: string,
   productRef: string, // ref to Product
   orderRef: string, // ref to Order
   totalQty: number,

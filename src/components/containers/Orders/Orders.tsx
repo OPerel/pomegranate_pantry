@@ -21,7 +21,6 @@ import './Orders.css';
 
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
-import { ORDER_STATUS } from '../../../constants';
 import Fire from '../../../services/Firebase';
 
 const Orders: React.FC = () => {
@@ -37,7 +36,7 @@ const Orders: React.FC = () => {
   //   }, 3000);
   // };
 
-  const allOrdersAreClosed = orders.every(order => order.status === ORDER_STATUS.CLOSED);
+  const allOrdersAreClosed = orders.every(order => !order.active);
 
   const addOrder = async (): Promise<void> => {
     if (dateValue) {

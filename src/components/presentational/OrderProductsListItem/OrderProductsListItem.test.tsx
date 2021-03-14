@@ -88,7 +88,7 @@ test('should type in product price and update it', async () => {
   fireEvent.ionChange(await screen.findByRole('order-product-price-input'), '20')
   fireEvent.click(await screen.findByRole('update-order-product-price'));
   expect(mockUpdatePrice).toHaveBeenCalledTimes(1);
-  expect(mockUpdatePrice).toHaveBeenCalledWith('orderProducts', orderProduct._id, {
+  expect(mockUpdatePrice).toHaveBeenCalledWith('orderProducts', `${orderProduct.orderRef}/${orderProduct.productRef}`, {
     price: 20
   });
 });

@@ -82,10 +82,14 @@ const OrderProductsListItem: React.FC<OrderProductListItemProps> = ({ orderProdu
             <IonCol>
               <IonButton
                 role="update-order-product-price"
-                disabled={!priceInput}
-                onClick={() => Fire.updateEntry('orderProducts', orderProduct._id, {
-                  price: priceInput
-                })}
+                disabled={!priceInput || order?.status !== ORDER_STATUS.SHOPPING}
+                onClick={() => Fire.updateEntry(
+                  'orderProducts', 
+                  `${orderProduct.orderRef}/${orderProduct.productRef}`,
+                  {
+                    price: priceInput
+                  }
+                )}
               >
                 <IonLabel>קבע מחיר</IonLabel>
               </IonButton>

@@ -18,8 +18,10 @@ Let's help Elad help us shop for cheap!!
 type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed'
 
 {
+  status: OrderStatus,
   createdAt: Date,
   closingTime: Date,
+  active: boolean,
   totalPrice: number | null, // total price of OrderUsers, null until OrderProduct.price is filled for every product in the order   
 }
 
@@ -96,6 +98,7 @@ type OrderStatus = 'open' | 'completion' | 'shopping' | 'paying' | 'closed';
 
 {
   _id: string,
+  active: boolean,
   status: OrderStatus,
   createdAt: Date,
   closingTime: Date,

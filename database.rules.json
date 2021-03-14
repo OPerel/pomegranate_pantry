@@ -11,6 +11,11 @@
       ".indexOn": [
         "orderRef"
       ]
+    },
+    "orders": {
+      ".indexOn": [
+        "active"
+      ]
     }
   }
 }

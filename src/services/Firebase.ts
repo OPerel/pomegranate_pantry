@@ -303,7 +303,8 @@ class FirebaseService {
 
         if (updateOrderStatus !== orderObj.status) {
           this.updateEntry('orders', orderObj._id, {
-            status: updateOrderStatus
+            status: updateOrderStatus,
+            active: updateOrderStatus !== ORDER_STATUS.CLOSED
           })
         }
         return orderObj;
@@ -318,20 +319,10 @@ class FirebaseService {
 
   // User data
 
-  public openOrderListener = (cb: (orderId: Order | null) => void) => {
-    const openOrderRef = this.getColRef('orders').orderByChild('status').equalTo('open');
-    const openOrder$ = stateChanges(openOrderRef);
-    const subscription = openOrder$.subscribe(orderData => {
-      const val = orderData.snapshot.val();
-      cb({
-        ...val,
-        createdAt: new Date(val.createdAt),
-        closingTime: new Date(val.closingTime),
-        _id: orderData.snapshot.key
-      });
-    });
-
-    return subscription;
+  public getOpenOrderId = async () => {
+    const openOrderRef = this.getColRef('orders').orderByChild('active').equalTo(true);
+    const snapshot = await openOrderRef.get();
+    return Object.keys(snapshot.val())[0];
   }
 
   public openOrderProductsListener = (
@@ -426,6 +417,7 @@ class FirebaseService {
   // Admin writes
   public addNewOrder = async (closingTime: Date) => {
     const newOrder = {
+      active: true,
       status: 'open',
       createdAt: app.database.ServerValue.TIMESTAMP,
       closingTime: closingTime.getTime(),

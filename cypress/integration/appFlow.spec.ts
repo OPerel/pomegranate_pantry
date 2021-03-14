@@ -143,7 +143,7 @@ describe('Complete app flow', () => {
       it('should enter qty for the first product item', () => {
         const firstProductInput = cy.getRole('order-product-qty-input').first();
         firstProductInput.type('2');
-        firstProductInput.should('have.value', Number(2));
+        firstProductInput.should('have.value', 2);
       });
 
       it('should add the product to the user\'s order', () => {
@@ -224,8 +224,8 @@ describe('Complete app flow', () => {
 
       it('should fill in product minQty', () => {
         const nimQtyInput = cy.getRole('product-minQty-input');
-        nimQtyInput.type('1');
-        nimQtyInput.should('have.value', '1');
+        nimQtyInput.type('5');
+        nimQtyInput.should('have.value', '5');
       });
 
       // it('should fill in product qtyUnit', () => {
@@ -261,6 +261,86 @@ describe('Complete app flow', () => {
         });
     });
 
+    // duplicated code 
+    it('should enter qty for the first product item', () => {
+      const firstProductInput = cy.getRole('order-product-qty-input').first();
+      firstProductInput.type('2');
+      firstProductInput.should('have.value', 2);
+    });
+
+    it('should add the product to the user\'s order', () => {
+      cy.getRole('add-product-to-order-button').first().click();
+      cy.testId('open-order-product-item').first().should('have.attr', 'color', 'favorite')
+        .getRole('order-product-qty-input').should('have.attr', 'placeholder', '2');
+    });
+    // end of
+
+    // it('update product qty', () => {
+    //   const firstProductInput = cy.getRole('order-product-qty-input').first();
+    //   firstProductInput.clear();
+    //   firstProductInput.shadow().find('input').type('3');
+    //   cy.getRole('add-product-to-order-button').first().click();
+    //   cy.getRole('order-product-qty-input').first().should('have.attr', 'placeholder', '2');
+    // });
 
   }); // end of regular user adding to order
+
+  describe('Admin sees updated order and updates it more', () => {
+    before(() => {
+      cy.login('rimon@mail.com', 'testadmin');
+      cy.visit('/');
+    });
+    
+    after(() => {
+      cy.logout();
+    });
+
+    it('should navigate from /admin to /admin/order/...', () => {
+      cy.testId('order-list-item').first().click();
+      cy.testId('order-user-name').should('have.lengthOf', 2)
+        .last().should('have.text', 'משה')
+    });
+
+    it('should go to order products and see two products', () => {
+      cy.testId('order-products-tab-button').click();
+      cy.getRole('order-product-list-item').should('have.lengthOf', 2)
+        .first().should('have.text', 'אגוז23קבע מחיר0')
+    });
+
+    it('should go to user view', () => {
+      cy.contains('משתמש').click({ force: true });
+      cy.testId('open-order-title').should('be.visible');
+    });
+
+    it('should update the existing order product', () => {
+      const orderedProduct = cy.testId('open-order-product-item').eq(1);
+      orderedProduct.should('have.attr', 'color', 'favorite')
+        .and('include.text', 'טחינה הר ברכה');
+
+      const orderredProductInput = cy.getRole('order-product-qty-input').eq(1);
+      orderredProductInput.should('have.attr', 'placeholder', '2').type('3');
+
+      orderedProduct.should('have.value', '3');
+      cy.getRole('add-product-to-order-button').eq(1).click();
+    });
+
+    it('should add the new product to the order', () => {
+      const productInput = cy.getRole('order-product-qty-input').first();
+      productInput.type('1');
+      productInput.should('have.value', 1);
+      cy.getRole('add-product-to-order-button').first().click();
+    });
+
+    it('should open my order modal and see both product', () => {
+      cy.getRole('my-order-button').click();
+      const productsList = cy.testId('my-order-product-item');
+      productsList.should('have.lengthOf', 2);
+      productsList.first().should('have.text', 'אגוז - 1');
+      cy.testId('my-order-product-item').last().should('have.text', 'טחינה הר ברכה - 3');
+    });
+
+    // close modal and go back to admin
+    // check for updated order
+
+  });
 })

@@ -35,7 +35,8 @@
     "-MNArMQr-Jxt0gE8-Szk" : {
       "closingTime" : 1608616832000,
       "createdAt" : 1606516832167,
-      "status" : "closed",
+      "active" : false,
+      "status": "closed",
       "totalPrice" : 219
     }
   },
