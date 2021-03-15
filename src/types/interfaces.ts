@@ -40,7 +40,7 @@ export interface OrderUserProduct {
 }
 
 export interface OrderUser {
-  _id?: string,
+  _id: string,
   products: OrderUserProduct[], // array of Products`
   userRef: string, // a ref to the user
   orderRef: string, // a ref to the order

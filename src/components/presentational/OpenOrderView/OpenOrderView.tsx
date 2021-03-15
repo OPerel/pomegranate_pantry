@@ -103,7 +103,10 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
                   slot="end"
                   color="danger"
                   fill="outline"
-                  className="delete-product-btn"
+                  role="delete-order-product-button"
+                  onClick={() => {
+                    Fire.deleteProductFromOrder(currentOrder._id, product.productRef)
+                  }}
                 >
                   <IonIcon icon={trash} slot="icon-only"/>
                 </IonButton>

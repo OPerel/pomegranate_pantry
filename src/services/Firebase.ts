@@ -246,7 +246,7 @@ class FirebaseService {
 
     const subscription = combineLatest(orderState$, orderUsersList$, orderProductsList$)
     .pipe(
-      // turns each observable into the desired object
+      // turns each observable into the desired object / list of objects
       map(([order, orderUsers, orderProducts]): [Order, OrderUser[], OrderProduct[]] => {
         const val = order.snapshot.val();
         const orderObj = {
@@ -452,6 +452,19 @@ class FirebaseService {
           })
         }
       })    
+  }
+
+  public deleteProductFromOrder = (
+    orderUserId: string,
+    productRef: string
+  ) => {
+    this.db.ref(`orderUsers/${orderUserId}/products`).child(productRef).remove(err => {
+      if (err) {
+        console.warn('Error removing product: ', err)
+      } else {
+        console.log('Product removed from order')
+      }
+    })
   }
 
 }

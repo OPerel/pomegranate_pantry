@@ -9,6 +9,7 @@ ion-content, ion-item, ion-list-header {
 
 .nested-list {
   background: var(--ion-color-light-shade);
+  padding: 0;
 }
 
 ion-icon {
