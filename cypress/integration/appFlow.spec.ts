@@ -137,7 +137,7 @@ describe('Complete app flow', () => {
 
       it('should display correct missing qty for first product', () => {
         const firstProductMissingQty = cy.getRole('missing-product-qty').first();
-        firstProductMissingQty.should('have.text', '12');
+        firstProductMissingQty.should('have.text', '');
       });
 
       it('should enter qty for the first product item', () => {

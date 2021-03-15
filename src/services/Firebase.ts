@@ -321,55 +321,12 @@ class FirebaseService {
 
   public getOpenOrderId = async () => {
     const openOrderRef = this.getColRef('orders').orderByChild('active').equalTo(true);
-    const snapshot = await openOrderRef.get();
-    return Object.keys(snapshot.val())[0];
-  }
+    const order = (await openOrderRef.get()).val();
+    if (order) {
+      return Object.keys(order)[0];
+    }
 
-  public openOrderProductsListener = (
-    orderId: string,
-    cb: (products: OrderProduct[]) => void
-  ) => {
-    const orderProductsRef = this.getColRef('orderProducts').child(orderId);
-    const orderUsersRef = this.getColRef('orderUsers')
-      .orderByChild('orderRef').equalTo(orderId);
-    
-    const orderProducts$ = list(orderProductsRef);
-    const orderUsers$ = list(orderUsersRef);
-
-    const subscription = combineLatest(orderProducts$, orderUsers$)
-    .pipe(
-      map(async ([orderProducts, orderUsers]): Promise<OrderProduct[]> => {
-        const res = await Promise.all(orderProducts.map(async orderProduct => {
-          const { key } = orderProduct.snapshot;
-          const orderUsersObjList = orderUsers.map(orderUser => {
-            const val = orderUser.snapshot.val();
-            return {
-              ...val,
-              _id: orderUser.snapshot.key,
-              products: Object.keys(val.products).map(key => ({
-                productRef: key,
-                qty: val.products[key]
-              }))
-            }
-          });
-          const { totalQty, missing } = await this.getOrderProductCalcs(key as string, orderUsersObjList)
-          return {
-            ...orderProduct.snapshot.val(),
-            productRef: key,
-            totalQty,
-            missing,
-            orderRef: orderId
-          }
-        }));
-
-        return res;        
-      })
-    )
-    .subscribe(async openOrderProducts => {
-      cb(await openOrderProducts);
-    });
-
-    return subscription;
+    return null;
   }
 
   public userOrdersListener = (

@@ -16,11 +16,11 @@ import { Product } from '../../../types/interfaces';
 
 const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
 
-  const { state: { currentOrder, openOrder, orderProducts } } = useUserStateContext();
+  const { state: { currentOrder, openOrder } } = useUserStateContext();
   const [productQty, setProductQty] = useState<any>();
 
   const currentOrderProduct = currentOrder?.products?.find(p => p.productRef === product._id);
-  const missing = orderProducts.find(p => p.productRef === product._id)?.missing;
+  const missing = openOrder?.orderProducts.find(p => p.productRef === product._id)?.missing;
 
   const handleAddProductClick = () => {
     const newOrderProduct = {
@@ -58,7 +58,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
               <IonIcon icon={addOutline} />
             </IonButton>
           </IonCol>
-          <IonCol role="missing-product-qty">{missing || product.minQty}</IonCol>
+          <IonCol role="missing-product-qty">{missing || ''}</IonCol>
         </IonRow>
       </IonGrid>
     </IonItem>
