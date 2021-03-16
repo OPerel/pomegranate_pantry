@@ -10,6 +10,7 @@ import {
   IonModal,
   IonIcon,
   IonContent,
+  IonText,
 } from '@ionic/react';
 import { trash, chevronForwardOutline } from 'ionicons/icons'
 import { useUserStateContext, UserStateActionTypes } from '../../context/userState/UserContextProvider';
@@ -97,6 +98,12 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
         )}
       </IonList>
 
+      {openOrder.status === ORDER_STATUS.COMPLETION && (
+        <IonText color="danger" className="ion-text-center">
+          <h5>שים לב: בזמן ההשלמות לא ניתן להסיר מוצרים מההזמנה!</h5>
+        </IonText>
+      )}
+
       <IonModal
         isOpen={myOrderModalIsOpen}
         data-testid="my-order-modal"
@@ -124,6 +131,7 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
                   color="danger"
                   fill="outline"
                   role="delete-order-product-button"
+                  disabled={openOrder.status === ORDER_STATUS.COMPLETION}
                   onClick={() => {
                     Fire.deleteProductFromOrder(currentOrder._id, product.productRef)
                   }}
