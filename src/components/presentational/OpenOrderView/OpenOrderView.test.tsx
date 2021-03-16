@@ -1,13 +1,14 @@
 import React from 'react';
-import { render, screen } from '../../../tests/testUtils';
+import { render, screen, fireEvent } from '../../../tests/testUtils';
 import '@testing-library/jest-dom/extend-expect';
-
+import Fire from '../../../services/Firebase';
 import OpenOrderView from './OpenOrderView';
-import { OrderStatus } from '../../../types/interfaces';
+import { OrderStatus, Order } from '../../../types/interfaces';
 
-const order = {
+const order: Order = {
   _id: '1',
   status: 'open' as OrderStatus,
+  active: true,
   createdAt: new Date(1606513716688),
   closingTime: new Date(1601241806937),
   totalPrice: null as null | number,
@@ -31,7 +32,6 @@ const order = {
   ],
   orderProducts: [
     {
-      _id: '123',
       productRef: 'qwerty1',
       orderRef: '1',
       totalQty: 2,
@@ -39,7 +39,6 @@ const order = {
       price: 28,
     },
     {
-      _id: '456',
       productRef: 'qwerty2',
       orderRef: '1',
       totalQty: 3,
@@ -63,6 +62,46 @@ test('should display correct order closing date and status in title', async () =
 test('should display correct number of products', async () => {
   render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
   expect(await screen.findAllByTestId('open-order-product-item')).toHaveLength(6);
+});
+
+test('should only display two orderProducts in completion mode', async () => {
+  let orderInComp = order;
+  orderInComp.status = 'completion';
+
+  render(<OpenOrderView openOrder={orderInComp} />, { route: '/user' }, true, 'user');
+  expect(await screen.findAllByTestId('open-order-product-item')).toHaveLength(2);
+});
+
+test('should only display one orderProducts in completion mode', async () => {
+  let orderInComp = order;
+  orderInComp.status = 'completion';
+  orderInComp.orderProducts[0].missing = null;
+
+  render(<OpenOrderView openOrder={orderInComp} />, { route: '/user' }, true, 'user');
+  expect(await screen.findAllByTestId('open-order-product-item')).toHaveLength(1);
+});
+
+test('should open my order modal and display modal title', async () => {
+  render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
+  fireEvent.click(await screen.findByRole('my-order-button'));
+  expect(await screen.findByTestId('my-order-modal')).toHaveTextContent('המוצרים שלי');
+});
+
+test('should display 2 products in my order modal', async () => {
+  render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
+  fireEvent.click(await screen.findByRole('my-order-button'));
+  expect(await screen.findAllByTestId('my-order-product-item')).toHaveLength(2);
+});
+
+test('should delete product on click delete button', async () => {
+  const mockDeleteProduct = jest.spyOn(Fire, 'deleteProductFromOrder');
+
+  render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
+  fireEvent.click(await screen.findByRole('my-order-button'));
+  fireEvent.click((await screen.findAllByRole('delete-order-product-button'))[0]);
+
+  expect(mockDeleteProduct).toHaveBeenCalledTimes(1);
+  expect(mockDeleteProduct).toHaveBeenCalledWith('abc', 'qwerty1');
 });
 
 // TODO: add tests for my order modal

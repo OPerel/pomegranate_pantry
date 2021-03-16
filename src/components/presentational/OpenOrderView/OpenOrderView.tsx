@@ -15,7 +15,7 @@ import { trash, chevronForwardOutline } from 'ionicons/icons'
 import { useUserStateContext, UserStateActionTypes } from '../../context/userState/UserContextProvider';
 import { mapOrderStatusToText } from '../../../utils/mapOrderStatus';
 import Fire from '../../../services/Firebase';
-import { Order } from '../../../types/interfaces';
+import { Order, Product } from '../../../types/interfaces';
 import { ORDER_STATUS } from '../../../constants';
 
 import OpenOrderProductItem from '../OpenOrderProductItem/OpenOrderProductItem';
@@ -49,6 +49,17 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
     return <h3 data-testid="no-open-order-msg">אין הזמנה פתוחה כרגע</h3>
   }
 
+  let productsWithMissing: Product[] = []; 
+  openOrder.orderProducts.forEach(product => {
+    if (product.missing) {
+      const productObj = {
+        ...products[product.productRef],
+        _id: product.productRef
+      }
+      productsWithMissing.push(productObj);
+    }
+  })
+
   return (
     <div>
       <IonToolbar className="order-header">
@@ -74,7 +85,13 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
           <IonLabel>הוסף</IonLabel>
           <IonLabel>חסר</IonLabel>
         </IonListHeader>
-        {productsList.map(product => <OpenOrderProductItem key={product._id} product={product} />)}
+        {openOrder.status !== ORDER_STATUS.COMPLETION ? (
+          productsList.map(product => <OpenOrderProductItem key={product._id} product={product} />)
+        ) : (
+          productsWithMissing.map(product => <OpenOrderProductItem key={product._id} product={product} />)
+        )}
+
+        
       </IonList>
 
       <IonModal

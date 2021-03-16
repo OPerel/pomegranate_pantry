@@ -209,6 +209,7 @@ jest.mock('./services/Firebase', () => {
     addNewOrder: () => {},
     addNewProduct: (product) => product,
     addProductToOrder: () => {},
+    deleteProductFromOrder: (orderUserId, productRef) => {},
     doSignIn: () => {}
   };
 });
