@@ -104,4 +104,12 @@ test('should delete product on click delete button', async () => {
   expect(mockDeleteProduct).toHaveBeenCalledWith('abc', 'qwerty1');
 });
 
+test('should display order in progress view after completion' ,async () => {
+  let orderInProg = order;
+  orderInProg.status = 'shopping';
+
+  render(<OpenOrderView openOrder={orderInProg} />, { route: '/user' }, true, 'user');
+  expect(await screen.findByTestId('order-in-progress-view')).toBeInTheDocument();
+});
+
 // TODO: add tests for my order modal

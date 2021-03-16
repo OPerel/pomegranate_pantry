@@ -9,16 +9,17 @@ import {
   IonLabel,
   IonModal,
   IonIcon,
-  IonContent
+  IonContent,
 } from '@ionic/react';
 import { trash, chevronForwardOutline } from 'ionicons/icons'
 import { useUserStateContext, UserStateActionTypes } from '../../context/userState/UserContextProvider';
-import { mapOrderStatusToText } from '../../../utils/mapOrderStatus';
+import { mapOrderStatusToText, orderSeq } from '../../../utils/mapOrderStatus';
 import Fire from '../../../services/Firebase';
 import { Order, Product } from '../../../types/interfaces';
 import { ORDER_STATUS } from '../../../constants';
 
 import OpenOrderProductItem from '../OpenOrderProductItem/OpenOrderProductItem';
+import OrderInProgressView from '../OrderInProgressView/OrderInProgressView';
 
 const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => {
 
@@ -49,6 +50,10 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
     return <h3 data-testid="no-open-order-msg">אין הזמנה פתוחה כרגע</h3>
   }
 
+  if (orderSeq(openOrder.status) > 1) {
+    return <OrderInProgressView openOrder={openOrder} />
+  }
+
   let productsWithMissing: Product[] = []; 
   openOrder.orderProducts.forEach(product => {
     if (product.missing) {
@@ -58,14 +63,14 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
       }
       productsWithMissing.push(productObj);
     }
-  })
+  });
 
   return (
     <div>
       <IonToolbar className="order-header">
         <IonTitle size="small" data-testid="open-order-title">
           {mapOrderStatusToText(openOrder.status)}
-          {openOrder.status === ORDER_STATUS.OPEN && ` | נסגרת ב - ${openOrder.closingTime.toLocaleDateString('he', { timeZone: 'Israel' })}`}
+          {` | נסגרת ב - ${openOrder.closingTime.toLocaleDateString('he', { timeZone: 'Israel' })}`}
         </IonTitle>
         {currentOrder && (
           <IonButton
@@ -90,8 +95,6 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
         ) : (
           productsWithMissing.map(product => <OpenOrderProductItem key={product._id} product={product} />)
         )}
-
-        
       </IonList>
 
       <IonModal
@@ -131,8 +134,6 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
             ))}
           </IonList>
         </IonContent>
-
-        
       </IonModal>
     </div>
   )

@@ -96,5 +96,20 @@ test('should type in product qty and add to order', async () => {
     currentOrder: 'abc',
     qty: 3
   })
-  
 });
+
+// how to set different openOrder context?
+
+// test('should not add order if qty > missing in completion', async () => {
+//   render(
+//     <OpenOrderProductItem product={orderedProduct} />,
+//     { route: '/user' }, true, 'user'
+//   );
+
+//   fireEvent.ionChange(await screen.findByRole('order-product-qty-input'), '11');
+//   fireEvent.click(await screen.findByRole('add-product-to-order-button'));
+  
+//   expect(await screen.findByTestId('qty-above-missing')).toHaveTextContent('בזמן ההשלמות ההזמנה מוגבלת לכמות החסרה: 10')
+// });
+
+
