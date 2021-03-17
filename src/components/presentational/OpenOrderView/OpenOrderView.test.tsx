@@ -57,7 +57,7 @@ describe('Open Order View', () => {
 
   test('should display correct order closing date and status in title', async () => {
     render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
-    expect(await screen.findByTestId('open-order-title')).toHaveTextContent('פתוח להזמנות | נסגרת ב - 9.28.2020');
+    expect(await screen.findByTestId('open-order-title')).toHaveTextContent('פתוח להזמנות | נסגרת ב - 28.9.2020');
   });
 
   test('should display correct number of products', async () => {

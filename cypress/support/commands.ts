@@ -30,13 +30,13 @@ import firebase from 'firebase';
 import * as data from '../../src/data/emulator/rimons-pantry-staging.json';
 
 firebase.initializeApp({
-  apiKey: Cypress.env('CYPRESS_REACT_APP_API_KEY'),
-  authDomain: Cypress.env('CYPRESS_REACT_APP_AUTH_DOMAIN'),
-  databaseURL: Cypress.env('CYPRESS_REACT_APP_DATABASE_URL'),
-  projectId: Cypress.env('CYPRESS_REACT_APP_PROJECT_ID'),
-  storageBucket: Cypress.env('CYPRESS_REACT_APP_STORAGE_BUCKET'),
-  messagingSenderId: Cypress.env('CYPRESS_REACT_APP_MESSAGING_SENDER_ID'),
-  appId: Cypress.env('CYPRESS_REACT_APP_APP_ID,Cypress')
+  apiKey: Cypress.env('REACT_APP_API_KEY'),
+  authDomain: Cypress.env('REACT_APP_AUTH_DOMAIN'),
+  databaseURL: Cypress.env('REACT_APP_DATABASE_URL'),
+  projectId: Cypress.env('REACT_APP_PROJECT_ID'),
+  storageBucket: Cypress.env('REACT_APP_STORAGE_BUCKET'),
+  messagingSenderId: Cypress.env('REACT_APP_MESSAGING_SENDER_ID'),
+  appId: Cypress.env('REACT_APP_APP_ID,Cypress')
 })
 
 Cypress.Commands.add('createUser', (email='rimon@mail.com', password='testadmin') => {
