@@ -29,6 +29,8 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # pass GitHub token to allow accurately detecting a build vs a re-run build
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Firebase token fo CI
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
           REACT_APP_AUTH_DOMAIN: ${{ secrets.REACT_APP_AUTH_DOMAIN }}
           REACT_APP_DATABASE_URL: ${{ secrets.REACT_APP_DATABASE_URL }}
