@@ -19,8 +19,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          build: npm run emulators &
-          start: npm start
+          start: npm run emulators:ci
           browser: chrome
           headless: false
           config: video=false

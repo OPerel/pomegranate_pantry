@@ -33,6 +33,7 @@
     "test": "react-scripts test --watchAll=false --verbose=true",
     "test:watch": "react-scripts test",
     "emulators": "firebase emulators:start --only database --import=./src/data/emulator",
+    "emulators:ci": "firebase emulators:exec --only database --import=./src/data/emulator \"npm start\"",
     "emulators:exec": "firebase emulators:exec --only database --import=./src/data/emulator \"npm run cypress:run\"",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
