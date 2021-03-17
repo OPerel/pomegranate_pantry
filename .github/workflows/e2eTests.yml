@@ -21,8 +21,6 @@ jobs:
         with:
           start: npm run emulators:ci
           browser: chrome
-          headless: false
-          config: video=false
         env:
           REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
           REACT_APP_AUTH_DOMAIN: ${{ secrets.REACT_APP_AUTH_DOMAIN }}
