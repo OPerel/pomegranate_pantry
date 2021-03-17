@@ -48,68 +48,70 @@ const order: Order = {
   ]
 }
 
-test('should display no open order msg when prop is null', async () => {
-  render(<OpenOrderView openOrder={null} />, { route: '/user' }, true, 'user');
-  expect(await screen.findByTestId('no-open-order-msg')).toBeInTheDocument();
-  expect(await screen.findByTestId('no-open-order-msg')).toHaveTextContent('אין הזמנה פתוחה כרגע');
-});
+describe('Open Order View', () => {
+  test('should display no open order msg when prop is null', async () => {
+    render(<OpenOrderView openOrder={null} />, { route: '/user' }, true, 'user');
+    expect(await screen.findByTestId('no-open-order-msg')).toBeInTheDocument();
+    expect(await screen.findByTestId('no-open-order-msg')).toHaveTextContent('אין הזמנה פתוחה כרגע');
+  });
 
-test('should display correct order closing date and status in title', async () => {
-  render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
-  expect(await screen.findByTestId('open-order-title')).toHaveTextContent('פתוח להזמנות | נסגרת ב - 9/28/2020');
-});
+  test('should display correct order closing date and status in title', async () => {
+    render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
+    expect(await screen.findByTestId('open-order-title')).toHaveTextContent('פתוח להזמנות | נסגרת ב - 9.28.2020');
+  });
 
-test('should display correct number of products', async () => {
-  render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
-  expect(await screen.findAllByTestId('open-order-product-item')).toHaveLength(6);
-});
+  test('should display correct number of products', async () => {
+    render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
+    expect(await screen.findAllByTestId('open-order-product-item')).toHaveLength(6);
+  });
 
-test('should only display two orderProducts in completion mode', async () => {
-  let orderInComp = order;
-  orderInComp.status = 'completion';
+  test('should only display two orderProducts in completion mode', async () => {
+    let orderInComp = order;
+    orderInComp.status = 'completion';
 
-  render(<OpenOrderView openOrder={orderInComp} />, { route: '/user' }, true, 'user');
-  expect(await screen.findAllByTestId('open-order-product-item')).toHaveLength(2);
-});
+    render(<OpenOrderView openOrder={orderInComp} />, { route: '/user' }, true, 'user');
+    expect(await screen.findAllByTestId('open-order-product-item')).toHaveLength(2);
+  });
 
-test('should only display one orderProducts in completion mode', async () => {
-  let orderInComp = order;
-  orderInComp.status = 'completion';
-  orderInComp.orderProducts[0].missing = null;
+  test('should only display one orderProducts in completion mode', async () => {
+    let orderInComp = order;
+    orderInComp.status = 'completion';
+    orderInComp.orderProducts[0].missing = null;
 
-  render(<OpenOrderView openOrder={orderInComp} />, { route: '/user' }, true, 'user');
-  expect(await screen.findAllByTestId('open-order-product-item')).toHaveLength(1);
-});
+    render(<OpenOrderView openOrder={orderInComp} />, { route: '/user' }, true, 'user');
+    expect(await screen.findAllByTestId('open-order-product-item')).toHaveLength(1);
+  });
 
-test('should open my order modal and display modal title', async () => {
-  render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
-  fireEvent.click(await screen.findByRole('my-order-button'));
-  expect(await screen.findByTestId('my-order-modal')).toHaveTextContent('המוצרים שלי');
-});
+  test('should open my order modal and display modal title', async () => {
+    render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
+    fireEvent.click(await screen.findByRole('my-order-button'));
+    expect(await screen.findByTestId('my-order-modal')).toHaveTextContent('המוצרים שלי');
+  });
 
-test('should display 2 products in my order modal', async () => {
-  render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
-  fireEvent.click(await screen.findByRole('my-order-button'));
-  expect(await screen.findAllByTestId('my-order-product-item')).toHaveLength(2);
-});
+  test('should display 2 products in my order modal', async () => {
+    render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
+    fireEvent.click(await screen.findByRole('my-order-button'));
+    expect(await screen.findAllByTestId('my-order-product-item')).toHaveLength(2);
+  });
 
-test('should delete product on click delete button', async () => {
-  const mockDeleteProduct = jest.spyOn(Fire, 'deleteProductFromOrder');
+  test('should delete product on click delete button', async () => {
+    const mockDeleteProduct = jest.spyOn(Fire, 'deleteProductFromOrder');
+    
+    render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
+    fireEvent.click(await screen.findByRole('my-order-button'));
+    fireEvent.click((await screen.findAllByRole('delete-order-product-button'))[0]);
 
-  render(<OpenOrderView openOrder={order} />, { route: '/user' }, true, 'user');
-  fireEvent.click(await screen.findByRole('my-order-button'));
-  fireEvent.click((await screen.findAllByRole('delete-order-product-button'))[0]);
+    expect(mockDeleteProduct).toHaveBeenCalledTimes(1);
+    expect(mockDeleteProduct).toHaveBeenCalledWith('abc', 'qwerty1');
+  });
 
-  expect(mockDeleteProduct).toHaveBeenCalledTimes(1);
-  expect(mockDeleteProduct).toHaveBeenCalledWith('abc', 'qwerty1');
-});
-
-test('should display order in progress view after completion' ,async () => {
-  let orderInProg = order;
-  orderInProg.status = 'shopping';
-
-  render(<OpenOrderView openOrder={orderInProg} />, { route: '/user' }, true, 'user');
-  expect(await screen.findByTestId('order-in-progress-view')).toBeInTheDocument();
-});
+  test('should display order in progress view after completion' ,async () => {
+    let orderInProg = order;
+    orderInProg.status = 'shopping';
+    
+    render(<OpenOrderView openOrder={orderInProg} />, { route: '/user' }, true, 'user');
+    expect(await screen.findByTestId('order-in-progress-view')).toBeInTheDocument();
+  });
+})
 
 // TODO: add tests for my order modal

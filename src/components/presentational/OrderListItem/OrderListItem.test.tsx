@@ -8,6 +8,7 @@ import { OrderStatus } from '../../../types/interfaces';
 const order = {
   _id: '1',
   status: 'open' as OrderStatus,
+  active: true,
   createdAt: new Date(1606513716688),
   closingTime: new Date(1601241806937),
   totalPrice: null as null | number,
@@ -51,7 +52,7 @@ const order = {
 
 test('should display correct createdAt formatted date', async () => {
   render(<OrderListItem order={order} />, { route: 'admin/' });
-  expect(await screen.findByTestId('order-item-createdAt')).toHaveTextContent('11/27/2020');
+  expect(await screen.findByTestId('order-item-createdAt')).toHaveTextContent('27.11.2020');
 });
 
 test('should have order totalPrice empty', async () => {

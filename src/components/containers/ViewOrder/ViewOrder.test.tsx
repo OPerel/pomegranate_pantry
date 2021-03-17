@@ -16,7 +16,7 @@ test('should display correct order title', async () => {
     { route: 'admin/order/1' }
   );
   const title = await screen.findByRole('order-details-title');
-  expect(title).toHaveTextContent('הזמנה 11/27/2020פתוח להזמנותנסגר להזמנות ב - 9/28/2020');
+  expect(title).toHaveTextContent('הזמנה 11.27.2020פתוח להזמנותנסגר להזמנות ב - 9.28.2020');
 });
 
 test('should render order user list by default', async () => {
