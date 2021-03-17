@@ -4,13 +4,12 @@ import {
   IonHeader,
   IonList,
   IonTitle,
-  IonToolbar,
-  IonListHeader,
-  IonLabel,
+  IonToolbar
 } from '@ionic/react';
 
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 import UsersListItem from '../../presentational/UsersListItem/UsersListItem';
+import ListHeader from '../../common/ListHeader/ListHeader';
 
 const Orders: React.FC = () => {
 
@@ -28,11 +27,7 @@ const Orders: React.FC = () => {
       </IonHeader>
 
       <IonList>
-        <IonListHeader>
-          <IonLabel>שם</IonLabel>
-          <IonLabel>מיקום</IonLabel>
-          {/* <IonLabel>מס' סידורי</IonLabel> */}
-        </IonListHeader>
+        <ListHeader headersList={['שם' ,'מיקום']} />
         {Object.keys(users).map(userKey => <UsersListItem key={userKey} user={users[userKey]} />)}
       </IonList>
     </IonContent>

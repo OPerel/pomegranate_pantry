@@ -3,10 +3,14 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom/extend-expect';
-
+// import { configure } from '@testing-library/react';
 import { mockIonicReact } from '@ionic/react-test-utils';
 mockIonicReact();
-
+// configure({
+//   computedStyleSupportsPseudoElements: true
+// })
+const { getComputedStyle } = window;
+window.getComputedStyle = (elt) => getComputedStyle(elt);
 
 
 jest.mock('./services/Firebase', () => {

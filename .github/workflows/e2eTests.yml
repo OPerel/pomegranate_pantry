@@ -1,6 +1,6 @@
 name: run cypress e2e
 
-# on: [push, pull_request]
+on: [push, pull_request]
 
 jobs:
   cypress-run:
@@ -19,9 +19,8 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          start: |
-            npm start
-            npm run emulators
+          build: npm run emulators:exec
+          start: npm start
           browser: chrome
           headless: false
           config: video=false

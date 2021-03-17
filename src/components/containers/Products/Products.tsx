@@ -5,7 +5,6 @@ import {
   IonList,
   IonTitle,
   IonToolbar,
-  IonListHeader,
   IonLabel,
   IonButton,
   IonIcon,
@@ -19,6 +18,7 @@ import { addOutline } from 'ionicons/icons';
 
 import { useAdminStateContext  } from '../../context/adminState/AdminContextProvider';
 import ProductListItem from '../../presentational/ProductsListItem/ProductsListItem';
+import ListHeader from '../../common/ListHeader/ListHeader';
 
 import Fire from '../../../services/Firebase';
 
@@ -100,11 +100,7 @@ const Products: React.FC = () => {
       </IonHeader>
 
       <IonList>
-        <IonListHeader>
-          <IonLabel>שם</IonLabel>
-          <IonLabel>כמות מינימום</IonLabel>
-          <IonLabel>סוג יחידה</IonLabel>
-        </IonListHeader>
+        <ListHeader headersList={['שם', 'כמות מינימום', 'סוג יחידה']} />
         {Object.keys(products).map(productKey => <ProductListItem key={productKey} product={products[productKey]} />)}
       </IonList>
       

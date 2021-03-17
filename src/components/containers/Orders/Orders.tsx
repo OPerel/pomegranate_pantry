@@ -8,7 +8,6 @@ import {
   // IonRefresherContent,
   IonTitle,
   IonToolbar,
-  IonListHeader,
   IonLabel,
   IonButton,
   IonIcon,
@@ -22,6 +21,8 @@ import './Orders.css';
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 import OrderListItem from '../../presentational/OrderListItem/OrderListItem';
 import Fire from '../../../services/Firebase';
+
+import ListHeader from '../../common/ListHeader/ListHeader';
 
 const Orders: React.FC = () => {
 
@@ -77,11 +78,7 @@ const Orders: React.FC = () => {
       </IonHeader>
 
       <IonList>
-        <IonListHeader>
-          <IonLabel>תאריך</IonLabel>
-          <IonLabel>סה"כ</IonLabel>
-          <IonLabel>סטטוס</IonLabel>
-        </IonListHeader>
+        <ListHeader headersList={['תאריך', 'סה"כ', 'סטטוס']} />
         {!loading ? (
           orders.length > 0 ? (
             orders.map(p => <OrderListItem key={p._id} order={p} />)

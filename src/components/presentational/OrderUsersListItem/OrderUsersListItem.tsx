@@ -6,8 +6,6 @@ import {
   IonCol,
   IonRow,
   IonList,
-  IonListHeader,
-  IonLabel,
   IonIcon,
   IonButton
 } from '@ionic/react';
@@ -16,6 +14,7 @@ import { chevronDownOutline, chevronUpOutline, closeOutline, checkmarkOutline } 
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 import { OrderUser } from '../../../types/interfaces';
 import { ORDER_STATUS } from '../../../constants';
+import ListHeader from '../../common/ListHeader/ListHeader';
 
 import Fire from '../../../services/Firebase';
 
@@ -67,12 +66,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
       </IonItem>
       {itemOpen ? (
         <IonList className="nested-list" data-testid="order-user-item-details">
-          <IonListHeader className="nested-list">
-            <IonLabel>מוצר</IonLabel>
-            <IonLabel>מחיר</IonLabel>
-            <IonLabel>כמות</IonLabel>
-            <IonLabel>סה"כ</IonLabel>
-          </IonListHeader>
+          <ListHeader headersList={['מוצר' , 'מחיר', 'כמות', 'סה"כ']}  className="nested-list" />
           {orderUser.products?.map(({ productRef, qty }) => {
             const orderProduct = order?.orderProducts.find(p => p.productRef === productRef);
             return (

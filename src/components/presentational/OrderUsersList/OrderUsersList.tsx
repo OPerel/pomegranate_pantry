@@ -6,12 +6,12 @@ import {
   IonLabel,
   IonSelect,
   IonSelectOption,
-  IonListHeader,
 } from '@ionic/react';
 
 import { useAdminStateContext } from '../../context/adminState/AdminContextProvider';
 import { OrderUser } from '../../../types/interfaces';
 import OrderUsersListItem from '../OrderUsersListItem/OrderUsersListItem';
+import ListHeader from '../../common/ListHeader/ListHeader';
 import './OrderUsersList.css';
 
 const OrderUsersList: React.FC<{orderUsers: OrderUser[]}> = ({ orderUsers }) => {
@@ -42,13 +42,7 @@ const OrderUsersList: React.FC<{orderUsers: OrderUser[]}> = ({ orderUsers }) => 
           </IonSelect>
         </IonItem>
       </div>
-      <IonListHeader>
-        <IonLabel>שם</IonLabel>
-        <IonLabel>מקום</IonLabel>
-        <IonLabel>סה"כ</IonLabel>
-        <IonLabel>שולם</IonLabel>
-        <IonLabel></IonLabel>
-      </IonListHeader>
+      <ListHeader headersList={['שם', 'מקום', 'סה"כ', 'שולם', '']} />
       {orderUsers.length > 0 ? (
         filteredOrderUsers?.map(o => <OrderUsersListItem key={o._id} orderUser={o} />)
       ) : (

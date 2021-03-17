@@ -5,12 +5,12 @@ import {
   IonButton,
   IonList,
   IonItem,
-  IonListHeader,
   IonLabel,
   IonModal,
   IonIcon,
   IonContent,
   IonText,
+  IonSpinner
 } from '@ionic/react';
 import { trash, chevronForwardOutline } from 'ionicons/icons'
 import { useUserStateContext, UserStateActionTypes } from '../../context/userState/UserContextProvider';
@@ -19,12 +19,13 @@ import Fire from '../../../services/Firebase';
 import { Order, Product } from '../../../types/interfaces';
 import { ORDER_STATUS } from '../../../constants';
 
+import ListHeader from '../../common/ListHeader/ListHeader';
 import OpenOrderProductItem from '../OpenOrderProductItem/OpenOrderProductItem';
 import OrderInProgressView from '../OrderInProgressView/OrderInProgressView';
 
 const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => {
 
-  const { state: { products, currentOrder }, dispatch } = useUserStateContext();
+  const { state: { products, currentOrder, loading }, dispatch } = useUserStateContext();
   const [myOrderModalIsOpen, setMyOrderModalIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -48,11 +49,15 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
   }));
 
   if (!openOrder) {
-    return <h3 data-testid="no-open-order-msg">אין הזמנה פתוחה כרגע</h3>
+    return !loading ? (
+      <h3 data-testid="no-open-order-msg">אין הזמנה פתוחה כרגע</h3>
+      ) : (
+      <IonSpinner />
+    )
   }
 
   if (orderSeq(openOrder.status) > 1) {
-    return <OrderInProgressView openOrder={openOrder} />
+    return <OrderInProgressView openOrder={openOrder} />;
   }
 
   let productsWithMissing: Product[] = []; 
@@ -85,12 +90,10 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
       </IonToolbar>
 
       <IonList>
-        <IonListHeader className="ion-text-center">
-          <IonLabel>שם</IonLabel>
-          <IonLabel>כמות</IonLabel>
-          <IonLabel>הוסף</IonLabel>
-          <IonLabel>חסר</IonLabel>
-        </IonListHeader>
+        <ListHeader
+          headersList={['שם', 'כמות', 'הוסף', 'חסר']}
+          className="ion-text-center"
+        />
         {openOrder.status !== ORDER_STATUS.COMPLETION ? (
           productsList.map(product => <OpenOrderProductItem key={product._id} product={product} />)
         ) : (
