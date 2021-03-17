@@ -260,7 +260,7 @@ class FirebaseService {
           return {
             ...val,
             _id: orderUser.snapshot.key,
-            products: Object.keys(val.products).map(key => ({
+            products: val.products && Object.keys(val.products).map(key => ({
               productRef: key,
               qty: val.products[key]
             }))
@@ -323,6 +323,7 @@ class FirebaseService {
     const openOrderRef = this.getColRef('orders').orderByChild('active').equalTo(true);
     const order = (await openOrderRef.get()).val();
     if (order) {
+      console.log(Object.keys(order)[0])
       return Object.keys(order)[0];
     }
 
@@ -342,7 +343,7 @@ class FirebaseService {
           return {
             ...val,
             _id: order.snapshot.key,
-            products: Object.keys(val.products).map(key => ({
+            products: val.products && Object.keys(val.products).map(key => ({
               productRef: key,
               qty: val.products[key]
             }))

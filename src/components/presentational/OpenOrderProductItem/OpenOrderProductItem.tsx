@@ -37,6 +37,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
     };
 
     Fire.addProductToOrder(newOrderProduct);
+    setProductQty(null);
   }
 
   return (

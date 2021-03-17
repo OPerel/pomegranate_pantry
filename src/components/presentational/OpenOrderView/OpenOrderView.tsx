@@ -126,7 +126,7 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
         </IonToolbar>
         <IonContent>
           <IonList>
-            {currentOrder?.products.map(product => (
+            {currentOrder?.products?.map(product => (
               <IonItem key={product.productRef} data-testid="my-order-product-item">
                 <IonLabel>{products[product.productRef].name} - {product.qty}</IonLabel>
                 <IonButton

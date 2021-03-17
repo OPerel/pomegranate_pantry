@@ -4,12 +4,8 @@
     ".write": true,
     "orderUsers": {
       ".indexOn": [
-        "orderRef", "userRef"
-      ]
-    },
-    "orderProducts": {
-      ".indexOn": [
-        "orderRef"
+        "orderRef",
+        "userRef"
       ]
     },
     "orders": {
