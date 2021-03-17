@@ -8,7 +8,7 @@ import app from 'firebase/app';
 import "firebase/database";
 import 'firebase/auth';
 
-import { list, object, stateChanges } from 'rxfire/database';
+import { list, object } from 'rxfire/database';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
