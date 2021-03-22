@@ -323,7 +323,6 @@ class FirebaseService {
     const openOrderRef = this.getColRef('orders').orderByChild('active').equalTo(true);
     const order = (await openOrderRef.get()).val();
     if (order) {
-      console.log(Object.keys(order)[0])
       return Object.keys(order)[0];
     }
 

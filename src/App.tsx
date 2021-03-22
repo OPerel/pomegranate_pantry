@@ -56,3 +56,10 @@ const App: React.FC = () => {
 }
 
 export default AuthStateProvider(App);
+
+/**
+ * TODO:
+ * user registration
+ * notifications
+ * fix admin mobile view
+ */

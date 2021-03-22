@@ -1,14 +1,22 @@
 import React from 'react';
+import { IonList } from '@ionic/react';
 import { OrderUser } from '../../../types/interfaces';
 
+import OrderUsersListItem from '../OrderUsersListItem/OrderUsersListItem';
+import ListHeader from '../../common/ListHeader/ListHeader';
+
+/**
+ * Unused at the moment
+ */
 const UserOrdersList: React.FC<{ userOrders: OrderUser[] }> = ({ userOrders }) => {
   
   return (
-    <div data-testid="old-user-orders">
+    <IonList data-testid="old-user-orders">
+      <ListHeader headersList={['שם', 'מקום', 'סה"כ', 'שולם', '']} />
       {userOrders.map(order => (
-        <p key={order._id}>{order._id} | {order.orderRef}</p>
+        <OrderUsersListItem key={order._id} orderUser={order} />
       ))}
-    </div>
+    </IonList>
   )
 }
 

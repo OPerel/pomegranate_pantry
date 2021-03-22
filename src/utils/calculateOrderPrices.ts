@@ -17,7 +17,7 @@ const calculateOrderTotals = (order: Order): void => {
     orderTotal += orderUserTotal;
   });
   Fire.updateOrderUsersPrice(updateObj);
-  Fire.updateEntry('orders', order._id, { totalPrice: orderTotal });
+  Fire.updateEntry('orders', order._id, { totalPrice: orderTotal }); // check if needed
 }
 
 export {

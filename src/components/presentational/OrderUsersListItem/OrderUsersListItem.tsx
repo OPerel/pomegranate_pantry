@@ -23,17 +23,17 @@ interface OrderUserListItemProps {
 }
 
 const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => {
-
+  
   const [itemOpen, setItemOpen] = useState<boolean>(false);
   const { state: { order, users, products } } = useAdminStateContext();
-
+  
   const userInfo = users[orderUser.userRef];
 
   return userInfo ? (
     <>
       <IonItem>
         <IonGrid>
-          <IonRow>
+          <IonRow onClick={() => setItemOpen(!itemOpen)}>
             <IonCol data-testid="order-user-name"><p>{userInfo.name}</p></IonCol>
             <IonCol><p>{userInfo.location === 'TA' ? 'תל אביב' : 'פרדס חנה'}</p></IonCol>
             <IonCol><p>{orderUser.totalPrice}</p></IonCol>
@@ -54,8 +54,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
             </IonCol>
             <IonCol>
               <IonButton
-                fill="clear"
-                onClick={() => setItemOpen(!itemOpen)}
+                fill="clear"             
                 data-testid="order-user-list-item"
               >
                 <IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} />
@@ -72,7 +71,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
             return (
               <IonItem key={productRef} color="light-shade" data-testid="order-user-product-list-item">
                 <IonGrid>
-                  <IonRow onClick={() => setItemOpen(!itemOpen)}>
+                  <IonRow>
                     <IonCol><p>{products[productRef].name}</p></IonCol>
                     <IonCol><p>{orderProduct?.price}</p></IonCol>
                     <IonCol><p>{qty}</p></IonCol>
