@@ -58,7 +58,7 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
 
   return (
     <div>
-      <IonToolbar className="order-header">
+      <IonToolbar color="dark">
         <IonTitle size="small" data-testid="open-order-title">
           {mapOrderStatusToText(openOrder.status)}
           {` | נסגרת ב - ${openOrder.closingTime.toLocaleDateString('he', { timeZone: 'Israel' })}`}

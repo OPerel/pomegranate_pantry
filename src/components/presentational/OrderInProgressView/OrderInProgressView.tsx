@@ -29,7 +29,7 @@ const OrderInProgressView: React.FC<{ openOrder: Order }> = ({ openOrder }) => {
 
   return (
     <div data-testid="order-in-progress-view">
-      <IonToolbar className="order-header">
+      <IonToolbar color="dark">
         <IonTitle size="small">המוצרים שלי - ההזמנה {mapOrderStatusToText(openOrder.status)}</IonTitle>
       </IonToolbar>
       <IonList>

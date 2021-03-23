@@ -59,13 +59,23 @@ export default AuthStateProvider(App);
 
 /**
  * TODO:
+ * 
+ * App:
  * user registration
  * notifications
  * database rules
- * qty inputs and prices for different qtyUnit types
  * 
  * Tests:
  * complete e2e test flows
  * check code coverage
  * fix cypress flaky tests
+ * 
+ * CI:
+ * cache firebase-tools installation
+ * 
+ * Deploy:
+ * 404 on page refresh
+ * 
+ * Questions for Elad:
+ * are prices for Kg unit type per 1 or 5 or what?
  */

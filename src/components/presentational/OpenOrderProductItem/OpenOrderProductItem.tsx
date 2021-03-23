@@ -13,7 +13,7 @@ import { addOutline } from 'ionicons/icons';
 import { useUserStateContext } from '../../context/userState/UserContextProvider';
 import Fire from '../../../services/Firebase';
 import { Product } from '../../../types/interfaces';
-import { ORDER_STATUS } from '../../../constants';
+import { ORDER_STATUS, UNIT_TYPE } from '../../../constants';
 
 const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
 
@@ -53,6 +53,8 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
               <IonItem>
                 <IonInput
                   type="number"
+                  min="0"
+                  step={product.qtyUnit === UNIT_TYPE.KG ? '0.5' : '1'}
                   placeholder={currentOrderProduct?.qty.toString()}
                   value={productQty}
                   onIonChange={e => setProductQty(e.detail.value)}
