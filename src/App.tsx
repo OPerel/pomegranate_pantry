@@ -61,5 +61,12 @@ export default AuthStateProvider(App);
  * TODO:
  * user registration
  * notifications
+ * database rules
  * fix admin mobile view
+ * qty inputs and prices for different qtyUnit types
+ * 
+ * Tests:
+ * complete e2e test flows
+ * check code coverage
+ * fix cypress flaky tests
  */

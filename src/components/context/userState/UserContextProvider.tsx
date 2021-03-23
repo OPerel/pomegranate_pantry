@@ -103,6 +103,21 @@ const UserStateProvider = <P extends {}>(Component: React.ComponentType<P>): Rea
     }, []);
 
     useEffect(() => {
+      let isMounted = true;
+      dispatch({ type: UserStateActionTypes.FETCH });
+      const subscription = Fire.productsCollectionListener(productsObj => {
+        if (isMounted) {
+          dispatch({ type: UserStateActionTypes.SET_PRODUCTS, payload: productsObj });
+        }
+      });
+  
+      return () => {
+        isMounted = false;
+        subscription.unsubscribe()
+      }
+    }, []);
+
+    useEffect(() => {
       let subscription: any;
       let isMounted = true;
       if (user && user._id && isMounted) {

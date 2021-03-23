@@ -15,8 +15,10 @@ test('should render open order by default', async () => {
   expect(await screen.findByTestId('open-order-title')).toBeInTheDocument();
 });
 
-test('should click old orders tab button and render old orders list', async () => {
-  render(<User />, { route: './user/ZMTBBeoL4ja79HFVDVoTUHDtzJw1'}, true, 'user');
-  fireEvent.click(await screen.findByRole('old-orders-tab'));
-  expect(await screen.findByTestId('old-user-orders')).toBeInTheDocument();
-});
+/** removed at the moment */
+
+// test('should click old orders tab button and render old orders list', async () => {
+//   render(<User />, { route: './user/ZMTBBeoL4ja79HFVDVoTUHDtzJw1'}, true, 'user');
+//   fireEvent.click(await screen.findByRole('old-orders-tab'));
+//   expect(await screen.findByTestId('old-user-orders')).toBeInTheDocument();
+// });

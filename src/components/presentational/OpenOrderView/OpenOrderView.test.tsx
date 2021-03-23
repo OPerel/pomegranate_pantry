@@ -114,4 +114,3 @@ describe('Open Order View', () => {
   });
 })
 
-// TODO: add tests for my order modal
