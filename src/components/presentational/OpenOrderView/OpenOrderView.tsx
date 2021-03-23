@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   IonToolbar,
   IonTitle,
@@ -13,7 +13,7 @@ import {
   IonSpinner
 } from '@ionic/react';
 import { trash, chevronForwardOutline } from 'ionicons/icons'
-import { useUserStateContext, UserStateActionTypes } from '../../context/userState/UserContextProvider';
+import { useUserStateContext } from '../../context/userState/UserContextProvider';
 import { mapOrderStatusToText, orderSeq } from '../../../utils/mapOrderStatus';
 import Fire from '../../../services/Firebase';
 import { Order, Product } from '../../../types/interfaces';
@@ -25,7 +25,7 @@ import OrderInProgressView from '../OrderInProgressView/OrderInProgressView';
 
 const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => {
 
-  const { state: { products, currentOrder, loading }, dispatch } = useUserStateContext();
+  const { state: { products, currentOrder, loading } } = useUserStateContext();
   const [myOrderModalIsOpen, setMyOrderModalIsOpen] = useState<boolean>(false);
 
   const productsList = Object.keys(products).map(key => ({

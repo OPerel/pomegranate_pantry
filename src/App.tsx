@@ -62,7 +62,6 @@ export default AuthStateProvider(App);
  * user registration
  * notifications
  * database rules
- * fix admin mobile view
  * qty inputs and prices for different qtyUnit types
  * 
  * Tests:

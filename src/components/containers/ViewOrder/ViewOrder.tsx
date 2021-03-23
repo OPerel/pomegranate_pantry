@@ -28,6 +28,10 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
 
   const { state: { order } } = useAdminStateContext();
 
+  const getLocalDateStr = (date: Date) => {
+    return date.toLocaleDateString('he', { timeZone: 'Israel' });
+  }
+
   const {
     orderStatusBtnText,
     orderStatusBtnFunction
@@ -38,10 +42,9 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
       <AdminHeader />
 
       {order && (<IonContent>
-        <IonToolbar className="order-header">
+        <IonToolbar color="dark">
 
-          <nav slot="start">
-            <IonButtons>
+            <IonButtons slot="start">
               <IonBackButton
                 defaultHref={ROUTES.ADMIN}
                 icon={chevronForwardOutline}
@@ -63,12 +66,11 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
                 מוצרים
               </IonButton>
             </IonButtons>
-          </nav>
 
-          <IonTitle size="small" role="order-details-title">
-            <span>{`הזמנה ${order.createdAt.toLocaleDateString('he', { timeZone: 'Israel' })}`}</span>
+          <IonTitle size="small" role="order-details-title" className="order-desktop-title">
+            <span>{`הזמנה ${getLocalDateStr(order.createdAt)}`}</span>
             <span><b>{mapOrderStatusToText(order.status)}</b></span>
-            <span>{`נסגר להזמנות ב - ${order.closingTime.toLocaleDateString('he', { timeZone: 'Israel' })}`}</span>
+            <span>{`נסגר להזמנות ב - ${getLocalDateStr(order.closingTime)}`}</span>
           </IonTitle>
 
           {orderStatusBtnText && 
@@ -81,6 +83,14 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
               {orderStatusBtnText}
             </IonButton>}
         
+        </IonToolbar>
+
+        <IonToolbar color="dark" className="order-mobile-title">
+          <IonTitle size="small">
+            <span>{`הזמנה ${getLocalDateStr(order.createdAt)}`}</span>
+            <span><b>{mapOrderStatusToText(order.status)}</b></span>
+            <span>{`נסגר להזמנות ב - ${getLocalDateStr(order.closingTime)}`}</span>
+          </IonTitle>
         </IonToolbar>
 
         <div>

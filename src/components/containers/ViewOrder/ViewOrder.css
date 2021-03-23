@@ -1,24 +1,3 @@
-/* ion-select {
-  width: 15vw;
-} */
-
-.order-header {
-  --background: var(--ion-color-dark-tint);
-}
-
-/* .order-header-success {
-  --background: var(--ion-color-success-tint);
-}
-
-.order-header-danger {
-  --background: var(--ion-color-danger-tint);
-} */
-
-.order-header nav {
-  padding: 1.2% 2%;
-  background-color: var(--ion-color-dark);
-}
-
 ion-title span {
   padding: 0 1%;
   border-left: 0.5px solid;
@@ -26,4 +5,18 @@ ion-title span {
 
 ion-title span:last-child {
   border: none;
+}
+
+.order-desktop-title {
+  display: none;
+}
+
+@media only screen and (min-width: 770px) {
+  .order-desktop-title {
+    display: block;
+  }
+
+  .order-mobile-title {
+    display: none;
+  }
 }
