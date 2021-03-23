@@ -2,6 +2,7 @@ export enum ROUTES {
   ROOT = '/',
   ADMIN = '/admin',
   LOGIN = '/login',
+  REGISTRATION = '/registration',
   USER = '/user',
   ORDER = '/admin/order'
 }

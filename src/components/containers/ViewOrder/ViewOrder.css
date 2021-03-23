@@ -6,17 +6,3 @@ ion-title span {
 ion-title span:last-child {
   border: none;
 }
-
-.order-desktop-title {
-  display: none;
-}
-
-@media only screen and (min-width: 770px) {
-  .order-desktop-title {
-    display: block;
-  }
-
-  .order-mobile-title {
-    display: none;
-  }
-}

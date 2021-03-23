@@ -18,7 +18,7 @@ const AuthGuard = (condition: (user: User) => boolean) => {
 
       useEffect(() => {
 
-        if (!loading && !user) {
+        if (!loading && !user && history.location.pathname !== ROUTES.REGISTRATION) {
           console.log('Route guard: User not logged in. Redirecting to /login');
           history.push(ROUTES.LOGIN);
         }
@@ -27,7 +27,7 @@ const AuthGuard = (condition: (user: User) => boolean) => {
           const redirect = user.role === ROLES.ADMIN ? ROUTES.ADMIN : `${ROUTES.USER}/${user._id}`;
           const { pathname } = history.location;
           const message =
-            (pathname === ROUTES.LOGIN || pathname === ROUTES.ROOT)
+            (pathname === ROUTES.LOGIN || pathname === ROUTES.ROOT || ROUTES.REGISTRATION)
             ? `User already logged in. Redirecting to ${redirect}`
             : `Route guard: User isn't authorized for route ${pathname}. Redirecting to ${redirect}`;
           console.log(message);

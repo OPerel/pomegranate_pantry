@@ -2,34 +2,42 @@ import Admin from './components/containers/Admin/Admin';
 import ViewOrder from './components/containers/ViewOrder/ViewOrder';
 import User from './components/containers/User/User';
 import Login from './components/containers/Login/Login';
+import Registration from './components/containers/Registration/Registration';
 
 import AdminStateProvider from './components/context/adminState/AdminContextProvider';
 import UserStateProvider from './components/context/userState/UserContextProvider';
 
+import { ROUTES } from './constants';
+
 export const routes = [
   {
-    path: '/admin',
+    path: ROUTES.ADMIN,
     component: AdminStateProvider(Admin),
     routes: [
       {
-        path: '/admin/order/:id',
+        path: `${ROUTES.ORDER}/:id`,
         component: ViewOrder,
         exact: true
       }
     ]
   },
   {
-    path: '/user/:id',
+    path: `${ROUTES.USER}/:id`,
     component: UserStateProvider(User),
     exact: true
   },
   {
-    path: '/login',
+    path: ROUTES.LOGIN,
     component: Login,
     exact: true
   },
   {
-    path: '/',
+    path: ROUTES.REGISTRATION,
+    component: Registration,
+    exact: true
+  },
+  {
+    path: ROUTES.ROOT,
     component: Login,
     exact: true
   }

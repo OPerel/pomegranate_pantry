@@ -67,7 +67,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
               </IonButton>
             </IonButtons>
 
-          <IonTitle size="small" role="order-details-title" className="order-desktop-title">
+          <IonTitle size="small" role="order-details-title" className="ion-hide-md-down">
             <span>{`הזמנה ${getLocalDateStr(order.createdAt)}`}</span>
             <span><b>{mapOrderStatusToText(order.status)}</b></span>
             <span>{`נסגר להזמנות ב - ${getLocalDateStr(order.closingTime)}`}</span>
@@ -85,7 +85,7 @@ const ViewOrder: React.FC<RouteComponentProps<{ id: string }>> = () => {
         
         </IonToolbar>
 
-        <IonToolbar color="dark" className="order-mobile-title">
+        <IonToolbar color="dark" className="ion-hide-md-up">
           <IonTitle size="small">
             <span>{`הזמנה ${getLocalDateStr(order.createdAt)}`}</span>
             <span><b>{mapOrderStatusToText(order.status)}</b></span>

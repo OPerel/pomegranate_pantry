@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   IonPage,
   IonInput,
@@ -11,43 +11,33 @@ import {
   IonTitle,
   IonGrid,
   IonRow,
-  IonCol,
+  IonCol
 } from '@ionic/react';
 import { Link } from 'react-router-dom';
 import AuthGuard from '../Auth/AuthGuard';
-import GoogleSignIn from '../../common/GoogleSignIn/GoogleSignIn';
 import { User } from '../../../types/interfaces';
-
-import Fire from '../../../services/Firebase';
 import { ROUTES } from '../../../constants';
+import GoogleSignIn from '../../common/GoogleSignIn/GoogleSignIn';
+import Fire from '../../../services/Firebase';
 
-const Login: React.FC = () => {
+const Registration: React.FC = () => {
 
+  const [userName, setUserName] = React.useState<string>('');
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
   const [error, setError] = useState<string | null>(null);
-  
-  const handleLogin = async () => {
-    setError(null);
-    try {
-      await Fire.doSignIn(email, password);
-    } catch (err) {
-      console.warn('Error logging in: ', err);
-      setError(err);
-      setEmail('');
-      setPassword('');
-    }
-  }
+
+  const handleRegistration = () => {}
 
   return (
     <IonPage>
 
       <IonHeader>
         <IonToolbar>
-          <IonTitle slot="start">עמוד כניסה</IonTitle>
-          <Link slot="end" to={ROUTES.REGISTRATION}>
+          <IonTitle slot="start">עמוד הרשמה</IonTitle>
+          <Link slot="end" to={ROUTES.LOGIN}>
             <IonButton>
-              הרשמה
+              כניסה
             </IonButton>
           </Link>
         </IonToolbar>
@@ -61,6 +51,20 @@ const Login: React.FC = () => {
               <form className="ion-padding ion-text-center">
                 <IonItem>
                   <IonLabel position="floating">
+                    שם משתמש
+                  </IonLabel>
+                  <IonInput
+                    type="text"
+                    name="name"
+                    value={userName}
+                    required
+                    onIonChange={e => setUserName(e.detail.value as string)}
+                    data-testid="userName-registration-input"
+                  />
+                </IonItem>
+                
+                <IonItem>
+                  <IonLabel position="floating">
                     אי-מייל
                   </IonLabel>
                   <IonInput
@@ -69,7 +73,7 @@ const Login: React.FC = () => {
                     value={email}
                     required
                     onIonChange={e => setEmail(e.detail.value as string)}
-                    data-testid="email-input"
+                    data-testid="email-registration-input"
                     />
                 </IonItem>
 
@@ -83,24 +87,25 @@ const Login: React.FC = () => {
                     value={password}
                     required
                     onIonChange={e => setPassword(e.detail.value as string)}
-                    data-testid="password-input"
+                    data-testid="password-registration-input"
                     />
                 </IonItem>
 
                 <IonButton
                   className="ion-padding"
-                  onClick={() => handleLogin()}
+                  onClick={() => handleRegistration()}
                   data-testid="login-button"
-                  >
-                  כניסה
+                >
+                  הרשמה
                 </IonButton>
               </form>
 
-              <GoogleSignIn />
+              <GoogleSignIn></GoogleSignIn>
 
             </IonCol>
           </IonRow>
         </IonGrid>
+
         {error && (
           <IonTitle
             dir="ltr"
@@ -112,10 +117,10 @@ const Login: React.FC = () => {
           </IonTitle>
         )}
       </IonContent>
-
+      
     </IonPage>
   )
 }
 
 const condition = (user: User) => !user;
-export default AuthGuard(condition)(Login);
+export default AuthGuard(condition)(Registration);
