@@ -212,3 +212,4 @@ TODO: for every product with `Product.qytUnit === 'Kg'`, `OrderProduct.totalQty`
 ### Login
 - rimon@mail.com - testadmin
 - testuser1@mail.com - rimontesting1
+- yanir@ahmash.com = rimontesting2

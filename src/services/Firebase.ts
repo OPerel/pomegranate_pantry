@@ -145,6 +145,40 @@ class FirebaseService {
   public doSignOut = () => {
     this.auth.signOut();
   }
+
+  public doEmailRegistration = (
+    userName: string,
+    location: string,
+    email: string,
+    password: string
+  ) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { user } = await this.auth
+          .createUserWithEmailAndPassword(email, password);
+        
+        if (user) {
+          return this.getUserRef(user.uid).set({
+            name: userName,
+            role: 'user',
+            email,
+            location
+          })
+          .then(res => {
+            resolve(res);
+          })
+          .catch(err => {
+            console.warn('Error inserting new user to DB: ', err);
+            reject(err);
+          })
+        }
+
+      } catch (err) {
+        console.warn('Error registering user: ', err);
+        reject(err);
+      }
+    });
+  }
   
   /**
    * Listeners

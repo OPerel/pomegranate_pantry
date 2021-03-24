@@ -12,23 +12,40 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonText
+  IonText,
+  IonSelect,
+  IonSelectOption
 } from '@ionic/react';
 import { Link } from 'react-router-dom';
 import AuthGuard from '../Auth/AuthGuard';
 import { User } from '../../../types/interfaces';
-import { ROUTES } from '../../../constants';
+import { ROUTES, LOCATIONS } from '../../../constants';
 import GoogleSignIn from '../../common/GoogleSignIn/GoogleSignIn';
 import Fire from '../../../services/Firebase';
 
 const Registration: React.FC = () => {
 
   const [userName, setUserName] = React.useState<string>('');
+  const [userLocation, setUserLocation] = React.useState<string>('');
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
-  const handleRegistration = () => {}
+  const formIsValid = 
+    userName &&
+    userLocation &&
+    email &&
+    password;
+
+  const handleRegistration = () => {
+    if (formIsValid) {
+      Fire.doEmailRegistration(userName, userLocation, email, password)
+      .then((res: any) => console.log('registration: ', res))
+      .catch(err => {
+        setError(err);
+      });
+    }
+  }
 
   return (
     <IonPage>
@@ -90,6 +107,20 @@ const Registration: React.FC = () => {
                     onIonChange={e => setPassword(e.detail.value as string)}
                     data-testid="password-registration-input"
                   />
+                </IonItem>
+
+                <IonItem>
+                  <IonLabel position="floating">
+                    מקום מגורים
+                  </IonLabel>
+                  <IonSelect
+                    interface="popover"
+                    value={userLocation}
+                    onIonChange={e => setUserLocation(e.detail.value)}
+                  >
+                    <IonSelectOption value={LOCATIONS.TA}>תל אביב</IonSelectOption>
+                    <IonSelectOption value={LOCATIONS.PH}>פרדס חנה</IonSelectOption>
+                  </IonSelect>
                 </IonItem>
 
                 <IonButton
