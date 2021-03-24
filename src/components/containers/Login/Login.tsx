@@ -12,6 +12,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonText
 } from '@ionic/react';
 import { Link } from 'react-router-dom';
 import AuthGuard from '../Auth/AuthGuard';
@@ -46,7 +47,7 @@ const Login: React.FC = () => {
         <IonToolbar>
           <IonTitle slot="start">עמוד כניסה</IonTitle>
           <Link slot="end" to={ROUTES.REGISTRATION}>
-            <IonButton>
+            <IonButton color="secondary">
               הרשמה
             </IonButton>
           </Link>
@@ -70,7 +71,7 @@ const Login: React.FC = () => {
                     required
                     onIonChange={e => setEmail(e.detail.value as string)}
                     data-testid="email-input"
-                    />
+                  />
                 </IonItem>
 
                 <IonItem>
@@ -84,16 +85,27 @@ const Login: React.FC = () => {
                     required
                     onIonChange={e => setPassword(e.detail.value as string)}
                     data-testid="password-input"
-                    />
+                  />
                 </IonItem>
 
                 <IonButton
                   className="ion-padding"
                   onClick={() => handleLogin()}
                   data-testid="login-button"
-                  >
+                >
                   כניסה
                 </IonButton>
+
+                {error && (
+                  <IonText
+                    dir="ltr"
+                    color="danger"
+                    data-testid="login-error-msg"
+                  >
+                    <h6>{error}</h6>
+                  </IonText>
+                )}
+
               </form>
 
               <GoogleSignIn />
@@ -101,16 +113,7 @@ const Login: React.FC = () => {
             </IonCol>
           </IonRow>
         </IonGrid>
-        {error && (
-          <IonTitle
-            dir="ltr"
-            color="danger"
-            style={{ textAlign: 'center', margin: '2%' }}
-            data-testid="login-error-msg"
-          >
-            {error}
-          </IonTitle>
-        )}
+        
       </IonContent>
 
     </IonPage>

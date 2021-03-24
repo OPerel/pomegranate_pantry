@@ -11,7 +11,8 @@ import {
   IonTitle,
   IonGrid,
   IonRow,
-  IonCol
+  IonCol,
+  IonText
 } from '@ionic/react';
 import { Link } from 'react-router-dom';
 import AuthGuard from '../Auth/AuthGuard';
@@ -36,7 +37,7 @@ const Registration: React.FC = () => {
         <IonToolbar>
           <IonTitle slot="start">עמוד הרשמה</IonTitle>
           <Link slot="end" to={ROUTES.LOGIN}>
-            <IonButton>
+            <IonButton color="secondary">
               כניסה
             </IonButton>
           </Link>
@@ -74,7 +75,7 @@ const Registration: React.FC = () => {
                     required
                     onIonChange={e => setEmail(e.detail.value as string)}
                     data-testid="email-registration-input"
-                    />
+                  />
                 </IonItem>
 
                 <IonItem>
@@ -88,7 +89,7 @@ const Registration: React.FC = () => {
                     required
                     onIonChange={e => setPassword(e.detail.value as string)}
                     data-testid="password-registration-input"
-                    />
+                  />
                 </IonItem>
 
                 <IonButton
@@ -98,24 +99,25 @@ const Registration: React.FC = () => {
                 >
                   הרשמה
                 </IonButton>
+
+                {error && (
+                  <IonText
+                    dir="ltr"
+                    color="danger"
+                    data-testid="login-error-msg"
+                  >
+                    <h6>{error}</h6>
+                  </IonText>
+                )}
+
               </form>
 
-              <GoogleSignIn></GoogleSignIn>
+              <GoogleSignIn />
 
             </IonCol>
           </IonRow>
         </IonGrid>
 
-        {error && (
-          <IonTitle
-            dir="ltr"
-            color="danger"
-            style={{ textAlign: 'center', margin: '2%' }}
-            data-testid="login-error-msg"
-          >
-            {error}
-          </IonTitle>
-        )}
       </IonContent>
       
     </IonPage>

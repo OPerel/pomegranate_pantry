@@ -3,8 +3,6 @@
   "screenshots": {
     "screenshotOnRunFailure": false
   },
-  "videos": {
-    "video": false
-  },
+  "video": false,
   "projectId": "orq4rs"
 }
