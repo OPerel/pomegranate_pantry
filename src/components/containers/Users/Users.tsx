@@ -27,7 +27,7 @@ const Orders: React.FC = () => {
       </IonHeader>
 
       <IonList>
-        <ListHeader headersList={['שם' ,'מיקום']} />
+        <ListHeader name="Users" headersList={['שם' ,'מיקום']} />
         {Object.keys(users).map(userKey => <UsersListItem key={userKey} user={users[userKey]} />)}
       </IonList>
     </IonContent>

@@ -12,7 +12,10 @@ const UserOrdersList: React.FC<{ userOrders: OrderUser[] }> = ({ userOrders }) =
   
   return (
     <IonList data-testid="old-user-orders">
-      <ListHeader headersList={['שם', 'מקום', 'סה"כ', 'שולם', '']} />
+      <ListHeader
+        name="UserOrders"
+        headersList={['שם', 'מקום', 'סה"כ', 'שולם', '']}
+      />
       {userOrders.map(order => (
         <OrderUsersListItem key={order._id} orderUser={order} />
       ))}

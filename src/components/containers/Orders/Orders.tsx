@@ -78,7 +78,7 @@ const Orders: React.FC = () => {
       </IonHeader>
 
       <IonList>
-        <ListHeader headersList={['תאריך', 'סה"כ', 'סטטוס']} />
+        <ListHeader name="Orders" headersList={['תאריך', 'סה"כ', 'סטטוס']} />
         {!loading ? (
           orders.length > 0 ? (
             orders.map(p => <OrderListItem key={p._id} order={p} />)

@@ -67,6 +67,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
       {itemOpen ? (
         <IonList className="nested-list" data-testid="order-user-item-details">
           <ListHeader
+            name="OrderUserItem"
             headersList={['מוצר' , 'מחיר', 'כמות', 'סה"כ']}
             className="nested-list"
           />

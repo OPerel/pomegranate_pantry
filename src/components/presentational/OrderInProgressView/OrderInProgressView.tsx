@@ -34,6 +34,7 @@ const OrderInProgressView: React.FC<{ openOrder: Order }> = ({ openOrder }) => {
       </IonToolbar>
       <IonList>
         <ListHeader
+          name="OrderInProgress"
           headersList={['שם', 'כמות', 'מחיר', 'סה"כ']}
           color="medium"
           className="ion-text-center"

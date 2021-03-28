@@ -100,7 +100,7 @@ const Products: React.FC = () => {
       </IonHeader>
 
       <IonList>
-        <ListHeader headersList={['שם', 'כמות מינימום', 'סוג יחידה']} />
+        <ListHeader name="Products" headersList={['שם', 'כמות מינימום', 'סוג יחידה']} />
         {Object.keys(products).map(productKey => <ProductListItem key={productKey} product={products[productKey]} />)}
       </IonList>
       

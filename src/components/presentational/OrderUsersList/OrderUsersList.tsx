@@ -42,7 +42,10 @@ const OrderUsersList: React.FC<{orderUsers: OrderUser[]}> = ({ orderUsers }) => 
           </IonSelect>
         </IonItem>
       </div>
-      <ListHeader headersList={['שם', 'מקום', 'סה"כ', 'שולם', '']} />
+      <ListHeader
+        name="OrderUsers"
+        headersList={['שם', 'מקום', 'סה"כ', 'שולם', '']}
+      />
       {orderUsers.length > 0 ? (
         filteredOrderUsers?.map(o => <OrderUsersListItem key={o._id} orderUser={o} />)
       ) : (

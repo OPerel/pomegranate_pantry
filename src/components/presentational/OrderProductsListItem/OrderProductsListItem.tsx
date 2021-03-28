@@ -61,7 +61,7 @@ const OrderProductsListItem: React.FC<OrderProductListItemProps> = ({ orderProdu
 
   return Object.keys(products).length > 0 ? (
     <>
-      <h5 className="list-item-header" data-testid="order-product-name">
+      <h5 className="ion-padding-start" data-testid="order-product-name">
         {products[productRef].name}
       </h5>
       <IonItem role="order-product-list-item">

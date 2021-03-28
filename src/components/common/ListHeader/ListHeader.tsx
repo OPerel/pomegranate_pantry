@@ -6,15 +6,16 @@ import {
 import './ListHeader.css';
 
 interface ListHeaderProps extends React.HTMLAttributes<HTMLIonListHeaderElement> {
+  name: string;
   headersList: string[]
 }
 
 const ListHeader: React.FC<ListHeaderProps> = (props) => {
-  const { headersList } = props;
+  const { name, headersList } = props;
   return (
     <IonListHeader { ...props }>
-      {headersList.map(header => (
-        <IonLabel key={header} className="list-header-label">{header}</IonLabel>
+      {headersList.map((header, idx) => (
+        <IonLabel key={`${idx}-${name}-${header}`} className="list-header-label">{header}</IonLabel>
       ))}
     </IonListHeader>
   )

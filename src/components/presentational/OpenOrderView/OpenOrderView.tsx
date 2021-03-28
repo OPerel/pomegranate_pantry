@@ -76,6 +76,7 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
 
       <IonList>
         <ListHeader
+          name="OpenOrder"
           headersList={['שם', 'כמות', 'הוסף', 'חסר']}
           className="ion-text-center"
         />
