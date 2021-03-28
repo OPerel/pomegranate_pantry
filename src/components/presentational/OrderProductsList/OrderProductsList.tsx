@@ -14,7 +14,7 @@ interface PropsTypes {
 const OrderProductsList: React.FC<PropsTypes> = ({ orderProducts }) => (
   <IonList role="order-products-list">
     <h2>רשימת מוצרים</h2>
-    <ListHeader headersList={['מוצר', 'כמות', 'חסר', 'מחיר ליחידה', 'סה"כ', '']} />
+    <ListHeader headersList={['כמות', 'חסר', 'מחיר ליחידה', 'סה"כ', '', '']} />
     {orderProducts.length > 0 ? (
       orderProducts.map(o => <OrderProductsListItem key={o.productRef} orderProduct={o} />)
     ) : (

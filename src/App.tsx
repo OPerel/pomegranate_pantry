@@ -61,9 +61,11 @@ export default AuthStateProvider(App);
  * TODO:
  * 
  * App:
- * user registration
- * notifications
+ * user registration (regular?)
+ * notifications (?)
  * database rules
+ * form / inputs validation (which and how?)
+ * user's data fetching / loading state
  * 
  * Tests:
  * complete e2e test flows
@@ -77,5 +79,6 @@ export default AuthStateProvider(App);
  * 404 on page refresh
  * 
  * Questions for Elad:
+ * how to move from completion to shopping?
  * are prices for Kg unit type per 1 or 5 or what?
  */

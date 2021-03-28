@@ -20,7 +20,7 @@ test('should display correct product name', async () => {
     <OrderProductsListItem orderProduct={orderProduct} />,
     { route: 'admin/order/1' }
   );
-  expect(await screen.findByRole('order-product-name')).toHaveTextContent('מוטי רסק עגבניות');
+  expect(await screen.findByTestId('order-product-name')).toHaveTextContent('מוטי רסק עגבניות');
 });
 
 test('should display correct product totalQty', async () => {

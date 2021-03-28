@@ -6,11 +6,10 @@ import {
   IonCol,
   IonRow,
   IonButton,
-  IonLabel,
   IonInput,
   IonIcon
 } from '@ionic/react';
-import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons';
+import { chevronDownOutline, chevronUpOutline, add } from 'ionicons/icons';
 
 import Fire from '../../../services/Firebase';
 import { OrderProduct } from '../../../types/interfaces';
@@ -62,18 +61,20 @@ const OrderProductsListItem: React.FC<OrderProductListItemProps> = ({ orderProdu
 
   return Object.keys(products).length > 0 ? (
     <>
+      <h5 className="list-item-header" data-testid="order-product-name">
+        {products[productRef].name}
+      </h5>
       <IonItem role="order-product-list-item">
         <IonGrid>
           <IonRow>
-            <IonCol role="order-product-name"><p>{products[productRef].name}</p></IonCol>
             <IonCol role="order-product-totalQty"><p>{orderProduct.totalQty}</p></IonCol>
             <IonCol role="order-product-missing"><p>{orderProduct.missing}</p></IonCol>
-            <IonCol>
-              <IonItem  className="final-price">
+            <IonCol sizeXs="4" sizeMd="">
+              <IonItem className="final-price">
                 <IonInput
+                  disabled={!(order?.status === ORDER_STATUS.SHOPPING)}
                   type="number"
                   value={priceInput || orderProduct.price}
-                  disabled={!(order?.status === ORDER_STATUS.SHOPPING)}
                   onIonChange={e => setPriceInput(Number(e.detail.value))}
                   role="order-product-price-input"
                 />
@@ -91,7 +92,7 @@ const OrderProductsListItem: React.FC<OrderProductListItemProps> = ({ orderProdu
                   }
                 )}
               >
-                <IonLabel>קבע מחיר</IonLabel>
+                <IonIcon icon={add} slot="icon-only" />
               </IonButton>
             </IonCol>
             <IonCol role="order-product-total-price">
@@ -103,7 +104,10 @@ const OrderProductsListItem: React.FC<OrderProductListItemProps> = ({ orderProdu
                 role="open-order-product-details"
                 onClick={() => setItemOpen(!itemOpen)}
               >
-                <IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} />
+                <IonIcon
+                  icon={itemOpen ? chevronUpOutline : chevronDownOutline}
+                  slot="icon-only"
+                />
               </IonButton>
             </IonCol>
           </IonRow>

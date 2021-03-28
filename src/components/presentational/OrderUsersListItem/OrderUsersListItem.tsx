@@ -33,7 +33,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
     <>
       <IonItem>
         <IonGrid>
-          <IonRow onClick={() => setItemOpen(!itemOpen)}>
+          <IonRow>
             <IonCol data-testid="order-user-name"><p>{userInfo.name}</p></IonCol>
             <IonCol><p>{userInfo.location === 'TA' ? 'תל אביב' : 'פרדס חנה'}</p></IonCol>
             <IonCol><p>{orderUser.totalPrice}</p></IonCol>
@@ -56,6 +56,7 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
               <IonButton
                 fill="clear"             
                 data-testid="order-user-list-item"
+                onClick={() => setItemOpen(!itemOpen)}
               >
                 <IonIcon icon={itemOpen ? chevronUpOutline : chevronDownOutline} />
               </IonButton>
@@ -65,11 +66,18 @@ const OrderUsersListItem: React.FC<OrderUserListItemProps> = ({ orderUser }) => 
       </IonItem>
       {itemOpen ? (
         <IonList className="nested-list" data-testid="order-user-item-details">
-          <ListHeader headersList={['מוצר' , 'מחיר', 'כמות', 'סה"כ']}  className="nested-list" />
+          <ListHeader
+            headersList={['מוצר' , 'מחיר', 'כמות', 'סה"כ']}
+            className="nested-list"
+          />
           {orderUser.products?.map(({ productRef, qty }) => {
             const orderProduct = order?.orderProducts.find(p => p.productRef === productRef);
             return (
-              <IonItem key={productRef} color="light-shade" data-testid="order-user-product-list-item">
+              <IonItem
+                key={productRef}
+                color="light-shade"
+                data-testid="order-user-product-list-item"
+              >
                 <IonGrid>
                   <IonRow>
                     <IonCol><p>{products[productRef].name}</p></IonCol>

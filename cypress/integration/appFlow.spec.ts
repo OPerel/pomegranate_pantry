@@ -195,7 +195,7 @@ describe('Complete app flow', () => {
       it('should go to order products and see the product', () => {
         cy.testId('order-products-tab-button').click();
         cy.getRole('order-product-list-item').should('have.lengthOf', 1)
-          .and('have.text', 'טחינה הר ברכה210קבע מחיר0');
+          .and('have.text', '2100');
       });
 
       it('should click product item details button and qty by location', () => {
@@ -304,7 +304,7 @@ describe('Complete app flow', () => {
     it('should go to order products and see two products', () => {
       cy.testId('order-products-tab-button').click();
       cy.getRole('order-product-list-item').should('have.lengthOf', 2)
-        .first().should('have.text', 'אגוז23קבע מחיר0')
+        .first().should('have.text', '230')
     });
 
     it('should go to user view', () => {
