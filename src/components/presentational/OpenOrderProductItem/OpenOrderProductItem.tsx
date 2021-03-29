@@ -13,7 +13,7 @@ import {
 import { addOutline } from 'ionicons/icons';
 import { useUserStateContext } from '../../context/userState/UserContextProvider';
 import Fire from '../../../services/Firebase';
-import useProductQtyValidator from '../../../hooks/useProductQtyValidator';
+import useInputValidator from '../../../hooks/useInputValidator';
 import { Product } from '../../../types/interfaces';
 import { ORDER_STATUS, UNIT_TYPE } from '../../../constants';
 
@@ -26,7 +26,10 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
   const currentOrderProduct = currentOrder?.products?.find(p => p.productRef === product._id);
   const missing = openOrder?.orderProducts.find(p => p.productRef === product._id)?.missing;
 
-  const { valid, message } = useProductQtyValidator(productQty, product.qtyUnit);
+  const { valid, message } = useInputValidator(
+    productQty,
+    product.qtyUnit === UNIT_TYPE.KG ? 'kgUnitType' : 'unitUnitType'
+  );
 
   const handleAddProductClick = () => {
     if (openOrder?.status === ORDER_STATUS.COMPLETION && productQty > (missing as number)) {
@@ -79,7 +82,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
             </IonCol>
             <IonCol role="missing-product-qty">{missing || ''}</IonCol>
           </IonRow>
-          {!valid && productQty ? (
+          {!valid && productQty && (
             <IonText
               color="danger"
               className="ion-padding-start ion-text-start"
@@ -87,8 +90,6 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
             >
               <small>{message}</small>
             </IonText>
-          ) : (
-            <IonText><small>{message}</small></IonText>
           )}
         </IonGrid>
       </IonItem>
