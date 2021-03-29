@@ -13,6 +13,7 @@ import {
 import { addOutline } from 'ionicons/icons';
 import { useUserStateContext } from '../../context/userState/UserContextProvider';
 import Fire from '../../../services/Firebase';
+import useProductQtyValidator from '../../../hooks/useProductQtyValidator';
 import { Product } from '../../../types/interfaces';
 import { ORDER_STATUS, UNIT_TYPE } from '../../../constants';
 
@@ -21,15 +22,11 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
   const { state: { currentOrder, openOrder } } = useUserStateContext();
   const [productQty, setProductQty] = useState<any>();
   const [qtyAlert, setQtyAlert] = useState<boolean>(false);
-  const [inputIsValid, setInputIsValid] = useState<{ valid: boolean, message: string }>({ valid: false, message: '' });
 
   const currentOrderProduct = currentOrder?.products?.find(p => p.productRef === product._id);
   const missing = openOrder?.orderProducts.find(p => p.productRef === product._id)?.missing;
 
-  const handleInputChange = (val: any) => {
-    validateQty(val);
-    setProductQty(val);
-  }
+  const { valid, message } = useProductQtyValidator(productQty, product.qtyUnit);
 
   const handleAddProductClick = () => {
     if (openOrder?.status === ORDER_STATUS.COMPLETION && productQty > (missing as number)) {
@@ -47,19 +44,6 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
     setProductQty(null);
   }
 
-  
-  const validateQty = (val: any) => {
-    let valid = product.qtyUnit === UNIT_TYPE.KG ? val % 0.5 === 0 : val % 1 === 0;
-    valid = valid && val > 0;
-    const message =  product.qtyUnit === UNIT_TYPE.KG
-      ? 'כמות בכפולות של 0.5'
-      : 'כמות בכפולות של 1'
-    console.log('valid: ', valid);
-    setInputIsValid({ valid, message });
-  }
-
-  console.log('inputIsValid: ', inputIsValid)
-
   return (
     <>
       <IonItem
@@ -70,7 +54,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
           <IonRow className="ion-text-center">
             <IonCol>{product.name}</IonCol>
             <IonCol>
-              <IonItem className={inputIsValid ? '' : 'input-invalid'}>
+              <IonItem className={!valid && productQty ? 'ion-invalid' : ''}>
                 <IonInput
                   id="product-qty"
                   type="number"
@@ -79,14 +63,14 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
                   step={product.qtyUnit === UNIT_TYPE.KG ? '0.5' : '1'}
                   placeholder={currentOrderProduct?.qty.toString()}
                   value={productQty}
-                  onIonChange={e => handleInputChange(e.detail.value)}
+                  onIonChange={e => setProductQty(e.detail.value)}
                   role="order-product-qty-input"
                 />
               </IonItem>
             </IonCol>
             <IonCol className="ion-text-center">
               <IonButton
-                disabled={productQty && inputIsValid.valid ? false : true}
+                disabled={!valid}
                 onClick={handleAddProductClick}
                 role="add-product-to-order-button"
                 >
@@ -95,12 +79,12 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
             </IonCol>
             <IonCol role="missing-product-qty">{missing || ''}</IonCol>
           </IonRow>
-          {!inputIsValid.valid ? (
+          {!valid && productQty ? (
             <IonText color="danger" className="ion-padding-start ion-text-start">
-              <small>{inputIsValid.message}</small>
+              <small>{message}</small>
             </IonText>
           ) : (
-            <IonText><small>{inputIsValid.message}</small></IonText>
+            <IonText><small>{message}</small></IonText>
           )}
         </IonGrid>
       </IonItem>
