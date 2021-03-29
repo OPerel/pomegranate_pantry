@@ -97,7 +97,7 @@ jest.mock('./services/Firebase', () => {
       totalPrice: null,
       orderUsers: [
         {
-          _id: '1',
+          _id: 'abc',
           products: [{ productRef: 'qwerty1', qty: 2 }, { productRef: 'qwerty2', qty: 3 }],
           userRef: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
           orderRef: '1',

@@ -1,5 +1,5 @@
 import React, { useReducer, createContext, useContext, useEffect } from 'react';
-import { User, Order, OrderUser, Product } from '../../../types/interfaces';
+import { Order, OrderUser, Product } from '../../../types/interfaces';
 
 import { useAuthStateContext } from '../authState/AuthContextProvider';
 import Fire from '../../../services/Firebase';
@@ -7,9 +7,8 @@ import Fire from '../../../services/Firebase';
 // types
 interface UserState {
   loading: boolean,
-  user: User | null,
   openOrder: Order | null,
-  userOrders: OrderUser[],
+  // userOrders: OrderUser[],
   currentOrder: OrderUser | null,
   products: { [key: string ]: Product },
   error: string | null
@@ -17,19 +16,17 @@ interface UserState {
 
 export enum UserStateActionTypes {
   FETCH = 'FETCH',
-  SET_USER = 'SET_USER',
   SET_OPEN_ORDER = 'SET_OPEN_ORDER',
   SET_CURRENT_ORDER = 'SET_CURRENT_ORDER',
-  SET_USER_ORDERS = 'SET_USER_ORDERS',
+  // SET_USER_ORDERS = 'SET_USER_ORDERS',
   SET_PRODUCTS = 'SET_PRODUCTS',
   SET_ERROR = 'SET_ERROR'
 };
 
 type UserAction = 
   | { type: UserStateActionTypes.FETCH }
-  | { type: UserStateActionTypes.SET_USER, payload: User | null }
   | { type: UserStateActionTypes.SET_OPEN_ORDER, payload: Order | null }
-  | { type: UserStateActionTypes.SET_USER_ORDERS, payload: OrderUser[] }
+  // | { type: UserStateActionTypes.SET_USER_ORDERS, payload: OrderUser[] }
   | { type: UserStateActionTypes.SET_CURRENT_ORDER, payload: OrderUser | null }
   | { type: UserStateActionTypes.SET_PRODUCTS, payload: { [key: string ]: Product } }
   | { type: UserStateActionTypes.SET_ERROR, payload: string };
@@ -42,9 +39,8 @@ interface UserProviderType {
 // state
 const initialState: UserState = {
   loading: false,
-  user: null,
   openOrder: null,
-  userOrders: [],
+  // userOrders: [],
   currentOrder: null,
   products: {},
   error: null
@@ -54,16 +50,14 @@ const reducer = (state: UserState, action: UserAction): UserState => {
   switch (action.type) {
     case UserStateActionTypes.FETCH:
       return { ...state, loading: true };
-    case UserStateActionTypes.SET_USER:
-      return { ...state, loading: false, error: null, user: action.payload };
     case UserStateActionTypes.SET_OPEN_ORDER:
       return { ...state, loading: false, openOrder: action.payload };
-    case UserStateActionTypes.SET_USER_ORDERS:
-      return { ...state, loading: false, userOrders: action.payload };
+    // case UserStateActionTypes.SET_USER_ORDERS:
+    //   return { ...state, userOrders: action.payload };
       case UserStateActionTypes.SET_CURRENT_ORDER:
-        return { ...state, loading: false, currentOrder: action.payload };
+        return { ...state, currentOrder: action.payload };
     case UserStateActionTypes.SET_PRODUCTS:
-      return { ...state, loading: false, products: action.payload };
+      return { ...state, products: action.payload };
     case UserStateActionTypes.SET_ERROR:
       return { ...state, loading: false, error: action.payload };
     default:
@@ -83,20 +77,23 @@ const UserStateProvider = <P extends {}>(Component: React.ComponentType<P>): Rea
     const [state, dispatch] = useReducer(reducer, initialState);
 
     useEffect(() => {
-
-      let subscription: any;
+      let openOrderSubscription: any;
       dispatch({ type: UserStateActionTypes.FETCH });
+      const productsSubscription = Fire.productsCollectionListener(productsObj => {
+        dispatch({ type: UserStateActionTypes.SET_PRODUCTS, payload: productsObj });
+      });
       Fire.getOpenOrderId().then(orderId => {
         if (orderId) {
-          subscription = Fire.orderListener(orderId, (order) => {
+          openOrderSubscription = Fire.orderListener(orderId, (order) => {
             dispatch({ type: UserStateActionTypes.SET_OPEN_ORDER, payload: order });
           });
         } 
       })
 
       return () => {
-        if (subscription) {
-          subscription.unsubscribe()
+        productsSubscription.unsubscribe()
+        if (openOrderSubscription) {
+          openOrderSubscription.unsubscribe()
         }
       }
     
@@ -104,40 +101,8 @@ const UserStateProvider = <P extends {}>(Component: React.ComponentType<P>): Rea
 
     useEffect(() => {
       let isMounted = true;
-      dispatch({ type: UserStateActionTypes.FETCH });
-      const subscription = Fire.productsCollectionListener(productsObj => {
-        if (isMounted) {
-          dispatch({ type: UserStateActionTypes.SET_PRODUCTS, payload: productsObj });
-        }
-      });
-  
-      return () => {
-        isMounted = false;
-        subscription.unsubscribe()
-      }
-    }, []);
-
-    useEffect(() => {
-      let subscription: any;
-      let isMounted = true;
-      if (user && user._id && isMounted) {
-        dispatch({ type: UserStateActionTypes.FETCH });
-        subscription = Fire.userOrdersListener(user._id, userOrders => {
-          dispatch({ type: UserStateActionTypes.SET_USER_ORDERS, payload: userOrders });
-        });
-      }
-
-      return () => {
-        if (subscription) {
-          subscription.unsubscribe();
-        }
-        isMounted = false;
-      }
-    }, [user]);
-
-    useEffect(() => {
-      let isMounted = true;
-      const currentOrder = state.userOrders.find(order => order.orderRef === state.openOrder?._id);
+      
+      const currentOrder = state.openOrder?.orderUsers.find(order => order.userRef === user?._id);
       if (currentOrder && isMounted) {
         dispatch({ type: UserStateActionTypes.SET_CURRENT_ORDER, payload: currentOrder });
       }
@@ -145,7 +110,7 @@ const UserStateProvider = <P extends {}>(Component: React.ComponentType<P>): Rea
       return () => {
         isMounted = false;
       }
-    }, [state.userOrders, state.openOrder])
+    }, [state.openOrder, user?._id])
 
     return (
       <UserStateContext.Provider value={{ state, dispatch }}>

@@ -10,14 +10,14 @@ const order: Order = {
   active: true,
   createdAt: new Date(1606513716688),
   closingTime: new Date(1601241806937),
-  totalPrice: null as null | number,
+  totalPrice: null,
   orderUsers: [
     {
-      _id: '1',
+      _id: 'abc',
       products: [{ productRef: 'qwerty1', qty: 2 }, { productRef: 'qwerty2', qty: 3 }],
       userRef: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
       orderRef: '1',
-      totalPrice: null,
+      totalPrice: 110,
       payed: false
     },
     {
@@ -25,7 +25,7 @@ const order: Order = {
       products: [],
       userRef: 'c',
       orderRef: '1',
-      totalPrice: null,
+      totalPrice: 0,
       payed: true
     }
   ],
@@ -56,17 +56,17 @@ describe('Open Order View', () => {
   });
 
   test('should display product with prices', async () => {
-    const orderWithPrice = order;
+    let orderWithPrice = order;
     orderWithPrice.orderProducts[0].price = 19;
-    render(<OrderInProgressView openOrder={orderWithPrice} />, { route: '/user' }, true, 'user');
+    render(<OrderInProgressView openOrder={order} />, { route: '/user' }, true, 'user');
     expect((await screen.findAllByTestId('order-in-progress-product-item'))[0])
       .toHaveTextContent("טחינה הר ברכה2‏19.00 ₪‏38.00 ₪");
   });
 
   test('should display user\'s order total', async () => {
-    const orderWithPrice = order;
-    orderWithPrice.orderProducts[0].price = 19;
-    render(<OrderInProgressView openOrder={orderWithPrice} />, { route: '/user' }, true, 'user');
-    expect(await screen.findByTestId('user-order-total')).toHaveTextContent('סה"כ ‏56.00 ₪')
+    // let orderWithPrice = order;
+    // orderWithPrice.orderProducts[0].price = 19;
+    render(<OrderInProgressView openOrder={order} />, { route: '/user' }, true, 'user');
+    expect(await screen.findByTestId('user-order-total')).toHaveTextContent('סה"כ ‏110.00 ₪')
   });
 });

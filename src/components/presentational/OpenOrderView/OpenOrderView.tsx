@@ -10,7 +10,9 @@ import {
   IonIcon,
   IonContent,
   IonText,
-  IonSpinner
+  IonSpinner,
+  IonRow,
+  IonGrid
 } from '@ionic/react';
 import { trash, chevronForwardOutline } from 'ionicons/icons'
 import { useUserStateContext } from '../../context/userState/UserContextProvider';
@@ -36,8 +38,12 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
   if (!openOrder) {
     return !loading ? (
       <h3 data-testid="no-open-order-msg">אין הזמנה פתוחה כרגע</h3>
-      ) : (
-      <IonSpinner />
+    ) : (
+      <IonGrid style={{ height: '100%' }}>
+        <IonRow className="ion-justify-content-center ion-margin-top">
+          <IonSpinner />
+        </IonRow>
+      </IonGrid>
     )
   }
 
