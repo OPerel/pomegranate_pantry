@@ -73,14 +73,18 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
                 disabled={!valid}
                 onClick={handleAddProductClick}
                 role="add-product-to-order-button"
-                >
+              >
                 <IonIcon icon={addOutline} />
               </IonButton>
             </IonCol>
             <IonCol role="missing-product-qty">{missing || ''}</IonCol>
           </IonRow>
           {!valid && productQty ? (
-            <IonText color="danger" className="ion-padding-start ion-text-start">
+            <IonText
+              color="danger"
+              className="ion-padding-start ion-text-start"
+              role="product-qty-invalid-msg"
+            >
               <small>{message}</small>
             </IonText>
           ) : (

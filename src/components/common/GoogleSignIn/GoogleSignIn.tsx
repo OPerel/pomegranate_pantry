@@ -11,7 +11,12 @@ const GoogleSignIn: React.FC = () => {
         או היכנס באמצעות חשבון גוגל
       </IonTitle>
 
-      <IonButton fill="solid" color="secondary" expand="full" className="ion-padding-start">
+      <IonButton
+        fill="solid"
+        color="secondary"
+        expand="full"
+        // className="ion-padding-start"
+      >
         כניסה עם גוגל
         <IonIcon slot="start" icon={logoGoogle} />
       </IonButton>

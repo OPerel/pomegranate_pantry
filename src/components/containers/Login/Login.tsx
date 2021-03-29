@@ -89,7 +89,7 @@ const Login: React.FC = () => {
                 </IonItem>
 
                 <IonButton
-                  className="ion-padding-start ion-padding-vertical"
+                  className="ion-padding-vertical"
                   expand="full"
                   onClick={() => handleLogin()}
                   data-testid="login-button"
