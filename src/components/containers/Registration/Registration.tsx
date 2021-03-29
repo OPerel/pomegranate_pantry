@@ -124,7 +124,8 @@ const Registration: React.FC = () => {
                 </IonItem>
 
                 <IonButton
-                  className="ion-padding"
+                  className="ion-padding-start ion-padding-vertical"
+                  expand="full"
                   onClick={() => handleRegistration()}
                   data-testid="login-button"
                 >
