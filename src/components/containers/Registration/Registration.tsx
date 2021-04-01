@@ -43,13 +43,12 @@ const Registration: React.FC = () => {
     passwordValidation.valid &&
     locationValidation.valid;
 
-  const handleRegistration = () => {
-    if (formIsValid) {
+  const handleRegistration = async () => {
+    try {
       Fire.doEmailRegistration(userName, userLocation, email, password)
-      .then((res: any) => console.log('registration: ', res))
-      .catch(err => {
-        setError(err);
-      });
+    } catch (err) {
+      console.warn('registration error: ', err)
+      setError(err);
     }
   }
 
@@ -127,6 +126,7 @@ const Registration: React.FC = () => {
                     interface="popover"
                     value={userLocation}
                     onIonChange={e => setUserLocation(e.detail.value)}
+                    data-testid="location-registration-input"
                   >
                     <IonSelectOption value={LOCATIONS.TA}>תל אביב</IonSelectOption>
                     <IonSelectOption value={LOCATIONS.PH}>פרדס חנה</IonSelectOption>
@@ -138,10 +138,17 @@ const Registration: React.FC = () => {
                   expand="full"
                   disabled={!formIsValid}
                   onClick={() => handleRegistration()}
-                  data-testid="login-button"
+                  data-testid="registration-button"
                 >
                   הרשמה
                 </IonButton>
+                  {!formIsValid ? (
+                    <div className="ion-margin-top">
+                      <IonText color="danger" className="ion-text-start">
+                        <small>כל השדות הינם חובה</small>
+                      </IonText>
+                    </div>
+                  ) : <div style={{ height: '18px' }} className="ion-margin-top" />}
 
                 {error && (
                   <IonText
