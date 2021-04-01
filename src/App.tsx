@@ -65,7 +65,7 @@ export default AuthStateProvider(App);
  * notifications (?)
  * database rules
  * form / inputs validation (which and how?)
- * user's data fetching / loading state
+ * PWA
  * 
  * Tests:
  * complete e2e test flows

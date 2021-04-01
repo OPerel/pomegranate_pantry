@@ -22,6 +22,7 @@ import { User } from '../../../types/interfaces';
 import { ROUTES, LOCATIONS } from '../../../constants';
 import GoogleSignIn from '../../common/GoogleSignIn/GoogleSignIn';
 import Fire from '../../../services/Firebase';
+import useInputValidator from '../../../hooks/useInputValidator';
 
 const Registration: React.FC = () => {
 
@@ -31,19 +32,23 @@ const Registration: React.FC = () => {
   const [password, setPassword] = React.useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
-  const formIsValid = 
-    userName &&
-    userLocation &&
-    email &&
-    password;
+  const userNameValidaiton = useInputValidator(userName, 'required'); 
+  const emailValidation = useInputValidator(email, 'email');
+  const passwordValidation = useInputValidator(password, 'password');
+  const locationValidation = useInputValidator(userLocation, 'required');
 
-  const handleRegistration = () => {
-    if (formIsValid) {
+  const formIsValid = 
+    userNameValidaiton.valid &&
+    emailValidation.valid &&
+    passwordValidation.valid &&
+    locationValidation.valid;
+
+  const handleRegistration = async () => {
+    try {
       Fire.doEmailRegistration(userName, userLocation, email, password)
-      .then((res: any) => console.log('registration: ', res))
-      .catch(err => {
-        setError(err);
-      });
+    } catch (err) {
+      console.warn('registration error: ', err)
+      setError(err);
     }
   }
 
@@ -66,8 +71,8 @@ const Registration: React.FC = () => {
           <IonRow className="ion-justify-content-center">
             <IonCol size-sm="12" size-md="3">
 
-              <form className="ion-padding ion-text-center">
-                <IonItem>
+              <form className="ion-padding">
+                <IonItem className={!userNameValidaiton.valid ? 'ion-invalid' : ''}>
                   <IonLabel position="floating">
                     שם משתמש
                   </IonLabel>
@@ -81,7 +86,7 @@ const Registration: React.FC = () => {
                   />
                 </IonItem>
                 
-                <IonItem>
+                <IonItem className={!emailValidation.valid && email ? 'ion-invalid' : ''}>
                   <IonLabel position="floating">
                     אי-מייל
                   </IonLabel>
@@ -95,7 +100,7 @@ const Registration: React.FC = () => {
                   />
                 </IonItem>
 
-                <IonItem>
+                <IonItem className={!passwordValidation.valid && password ? 'ion-invalid' : ''}>
                   <IonLabel position="floating">
                     סיסמה
                   </IonLabel>
@@ -103,13 +108,17 @@ const Registration: React.FC = () => {
                     type="password"
                     name="password"
                     value={password}
-                    required
                     onIonChange={e => setPassword(e.detail.value as string)}
                     data-testid="password-registration-input"
                   />
                 </IonItem>
+                {!passwordValidation.valid && (
+                  <IonText color="danger" className="ion-text-start">
+                    <small>{passwordValidation.message}</small>
+                  </IonText>
+                )}
 
-                <IonItem>
+                <IonItem className={!locationValidation.valid ? 'ion-invalid' : ''}>
                   <IonLabel position="floating">
                     מקום מגורים
                   </IonLabel>
@@ -117,6 +126,7 @@ const Registration: React.FC = () => {
                     interface="popover"
                     value={userLocation}
                     onIonChange={e => setUserLocation(e.detail.value)}
+                    data-testid="location-registration-input"
                   >
                     <IonSelectOption value={LOCATIONS.TA}>תל אביב</IonSelectOption>
                     <IonSelectOption value={LOCATIONS.PH}>פרדס חנה</IonSelectOption>
@@ -124,17 +134,27 @@ const Registration: React.FC = () => {
                 </IonItem>
 
                 <IonButton
-                  className="ion-padding"
+                  className="ion-padding-vertical"
+                  expand="full"
+                  disabled={!formIsValid}
                   onClick={() => handleRegistration()}
-                  data-testid="login-button"
+                  data-testid="registration-button"
                 >
                   הרשמה
                 </IonButton>
+                  {!formIsValid ? (
+                    <div className="ion-margin-top">
+                      <IonText color="danger" className="ion-text-start">
+                        <small>כל השדות הינם חובה</small>
+                      </IonText>
+                    </div>
+                  ) : <div style={{ height: '18px' }} className="ion-margin-top" />}
 
                 {error && (
                   <IonText
                     dir="ltr"
                     color="danger"
+                    className="ion-text-center"
                     data-testid="login-error-msg"
                   >
                     <h6>{error}</h6>
