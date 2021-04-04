@@ -114,10 +114,8 @@ class FirebaseService {
    * Get by id
    */
 
-  public getUser = async (userId: string, cb: (user: User) => void) => {
-    await this.getUserRef(userId).once('value', snapshot => {
-      cb(snapshot.val());
-    });
+  public getUser = async (userId: string) => {
+    return (await this.getUserRef(userId).get()).val();
   };
 
   private getProduct = async (productId: string): Promise<Product> => {
@@ -142,6 +140,37 @@ class FirebaseService {
     });
   };
   
+  public doGoogleSignIn = () => {
+    const provider = new app.auth.GoogleAuthProvider()
+    this.auth.signInWithRedirect(provider);
+  }
+
+  public listenForGoogleSignIn = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const authUser = await this.auth.getRedirectResult();
+        const { user } = authUser;
+        if (user) {
+          const userRef = this.getUserRef(user.uid);
+          if (authUser.additionalUserInfo?.isNewUser) {
+            return userRef.set({
+              name: user.displayName,
+              role: 'user',
+              email: user.email
+            })
+            .then(() => {
+              resolve('register new user via Google: ' + user.displayName);
+            })
+          } else {
+            resolve('user exists: ' + user.displayName)
+          }
+        }
+      } catch (err) {
+        reject(err);
+      }
+    })
+  }
+
   public doSignOut = () => {
     this.auth.signOut();
   }
@@ -179,7 +208,7 @@ class FirebaseService {
       }
     });
   }
-  
+
   /**
    * Listeners
    */
@@ -442,6 +471,15 @@ class FirebaseService {
 
 
   // User writes
+
+  public updateUserLocation = async (userId: string, location: 'TA' | 'PH') => {
+    try {
+      await this.getUserRef(userId).update({ location })
+      console.log('user Location updated');
+    } catch (err) { 
+      console.warn('Error updating user location: ', err);
+    }
+  }
   
   public addProductToOrder = async ({
     orderRef, productRef, qty, currentOrder
