@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   IonItem,
   IonGrid,
@@ -47,6 +47,13 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
     setProductQty(null);
   }
 
+  let isMounted = useRef(true);
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    }
+  }, []);
+
   return (
     <>
       <IonItem
@@ -66,7 +73,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
                   step={product.qtyUnit === UNIT_TYPE.KG ? '0.5' : '1'}
                   placeholder={currentOrderProduct?.qty.toString()}
                   value={productQty}
-                  onIonChange={e => setProductQty(e.detail.value)}
+                  onIonChange={e => {isMounted.current && setProductQty(e.detail.value)}}
                   role="order-product-qty-input"
                 />
               </IonItem>
@@ -102,7 +109,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
         data-testid="qty-above-missing"
       />
     </>
-  )
+  );
 }
 
 export default OpenOrderProductItem;
