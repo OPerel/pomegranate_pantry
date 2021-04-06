@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   IonPage,
   IonInput,
@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
 import AuthGuard from '../Auth/AuthGuard';
 import GoogleSignIn from '../../common/GoogleSignIn/GoogleSignIn';
 import { User } from '../../../types/interfaces';
-
+import useInputValidator from '../../../hooks/useInputValidator';
 import Fire from '../../../services/Firebase';
 import { ROUTES } from '../../../constants';
 
@@ -27,8 +27,12 @@ const Login: React.FC = () => {
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
   const [error, setError] = useState<string | null>(null);
-  
-  const handleLogin = async () => {
+
+  const emailValidation = useInputValidator(email, 'email');
+  const passwordValidation = useInputValidator(password, 'password');
+  const valid = emailValidation.valid && passwordValidation.valid;
+
+  const handleLogin = useCallback(async () => {
     setError(null);
     try {
       await Fire.doSignIn(email, password);
@@ -38,7 +42,23 @@ const Login: React.FC = () => {
       setEmail('');
       setPassword('');
     }
-  }
+  }, [email, password]);
+
+  useEffect(() => {
+    const form = document.querySelector('form');
+    const enterKeyPressCallback = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && valid) {
+        handleLogin();
+      }
+    }
+
+    form?.addEventListener('keypress', enterKeyPressCallback);
+
+    return () => {
+      form?.removeEventListener('keypress', enterKeyPressCallback);
+    }
+
+  }, [handleLogin, valid])
 
   return (
     <IonPage>
@@ -92,6 +112,7 @@ const Login: React.FC = () => {
                   className="ion-padding-vertical"
                   expand="full"
                   onClick={() => handleLogin()}
+                  disabled={!valid}
                   data-testid="login-button"
                 >
                   כניסה
