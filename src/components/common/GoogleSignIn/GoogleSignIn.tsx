@@ -3,7 +3,14 @@ import { IonTitle, IonButton, IonIcon } from '@ionic/react';
 import { logoGoogle } from 'ionicons/icons'; 
 import './GoogleSignIn.css';
 
+import Fire from '../../../services/Firebase';
+
 const GoogleSignIn: React.FC = () => {
+
+  const handleGoogleSignIn = () => {
+    Fire.doGoogleSignIn();
+  }
+
   return (
     <div className="ion-text-center ion-padding google-signin-div">
       <hr />
@@ -15,7 +22,7 @@ const GoogleSignIn: React.FC = () => {
         fill="solid"
         color="secondary"
         expand="full"
-        // className="ion-padding-start"
+        onClick={() => handleGoogleSignIn()}
       >
         כניסה עם גוגל
         <IonIcon slot="start" icon={logoGoogle} />

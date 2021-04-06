@@ -61,10 +61,8 @@ export default AuthStateProvider(App);
  * TODO:
  * 
  * App:
- * user registration (regular?)
  * notifications (?)
  * database rules
- * form / inputs validation (which and how?)
  * PWA
  * 
  * Tests:

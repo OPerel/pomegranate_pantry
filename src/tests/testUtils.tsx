@@ -37,7 +37,8 @@ const customRender = (
           _id: 'ZMTBBeoL4ja79HFVDVoTUHDtzJw1',
           name: 'e rimon',
           location: 'TA',
-          role: 'rimon'
+          role: 'rimon',
+          email: 'rimon@mail.com'
         } : null,
         error: null
       },
