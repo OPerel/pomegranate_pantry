@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IonList } from '@ionic/react';
+import { IonList, IonHeader, IonToolbar, IonTitle } from '@ionic/react';
 
 import { OrderProduct } from '../../../types/interfaces';
 
@@ -12,18 +12,26 @@ interface PropsTypes {
 }
 
 const OrderProductsList: React.FC<PropsTypes> = ({ orderProducts }) => (
-  <IonList role="order-products-list">
-    <h2>רשימת מוצרים</h2>
-    <ListHeader
-      name="OrderProducts"
-      headersList={['כמות', 'חסר', 'מחיר ליחידה', 'סה"כ', '', '']}
-    />
-    {orderProducts.length > 0 ? (
-      orderProducts.map(o => <OrderProductsListItem key={o.productRef} orderProduct={o} />)
-    ) : (
-      <h3 style={{ margin: '50px 0', textAlign: 'center' }}>לא נמצאו מוצרים להזמנה</h3>
-    )}
-  </IonList>
+  <>
+    <IonHeader>
+      <IonToolbar color="light">
+        <IonTitle color="primary">
+          רשימת מוצרים
+        </IonTitle>
+      </IonToolbar>
+    </IonHeader>
+    <IonList role="order-products-list">
+      <ListHeader
+        name="OrderProducts"
+        headersList={['כמות', 'חסר', 'מחיר ליחידה', '', 'סה"כ', '', '']}
+      />
+      {orderProducts.length > 0 ? (
+        orderProducts.map(o => <OrderProductsListItem key={o.productRef} orderProduct={o} />)
+      ) : (
+        <h3 style={{ margin: '50px 0', textAlign: 'center' }}>לא נמצאו מוצרים להזמנה</h3>
+      )}
+    </IonList>
+  </>
 )
 
 export default OrderProductsList;
