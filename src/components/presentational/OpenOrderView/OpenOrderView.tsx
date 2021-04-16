@@ -94,7 +94,7 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
       </IonList>
 
       {openOrder.status === ORDER_STATUS.COMPLETION && (
-        <IonText color="danger" className="ion-text-center">
+        <IonText color="danger" className="ion-text-center" data-testid="completion-warning">
           <h5>שים לב: בזמן ההשלמות לא ניתן להסיר מוצרים מההזמנה!</h5>
         </IonText>
       )}

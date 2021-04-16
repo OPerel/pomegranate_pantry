@@ -273,15 +273,6 @@ describe('Complete app flow', () => {
       cy.testId('open-order-product-item').first().should('have.attr', 'color', 'favorite')
         .getRole('order-product-qty-input').should('have.attr', 'placeholder', '2');
     });
-    // end of
-
-    // it('update product qty', () => {
-    //   const firstProductInput = cy.getRole('order-product-qty-input').first();
-    //   firstProductInput.clear();
-    //   firstProductInput.shadow().find('input').type('3');
-    //   cy.getRole('add-product-to-order-button').first().click();
-    //   cy.getRole('order-product-qty-input').first().should('have.attr', 'placeholder', '2');
-    // });
 
   }); // end of regular user adding to order
 
@@ -292,7 +283,7 @@ describe('Complete app flow', () => {
     });
     
     after(() => {
-      cy.logout();
+      // cy.logout();
     });
 
     it('should navigate from /admin to /admin/order/...', () => {
@@ -339,8 +330,50 @@ describe('Complete app flow', () => {
       cy.testId('my-order-product-item').last().should('have.text', 'טחינה הר ברכה - 3');
     });
 
-    // close modal and go back to admin
-    // check for updated order
+    // check for product removal from order
 
+    it('should close my order modal and navigate back to admin daxhboard', () => {
+      cy.getRole('close-my-order-modal').click();
+      cy.contains('אדמין').click();
+      cy.testId('admin-orders-list').should('be.visible');
+    });
+  });
+
+  describe('Admin changes order status to completion', () => {
+    it('clicks the order status button', () => {
+      cy.testId('order-list-item').first().click();
+
+      // check for updated products
+      
+      cy.testId('next-order-status-button').should('have.text', 'עבור להשלמות').click();
+    });
+
+    it('should display close completion button', () => {
+      cy.testId('next-order-status-button').should('have.text', 'סגור השלמות');
+    });
+
+    it('should display correct order header', () => {
+      const orderTitle = `הזמנה ${currentDateStr }פתוח להשלמותנסגר להזמנות ב - ${nextMonthDateStr}`;
+      cy.getRole('order-details-title').should('have.text', orderTitle);      
+    });
+
+    it('should navigate to user view and see only two products', () => {
+      cy.contains('משתמש').click({ force: true });
+      cy.testId('open-order-product-item').should('have.lengthOf', 2);
+    });
+
+    it('should display completion status warning', () => {
+      cy.testId('completion-warning').should('be.visible')
+        .and('have.text', 'שים לב: בזמן ההשלמות לא ניתן להסיר מוצרים מההזמנה!');
+    });
+
+    it('should open my order model and verify delete product btn is disabled', () => {
+      cy.getRole('my-order-button').click();
+      cy.getRole('delete-order-product-button').first().shadow().find('button').should('be.disabled');
+    });
+    /**
+     * move to user and check:
+     * - ordering missing qty removes product from list
+     */
   });
 })
