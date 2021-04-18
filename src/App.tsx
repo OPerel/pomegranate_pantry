@@ -66,6 +66,7 @@ export default AuthStateProvider(App);
  * PWA
  * 
  * Tests:
+ * add e2e tests for registration (maybe refactor auth test flows to emulator)
  * complete e2e test flows
  * check code coverage
  * fix cypress flaky tests

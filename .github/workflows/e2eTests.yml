@@ -1,4 +1,4 @@
-name: run cypress e2e
+name: Pantry's E2E Tests
 
 on: 
   push:

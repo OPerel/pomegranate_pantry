@@ -3,12 +3,8 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom/extend-expect';
-// import { configure } from '@testing-library/react';
 import { mockIonicReact } from '@ionic/react-test-utils';
 mockIonicReact();
-// configure({
-//   computedStyleSupportsPseudoElements: true
-// })
 const { getComputedStyle } = window;
 window.getComputedStyle = (elt) => getComputedStyle(elt);
 
@@ -188,27 +184,6 @@ jest.mock('./services/Firebase', () => {
       cb([orderUsersData[0]]);
       return { unsubscribe: () => {} };
     },
-    openOrderProductsListener: (id, cb) => {
-      cb(ordersData[0].orderProducts);
-      return { unsubscribe: () => {} };
-    },
-    // ordersCollectionOff: () => {},
-    // addNewOrder: () => {
-    //   // const orderWithId = { ...orderDetails, _id: (ordersData.length + 1).toString() }
-    //   // console.log('orders before push :', ordersData)
-    //   const newOrder = {
-    //     _id: '-MNArMQr-Jxt0gE8-Szk',
-    //     open: true, 
-    //     openToUsers: true,
-    //     createdAt: new Date(),
-    //     closingTime: new Date().setDate(new Date().getTime) + 30,
-    //     totalPrice: 0,
-    //     payed: false
-    //   }
-    //   ordersData.push(newOrder);
-    //   // console.log('orders after push :', ordersData)
-    //   // return orderWithId
-    // },
     updateEntry: () => {},
     addNewOrder: () => {},
     addNewProduct: (product) => product,

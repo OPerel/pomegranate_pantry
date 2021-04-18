@@ -6,7 +6,8 @@ import {
   IonItem,
   IonGrid,
   IonRow,
-  IonCol
+  IonCol,
+  IonHeader
 } from '@ionic/react';
 import { useUserStateContext } from '../../context/userState/UserContextProvider';
 import { mapOrderStatusToText } from '../../../utils/mapOrderStatus';
@@ -32,13 +33,15 @@ const OrderInProgressView: React.FC<{ openOrder: Order }> = ({ openOrder }) => {
       <IonToolbar color="dark">
         <IonTitle size="small">המוצרים שלי - ההזמנה {mapOrderStatusToText(openOrder.status)}</IonTitle>
       </IonToolbar>
-      <IonList>
+      <IonHeader>
         <ListHeader
           name="OrderInProgress"
           headersList={['שם', 'כמות', 'מחיר', 'סה"כ']}
-          color="medium"
           className="ion-text-center"
+          textColor="primary"
         />
+      </IonHeader>
+      <IonList>
         {currentOrder?.products.map(product => {
           const orderProductPrice = openOrder.orderProducts.find(p => {
             return p.productRef === product.productRef
