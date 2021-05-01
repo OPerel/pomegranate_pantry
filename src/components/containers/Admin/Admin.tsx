@@ -21,6 +21,14 @@ import { ROLES } from '../../../constants';
 const Admin: React.FC<{routes: RouteComponentProps<{ id: string }>[]}> = ({ routes }) => {
   const [tab, setTab] = React.useState<string>('orders');
 
+  const getAdminTab = () => {
+    switch (tab) {
+      case 'users': return <Users />
+      case 'products': return <Products />
+      default: return <Orders />
+    }
+  }
+
   return (
     <>
       <IonPage>
@@ -28,22 +36,25 @@ const Admin: React.FC<{routes: RouteComponentProps<{ id: string }>[]}> = ({ rout
 
         <IonToolbar color="dark">
           <IonButtons>
-            <IonButton onClick={() => setTab('orders')} disabled={tab === 'orders'} data-testid="admin-orders-button">הזמנות</IonButton>
-            <IonButton onClick={() => setTab('products')} disabled={tab === 'products'} data-testid="admin-products-button">מוצרים</IonButton>
-            <IonButton onClick={() => setTab('users')} disabled={tab === 'users'} data-testid="admin-users-button">משתמשים</IonButton>
+            <IonButton
+              onClick={() => setTab('orders')}
+              disabled={tab === 'orders'}
+              data-testid="admin-orders-button"
+            >הזמנות</IonButton>
+            <IonButton
+              onClick={() => setTab('products')}
+              disabled={tab === 'products'}
+              data-testid="admin-products-button"
+            >מוצרים</IonButton>
+            <IonButton
+              onClick={() => setTab('users')}
+              disabled={tab === 'users'}
+              data-testid="admin-users-button"
+            >משתמשים</IonButton>
           </IonButtons>
         </IonToolbar>
         
-        
-        {tab === 'orders' ? (
-          <Orders />
-        ) : (
-          tab === 'users' ? (
-            <Users />
-          ) : ( 
-            <Products />
-          )
-        )}
+        {getAdminTab()}
       </IonPage>
 
       <Switch>
