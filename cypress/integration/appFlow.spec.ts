@@ -308,8 +308,8 @@ describe('Complete app flow', () => {
       orderedProduct.should('have.attr', 'color', 'favorite')
         .and('include.text', 'טחינה הר ברכה');
 
-      const orderredProductInput = cy.getRole('order-product-qty-input').eq(1);
-      orderredProductInput.should('have.attr', 'placeholder', '2').type('3');
+      const orderedProductInput = cy.getRole('order-product-qty-input').eq(1);
+      orderedProductInput.should('have.attr', 'placeholder', '2').type('3');
 
       orderedProduct.should('have.value', '3');
       cy.getRole('add-product-to-order-button').eq(1).click();
@@ -344,7 +344,7 @@ describe('Complete app flow', () => {
       cy.testId('order-list-item').first().click();
 
       // check for updated products
-      
+
       cy.testId('next-order-status-button').should('have.text', 'עבור להשלמות').click();
     });
 
@@ -371,6 +371,24 @@ describe('Complete app flow', () => {
       cy.getRole('my-order-button').click();
       cy.getRole('delete-order-product-button').first().shadow().find('button').should('be.disabled');
     });
+
+    it('should order remaining product qty and see its removed', () => {
+      // cy.getRole('close-my-order-modal').click();
+      // const productInput = cy.getRole('order-product-qty-input').first();
+      // productInput.type('3');
+      // cy.getRole('add-product-to-order-button').first().click();
+
+      // const orderedProduct = cy.testId('open-order-product-item').eq(0);
+      // orderedProduct.should('have.attr', 'color', 'favorite')
+        // .and('include.text', 'אגוז');
+
+      const orderedProductInput = cy.getRole('order-product-qty-input').eq(0);
+      orderedProductInput.should('have.attr', 'placeholder', '1').type('3', { force: true });
+
+      // orderedProduct.should('have.value', '3');
+      cy.getRole('add-product-to-order-button').eq(0).click();
+      cy.getRole('order-product-qty-input').should('have.lengthOf', 1);
+    })
     /**
      * move to user and check:
      * - ordering missing qty removes product from list

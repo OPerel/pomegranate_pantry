@@ -12,7 +12,8 @@ import {
   IonText,
   IonSpinner,
   IonRow,
-  IonGrid
+  IonGrid,
+  IonHeader
 } from '@ionic/react';
 import { trash, chevronForwardOutline } from 'ionicons/icons'
 import { useUserStateContext } from '../../context/userState/UserContextProvider';
@@ -80,12 +81,15 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
         )}
       </IonToolbar>
 
-      <IonList>
+      <IonHeader>
         <ListHeader
           name="OpenOrder"
           headersList={['שם', 'כמות', 'הוסף', 'חסר']}
           className="ion-text-center"
         />
+      </IonHeader>
+
+      <IonList>
         {openOrder.status !== ORDER_STATUS.COMPLETION ? (
           productsList.map(product => <OpenOrderProductItem key={product._id} product={product} />)
         ) : (

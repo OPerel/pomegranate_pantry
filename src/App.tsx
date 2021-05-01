@@ -78,6 +78,6 @@ export default AuthStateProvider(App);
  * 404 on page refresh
  * 
  * Questions for Elad:
- * how to move from completion to shopping?
+ * how to move from completion to shopping? date? only button? to notify users?
  * are prices for Kg unit type per 1 or 5 or what?
  */

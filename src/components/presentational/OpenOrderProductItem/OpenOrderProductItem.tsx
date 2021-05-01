@@ -57,7 +57,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
   return (
     <>
       <IonItem
-        color={currentOrderProduct ? 'favorite' : ''}
+        // color={currentOrderProduct ? 'some' : ''}
         data-testid="open-order-product-item"
       >
         <IonGrid>
@@ -90,6 +90,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
             <IonCol role="missing-product-qty">{missing || ''}</IonCol>
           </IonRow>
           {!valid && productQty && (
+            // TODO: fix position on large screens
             <IonText
               color="danger"
               className="ion-padding-start ion-text-start"
