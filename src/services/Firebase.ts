@@ -365,7 +365,7 @@ class FirebaseService {
         }
 
         if (updateOrderStatus !== orderObj.status) {
-          this.updateEntry('orders', orderObj._id, {
+          await this.updateEntry('orders', orderObj._id, {
             status: updateOrderStatus,
             active: updateOrderStatus !== ORDER_STATUS.CLOSED
           })

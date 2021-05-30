@@ -12,7 +12,7 @@ import Fire from '../../../services/Firebase';
 const AdminHeader: React.FC = () => {
   return (
     <IonHeader translucent>
-      <IonToolbar>
+      <IonToolbar color="primary">
         <IonTitle slot="start">אדמין</IonTitle>
         <Link to={`${ROUTES.USER}/admin`} style={{ color: 'white', marginLeft: '2%' }} slot="end">משתמש</Link>
         <IonButton slot="end" color="secondary" onClick={() => Fire.doSignOut()}>יציאה</IonButton>

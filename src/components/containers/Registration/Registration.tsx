@@ -45,7 +45,7 @@ const Registration: React.FC = () => {
 
   const handleRegistration = async () => {
     try {
-      Fire.doEmailRegistration(userName, userLocation, email, password)
+      await Fire.doEmailRegistration(userName, userLocation, email, password)
     } catch (err) {
       console.warn('registration error: ', err)
       setError(err);
@@ -56,7 +56,7 @@ const Registration: React.FC = () => {
     <IonPage>
 
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar color="primary">
           <IonTitle slot="start">עמוד הרשמה</IonTitle>
           <Link slot="end" to={ROUTES.LOGIN}>
             <IonButton color="secondary">

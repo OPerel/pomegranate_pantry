@@ -114,7 +114,7 @@ const OrderProductsListItem: React.FC<OrderProductListItemProps> = ({ orderProdu
         </IonGrid>
       </IonItem>
       {itemOpen && orderProductLocations ? (
-        <div style={{ padding: '2%', backgroundColor: 'lightgray' }}>
+        <div className="nested-list" style={{ padding: '2%' }}>
           <h4 style={{ marginTop: '0' }}>כמות לפי מיקום</h4>
           <div
             style={{ display: 'flex', justifyContent: 'space-evenly' }}

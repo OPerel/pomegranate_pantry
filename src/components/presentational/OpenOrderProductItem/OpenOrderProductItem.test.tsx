@@ -43,13 +43,13 @@ describe('Open Order Product Item', () => {
     expect(qtyInput).not.toHaveProperty('placeholder', '2');
   });
 
-  test('should have no color attr for un-ordered product', async () => {
-    render(
-      <OpenOrderProductItem product={unOrderedProduct} />,
-      { route: '/user' }, true, 'user'
-    );
-    expect(await screen.findByTestId('open-order-product-item')).toHaveAttribute('color', '');
-  });
+  // test('should have no color attr for un-ordered product', async () => {
+  //   render(
+  //     <OpenOrderProductItem product={unOrderedProduct} />,
+  //     { route: '/user' }, true, 'user'
+  //   );
+  //   expect(await screen.findByTestId('open-order-product-item')).toHaveAttribute('color', '');
+  // });
 
   test('should display error message on invalid input', async () => {
     render(
@@ -68,13 +68,13 @@ describe('Open Order Product Item', () => {
     expect(await screen.findByPlaceholderText('2')).toBeInTheDocument();
   });
 
-  test('should have a "favorite" color attr for ordered product', async () => {
-    render(
-      <OpenOrderProductItem product={orderedProduct} />,
-      { route: '/user' }, true, 'user'
-      );
-    expect(await screen.findByTestId('open-order-product-item')).toHaveAttribute('color', 'favorite');
-  });
+  // test('should have a "favorite" color attr for ordered product', async () => {
+  //   render(
+  //     <OpenOrderProductItem product={orderedProduct} />,
+  //     { route: '/user' }, true, 'user'
+  //     );
+  //   expect(await screen.findByTestId('open-order-product-item')).toHaveAttribute('color', 'favorite');
+  // });
 
   test('should have correct missing qty' ,async () => {
     render(

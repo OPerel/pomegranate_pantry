@@ -64,7 +64,7 @@ const Login: React.FC = () => {
     <IonPage>
 
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar color="primary">
           <IonTitle slot="start">עמוד כניסה</IonTitle>
           <Link slot="end" to={ROUTES.REGISTRATION}>
             <IonButton color="secondary">

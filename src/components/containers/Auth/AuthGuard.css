@@ -3,5 +3,5 @@
   --height: 10vh;
   --background: var(--ion-color-secondary-shade);
   font-size: 1.5rem;
-  color: white;
+  color: var(--ion-color-secondary-contrast);
 }

@@ -53,7 +53,7 @@ const UserPage: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar color="primary">
           <IonTitle slot="start" role="greet-user-by-name">
             שלום {user?.name}
           </IonTitle>

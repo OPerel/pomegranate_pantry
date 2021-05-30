@@ -64,6 +64,7 @@ export default AuthStateProvider(App);
  * notifications (?)
  * database rules
  * PWA
+ * Dark mode colors
  * 
  * Tests:
  * add e2e tests for registration (maybe refactor auth test flows to emulator)

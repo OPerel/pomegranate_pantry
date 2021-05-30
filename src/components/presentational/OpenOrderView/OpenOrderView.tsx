@@ -108,7 +108,7 @@ const OpenOrderView: React.FC<{ openOrder: Order | null }> = ({ openOrder }) => 
         data-testid="my-order-modal"
         onDidDismiss={() => setMyOrderModalIsOpen(false)}
       >
-        <IonToolbar>
+        <IonToolbar color="primary">
           <IonButton
             onClick={() => setMyOrderModalIsOpen(false)}
             slot="start"
