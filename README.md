@@ -207,9 +207,61 @@ Every order view is divided to a list of the order's users, and a list of the or
 TODO: for every product with `Product.qytUnit === 'Kg'`, `OrderProduct.totalQty` has to satisfy the minimum quantity requirement for each location independently (or maybe just for PH?).
 
 ### 2 Users Views
+_TODO_
 
-
-### Login
+## Login
 - rimon@mail.com - testadmin
 - testuser1@mail.com - rimontesting1
 - yanir@ahmash.com = rimontesting2
+
+## Run locally
+- Clone and install dependencies:
+    ```bash
+    git clone https://github.com/OPerel/pomegranate_pantry.git
+    cd pomegranate_pantry
+    npm install
+    ```
+
+ - Ask me for the environment variables...  
+Or start a new Firebase project and add a `.env` file at the root of the project with the Firebase configuration attached to these keys:
+    ````
+    REACT_APP_API_KEY=**********************
+    REACT_APP_AUTH_DOMAIN=**********************
+    REACT_APP_DATABASE_URL=**********************
+    REACT_APP_PROJECT_ID=**********************
+    REACT_APP_STORAGE_BUCKET=**********************
+    REACT_APP_MESSAGING_SENDER_ID=**********************
+    REACT_APP_APP_ID=**********************
+    ````
+   You can upload data to Realtime DB from `src/data/rimons-pantry-staging.json`.
+- Run the dev server:
+    ```bash
+    npm run start
+    ```
+  
+## Running tests
+### Unit tests
+In the project's folder run:
+```bash
+npm run test:unit
+```
+
+### E2E test
+- Make sure the dev server is running on port 3000
+- E2E tests require the Firebase emulator to be running.  
+  You can run it just for the test run in one command:
+    ```bash
+    npm run test:e2e
+    ```
+- Or you can run the emulator permanently with:
+    ```shell
+    npm run emulators
+    ```
+- And then running the tests with:
+    ```shell
+    npm run cypress:run
+    ```
+- Or open the cypress GUI to run the tests from there with:
+    ```shell
+    npm run cypress:open
+    ```

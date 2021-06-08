@@ -65,6 +65,7 @@ export default AuthStateProvider(App);
  * database rules
  * PWA
  * Dark mode colors
+ * Enable closing completion after verifying missing products - Eran
  * 
  * Tests:
  * add e2e tests for registration (maybe refactor auth test flows to emulator)
