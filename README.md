@@ -232,6 +232,7 @@ Or start a new Firebase project and add a `.env` file at the root of the project
     REACT_APP_STORAGE_BUCKET=**********************
     REACT_APP_MESSAGING_SENDER_ID=**********************
     REACT_APP_APP_ID=**********************
+    FIREBASE_TOKEN=*****************
     ````
    You can upload data to Realtime DB from `src/data/rimons-pantry-staging.json`.
 - Run the dev server:

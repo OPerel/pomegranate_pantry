@@ -66,6 +66,10 @@ export default AuthStateProvider(App);
  * PWA
  * Dark mode colors
  * Enable closing completion after verifying missing products - Eran
+ *
+ * BUGS:
+ * In completion a user cannot order entire remaining qty as it subtracts the old order and adds the new
+ * Some errors are thrown during e2e test run. Unable to reproduce manually.
  * 
  * Tests:
  * add e2e tests for registration (maybe refactor auth test flows to emulator)
