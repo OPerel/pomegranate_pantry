@@ -311,8 +311,9 @@ describe('Complete app flow', () => {
       const orderedProductInput = cy.getRole('order-product-qty-input').eq(1);
       orderedProductInput.should('have.attr', 'placeholder', '2').type('3');
 
-      orderedProduct.should('have.value', '3');
+      orderedProductInput.should('have.value', '3');
       cy.getRole('add-product-to-order-button').eq(1).click();
+      cy.getRole('order-product-qty-input').eq(1).should('have.attr', 'placeholder', '5')
     });
 
     it('should add the new product to the order', () => {
@@ -327,12 +328,15 @@ describe('Complete app flow', () => {
       const productsList = cy.testId('my-order-product-item');
       productsList.should('have.lengthOf', 2);
       productsList.first().should('have.text', 'אגוז - 1');
-      cy.testId('my-order-product-item').last().should('have.text', 'טחינה הר ברכה - 3');
+      cy.testId('my-order-product-item').last().should('have.text', 'טחינה הר ברכה - 5');
     });
 
-    // check for product removal from order
+    it('should remove one product from order', () => {
+      cy.getRole('delete-order-product-button').first().click();
+      cy.testId('my-order-product-item').should('have.length', 1);
+    })
 
-    it('should close my order modal and navigate back to admin daxhboard', () => {
+    it('should close my order modal and navigate back to admin dashboard', () => {
       cy.getRole('close-my-order-modal').click();
       cy.contains('אדמין').click();
       cy.testId('admin-orders-list').should('be.visible');
@@ -372,28 +376,23 @@ describe('Complete app flow', () => {
       cy.getRole('delete-order-product-button').first().shadow().find('button').should('be.disabled');
     });
 
-    // it('should order remaining product qty and see its removed', () => {
-    //   cy.getRole('close-my-order-modal').click();
-    //   // const productInput = cy.getRole('order-product-qty-input').first();
-    //   // productInput.type('3');
-    //   // cy.getRole('add-product-to-order-button').first().click();
-    //
-    //   // const orderedProduct = cy.testId('open-order-product-item').eq(0);
-    //   // orderedProduct //.should('have.attr', 'color', 'favorite')
-    //   //   .should('include.text', 'אגוז');
-    //
-    //   const orderedProductInput = cy.getRole('order-product-qty-input').eq(0);
-    //   orderedProductInput.should('have.attr', 'placeholder', '1')
-    //     .type('3');
-    //
-    //   // orderedProductInput.should('have.value', '3');
-    //   cy.getRole('add-product-to-order-button').first().click();
-    //   // cy.getRole('order-product-qty-input').should('have.lengthOf', 1);
-    //   cy.testId('qty-above-missing').should('be.visible');
-    // })
-    /**
-     * move to user and check:
-     * - ordering missing qty removes product from list
-     */
+    it('should display alert when ordering more than missing qty', () => {
+      cy.getRole('close-my-order-modal').click();
+      const orderedProductInput = cy.getRole('order-product-qty-input').first();
+      orderedProductInput.type('4');
+      orderedProductInput.should('have.value', '4');
+      cy.getRole('add-product-to-order-button').first().click();
+      cy.contains('בזמן ההשלמות ההזמנה מוגבלת לכמות החסרה: 3');
+      cy.get('[role="dialog"]').get('button').click();
+    });
+
+    it('should remove product from list when ordering missing qty', () => {
+      const orderedProductInput = cy.getRole('order-product-qty-input').eq(1);
+      orderedProductInput.should('have.attr', 'placeholder', '5')
+        .type('7');
+      orderedProductInput.should('have.value', '7');
+      cy.getRole('add-product-to-order-button').eq(1).click();
+      cy.testId('open-order-product-item').should('have.length', 1);
+    });
   });
 })

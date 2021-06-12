@@ -484,7 +484,7 @@ class FirebaseService {
   public addProductToOrder = async ({
     orderRef, productRef, qty, currentOrder
   }: NewOrderProduct) => {
-    this.db.ref(`orderProducts/${orderRef}/${productRef}`)
+    await this.db.ref(`orderProducts/${orderRef}/${productRef}`)
       .transaction(currentProduct => {
         if (currentProduct === null) {
           return { price: 0 };
@@ -509,11 +509,12 @@ class FirebaseService {
                 }
               })
             } else {
+              const existingQty = currentOrder.products[productRef];
               return {
                 ...currentOrder,
                 products: {
                   ...currentOrder.products,
-                  [productRef]: qty
+                  [productRef]: (existingQty || 0) + qty
                 }
               }
             }

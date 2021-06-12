@@ -83,6 +83,7 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
                 disabled={!valid}
                 onClick={handleAddProductClick}
                 role="add-product-to-order-button"
+                title="לחיצה על הכפתור תוסיף את הכמות להזמנה שלך. על מנת להוריד את הכמות מחק את המוצר והכנס כמות חדשה."
               >
                 <IonIcon icon={addOutline} />
               </IonButton>
@@ -107,7 +108,6 @@ const OpenOrderProductItem: React.FC<{ product: Product }> = ({ product }) => {
         onDidDismiss={() => setQtyAlert(false)}
         buttons={['OK']}
         message={'בזמן ההשלמות ההזמנה מוגבלת לכמות החסרה: ' + missing}
-        data-testid="qty-above-missing"
       />
     </>
   );

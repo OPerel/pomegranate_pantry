@@ -68,7 +68,6 @@ export default AuthStateProvider(App);
  * Enable closing completion after verifying missing products - Eran
  *
  * BUGS:
- * In completion a user cannot order entire remaining qty as it subtracts the old order and adds the new
  * Some errors are thrown during e2e test run. Unable to reproduce manually.
  * 
  * Tests:
