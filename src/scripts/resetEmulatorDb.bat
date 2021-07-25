@@ -1,0 +1,3 @@
+:: reset the database emulator
+:: not working...
+curl -X PUT --data-binary @../../src/data/emulator/rimons-pantry-staging.json http://localhost:9000/?ns=rimons-pantry-staging.json

@@ -36,7 +36,7 @@ firebase.initializeApp({
   projectId: Cypress.env('REACT_APP_PROJECT_ID'),
   storageBucket: Cypress.env('REACT_APP_STORAGE_BUCKET'),
   messagingSenderId: Cypress.env('REACT_APP_MESSAGING_SENDER_ID'),
-  appId: Cypress.env('REACT_APP_APP_ID,Cypress')
+  appId: Cypress.env('REACT_APP_APP_ID')
 })
 
 Cypress.Commands.add('createUser', (email='rimon@mail.com', password='testadmin') => {
@@ -53,7 +53,7 @@ Cypress.Commands.add('logout', () => {
 
 Cypress.Commands.add('resetDb', () => {
   const db = firebase.database();
-  db.useEmulator('localhost', 9000);
+  // db.useEmulator('localhost', 9000);
   db.ref().set(data, err => {
     if (err) {
       console.log('reset err: ', err)

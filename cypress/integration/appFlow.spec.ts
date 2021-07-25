@@ -395,4 +395,18 @@ describe('Complete app flow', () => {
       cy.testId('open-order-product-item').should('have.length', 1);
     });
   });
+
+  describe('Admin changes order status to shopping', () => {
+    it('should navigate back to admin dashboard', () => {
+      cy.contains('אדמין').click();
+      cy.testId('order-item-status').first().should('have.text', 'פתוח להשלמות');
+    });
+
+    it('should click open order', () => {
+      cy.testId('order-list-item').first().click();
+      // const nextStatus = cy.testId('next-order-status-button');
+      // nextStatus.click();
+      // nextStatus.should('have.text', 'סגור הזמנה');
+    })
+  });
 })

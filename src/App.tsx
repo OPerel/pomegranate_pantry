@@ -62,8 +62,8 @@ export default AuthStateProvider(App);
  * 
  * App:
  * notifications (?)
- * database rules
  * PWA
+ * database rules
  * Dark mode colors
  * Enable closing completion after verifying missing products - Eran
  *
